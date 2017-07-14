@@ -1,5 +1,59 @@
 /*
  *
+ *  Bitcoin
+ *
+ */
+const btc = {
+	definitions: [
+		{
+			name: 'account',
+			alias: 'a',
+			type: String,
+			typeLabel: '[underline]{Address}',
+			description: 'Account address'
+		},
+		{
+			name: 'block',
+			alias: 'b',
+			type: String,
+			typeLabel: '[underline]{Hash} or [underline]{Number}',
+			description: 'Block number or hash'
+		},
+		{
+			name: 'transaction',
+			alias: 't',
+			type: String,
+			typeLabel: '[underline]{Hash}',
+			description: 'Transaction hash'
+		}
+	]
+};
+btc.usage = [
+	{
+		header: 'blocke btc',
+		content: 'Query the Bitcoin blockchain. Only one option is supported per query.'
+	},
+	{
+		header: 'Synopsis',
+		content: 'blocke btc <option>'
+	},
+	{
+		header: 'Options',
+		optionList: btc.definitions
+	},
+	{
+		header: 'Examples',
+		content: [
+			{ name: 'Get account by address', summary: 'blocke btc -a 19SokJG7fgk8iTjemJ2obfMj14FM16nqzj' },
+			{ name: 'Get block by hash', summary: 'blocke btc -b 0000000000000000079c58e8b5bce4217f7515a74b170049398ed9b8428beb4a' },
+			{ name: 'Get block by number', summary: 'blocke btc -b 371623' },
+			{ name: 'Get transaction by hash', summary: 'blocke btc -t 5756ff16e2b9f881cd15b8a7e478b4899965f87f553b6210d0f8e5bf5be7df1d' }
+		]
+	}
+];
+
+/*
+ *
  *  Ethereum
  *
  */
@@ -125,6 +179,7 @@ const help = {
 		{
 			header: 'Command List',
 			content: [
+				{ name: 'btc', summary: btc.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'xmr', summary: xmr.usage[0].content }
 			]
@@ -158,11 +213,7 @@ nullData.usage = [
 	},
 	{
 		header: 'Command List',
-		content: [
-			{ name: 'eth', summary: 'Query the Ethereum blockchain.' },
-			{ name: 'help', summary: 'Display help for a specific command.' },
-			{ name: 'xmr', summary: 'Query the Monero blockchain.' }
-		]
+		content: [{ name: 'help', summary: 'Display help for a specific command.' }].concat(help.usage[2].content)
 	},
 	{
 		header: 'Options',
@@ -176,6 +227,8 @@ nullData.usage = [
  *
  */
 module.exports = {
+	btc: btc,
+	bitcoin: btc,
 	eth: eth,
 	ethereum: eth,
 	help: help,

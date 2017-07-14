@@ -1,9 +1,11 @@
+const btcApi = require('./api/blockexplorer');
 const ethApi = require('./api/etherchain');
 const spinner = new (require('./extended-spinner'))();
 const xmrApi = require('./api/moneroblocks');
 
 let _api = undefined;
 const _apiMap = {
+	btc: btcApi,
 	eth: ethApi,
 	xmr: xmrApi
 };
@@ -17,11 +19,11 @@ class OptionRequestHandler {
 	
 	handleRequest() {
 		if (typeof(_options.account) === 'string') {
-			return this.handleAccountRequest(_options.account);
+			return this.handleAccountRequest(_options.account.trim());
 		} else if (typeof(_options.block) === 'string') {
-			return this.handleBlockRequest(_options.block);
+			return this.handleBlockRequest(_options.block.trim());
 		} else if (typeof(_options.transaction) === 'string') {
-			return this.handleTransactionRequest(_options.transaction);
+			return this.handleTransactionRequest(_options.transaction.trim());
 		} else {
 			return Promise.reject();
 		}

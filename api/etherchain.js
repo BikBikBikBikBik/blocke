@@ -12,9 +12,9 @@ function executeRequest(uriSuffix, objectName) {
 	}).then(function(res) {
 		if (res.data.length === 1) {
 			return res.data[0];
-		} else {
-			return Promise.reject(`${objectName} not found.`);
 		}
+		
+		return Promise.reject(`${objectName} not found.`);
 	});
 }
 

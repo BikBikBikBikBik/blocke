@@ -5,7 +5,18 @@ const commandLineCommands = require('command-line-commands');
 const commandLineUsage = require('command-line-usage');
 const version = require('../package.json').version;
 const OptionRequestHandler = require('../option-request-handler');
-const validCommands = [ null, 'eth', 'ethereum', 'help', 'monero', 'xmr'];
+
+const shortHandMap = {
+	bitcoin: 'btc',
+	ethereum: 'eth',
+	monero: 'xmr'
+};
+const validCommands = [
+	null, 'help',
+	'btc', 'bitcoin',
+	'eth', 'ethereum',
+	'monero', 'xmr'
+];
 
 function executeHandler(handler, usage) {
 	handler.handleRequest().then(function(res) {
@@ -28,11 +39,12 @@ try {
 		console.log(usage);
 	} else {
 		switch (command) {
-			case 'eth':
-			case 'ethereum':
-				executeHandler(new OptionRequestHandler('eth', options), usage);
+			case null:
+				if (options.version) {
+					console.log(`v${version}`);
+				}
 			break;
-			
+				
 			case 'help':
 				if (options.command) {
 					//Although --command is a default option and argv is set correctly, somehow 'help' ends up
@@ -44,16 +56,15 @@ try {
 					}
 				}
 			break;
-
-			case null:
-				if (options.version) {
-					console.log(`v${version}`);
+			
+			default:
+				let shortHandCommand = command;
+				if (shortHandMap.hasOwnProperty(command)) {
+					shortHandCommand = shortHandMap[command];
 				}
-			break;
-
-			case 'monero':
-			case 'xmr':
-				executeHandler(new OptionRequestHandler('xmr', options), usage);
+				
+				let handler = new OptionRequestHandler(shortHandCommand, options);
+				executeHandler(handler, usage);
 			break;
 		}
 	}
