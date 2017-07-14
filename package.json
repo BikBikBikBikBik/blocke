@@ -1,0 +1,17 @@
+{
+  "name": "blocke",
+  "version": "0.1.0",
+  "author": "BikBikBikBikBik",
+  "license": "GPL-3.0",
+  "bin": {
+    "blocke": "bin/blocke.js"
+  },
+  "dependencies": {
+    "cli-spinner": "^0.2.6",
+    "command-line-args": "^4.0.6",
+    "command-line-commands": "^2.0.1",
+    "command-line-usage": "^4.0.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
