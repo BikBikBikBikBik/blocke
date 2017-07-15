@@ -1,4 +1,4 @@
-const _ = require('underscore');
+const { Block, Transaction } = require('./models');
 
 const piconero = 1000000000000;
 
@@ -8,23 +8,11 @@ class ChainRadarTypeMapper {
 	}
 	
 	mapBlock(block) {
-		return {
-			difficulty: block.blockHeader.difficulty,
-			hash: block.blockHeader.hash,
-			number: block.blockHeader.height,
-			time: new Date(block.blockHeader.timestamp * 1000),
-			transactionCount: block.transactions.length
-		};
+		return new Block(block.blockHeader.difficulty, block.blockHeader.hash, block.blockHeader.height, new Date(block.blockHeader.timestamp * 1000), block.transactions.length);
 	}
 	
 	mapTransaction(transaction) {
-		return {
-			amountSent: transaction.header.totalInputsAmount / piconero,
-			blockHash: transaction.header.blockHash,
-			recipients: [],
-			senders: [],
-			time: new Date(transaction.header.timestamp * 1000)
-		};
+		return new Transaction(transaction.header.totalInputsAmount / piconero, transaction.header.blockHash, [], [], new Date(transaction.header.timestamp * 1000));
 	}
 }
 

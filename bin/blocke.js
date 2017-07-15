@@ -24,7 +24,7 @@ const validCommands = [
 
 function executeHandler(handler, usage) {
 	handler.handleRequest().then(function(res) {
-		console.log(res);
+		console.log(res.toString());
 	}).catch(function(err) {
 		if (typeof(err) === 'string') {
 			console.log(err);

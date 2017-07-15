@@ -1,32 +1,18 @@
+const { Account, Block, Transaction } = require('./models');
+
 const weiPerEther = 1000000000000000000;
 
 class EtherchainTypeMapper {
 	mapAccount(account) {
-		return {
-			address: account.address,
-			confirmedBalance: account.balance / weiPerEther,
-			unconfirmedBalance: 0
-		};
+		return new Account(account.address, account.balance / weiPerEther);
 	}
 	
 	mapBlock(block) {
-		return {
-			difficulty: block.difficulty,
-			hash: block.hash,
-			number: block.number,
-			time: new Date(block.time),
-			transactionCount: block.tx_count
-		};
+		return new Block(block.difficulty, block.hash, block.number, new Date(block.time), block.tx_count);
 	}
 	
 	mapTransaction(transaction) {
-		return {
-			amountSent: transaction.amount / weiPerEther,
-			blockHash: transaction.blockHash,
-			recipients: [transaction.recipient],
-			senders: [transaction.sender],
-			time: new Date(transaction.time),
-		};
+		return new Transaction(transaction.amount / weiPerEther, transaction.blockHash, transaction.recipient, transaction.sender, new Date(transaction.time));
 	}
 }
 
