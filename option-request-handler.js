@@ -23,6 +23,27 @@ const _optionRequestHandlerTypeMapperMap = {
 	xmr: chainRadarMapper
 };
 
+function handleIndividualRequest(apiRequest, resultMapper, waitMessage) {
+	const useSpinner = typeof(waitMessage) === 'string';
+	if (useSpinner) {
+		spinner.startSpinner(waitMessage);
+	}
+	
+	return apiRequest().then(function(res) {
+		if (useSpinner) {
+			spinner.stop(true);
+		}
+
+		return resultMapper(res);
+	}).catch(function(error) {
+		if (useSpinner) {
+			spinner.stop(true);
+		}
+
+		return Promise.reject(error);
+	});
+}
+
 class OptionRequestHandler {
 	constructor(api, options) {
 		let formattedApi = api.trim().toLowerCase();
@@ -38,57 +59,48 @@ class OptionRequestHandler {
 	handleRequest() {
 		if (typeof(this._options.account) === 'string') {
 			return this.handleAccountRequest(this._options.account.trim());
-		} else if (typeof(this._options.block) === 'string') {
-			return this.handleBlockRequest(this._options.block.trim());
-		} else if (typeof(this._options.transaction) === 'string') {
-			return this.handleTransactionRequest(this._options.transaction.trim());
-		} else {
-			return Promise.reject();
 		}
-	}
-	
-	handleAccountRequest(account) {
-		spinner.startSpinner('Retrieving account...');
+		if (typeof(this._options.block) === 'string') {
+			return this.handleBlockRequest(this._options.block.trim());
+		}
+		if (typeof(this._options.transaction) === 'string') {
+			return this.handleTransactionRequest(this._options.transaction.trim());
+		}
+		if (typeof(this._options.unknown) === 'string') {
+			return this.handleUnknownRequest(this._options.unknown.trim());
+		}
 		
-		let self = this;
-		return this._api.getAccount(account).then(function(res) {
-			spinner.stop(true);
-			
-			return self._typeMapper.mapAccount(res);
-		}).catch(function(error) {
-			spinner.stop(true);
-			
-			return Promise.reject(error);
-		});
+		return Promise.reject();
 	}
 	
-	handleBlockRequest(block) {
-		spinner.startSpinner('Retrieving block...');
-
-		let self = this;
-		return this._api.getBlockByNumberOrHash(block).then(function(res) {
-			spinner.stop(true);
-			
-			return self._typeMapper.mapBlock(res);
-		}).catch(function(error) {
-			spinner.stop(true);
-			
-			return Promise.reject(error);
-		});
+	handleAccountRequest(account, showSpinner = true) {
+		return handleIndividualRequest(this._api.getAccount.bind(this._api, account), this._typeMapper.mapAccount, showSpinner ? 'Retrieving account...' : null);
 	}
 	
-	handleTransactionRequest(transaction) {
-		spinner.startSpinner('Retrieving transaction...');
+	handleBlockRequest(block, showSpinner = true) {
+		return handleIndividualRequest(this._api.getBlockByNumberOrHash.bind(this._api, block), this._typeMapper.mapBlock, showSpinner ? 'Retrieving block...' : null);
+	}
+	
+	handleTransactionRequest(transaction, showSpinner = true) {
+		return handleIndividualRequest(this._api.getTransaction.bind(this._api, transaction), this._typeMapper.mapTransaction, showSpinner ? 'Retrieving transaction...' : null);
+	}
+	
+	handleUnknownRequest(unknown) {
+		const self = this;
+		spinner.startSpinner('Searching...');
+		
+		return self.handleTransactionRequest(unknown, false).catch(function(err) {
+			return self.handleBlockRequest(unknown, false);
+		}).catch(function(err) {
+			return self.handleAccountRequest(unknown, false);
+		}).catch(function(err) {
+			spinner.stop(true);
 
-		let self = this;
-		return this._api.getTransaction(transaction).then(function(res) {
+			return Promise.reject(`Unknown value: ${self._options.unknown}`);
+		}).then(function(res) {
 			spinner.stop(true);
-			
-			return self._typeMapper.mapTransaction(res);
-		}).catch(function(error) {
-			spinner.stop(true);
-			
-			return Promise.reject(error);
+
+			return res;
 		});
 	}
 }

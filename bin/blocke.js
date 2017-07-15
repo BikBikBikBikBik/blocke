@@ -39,7 +39,8 @@ try {
 	const options = commandLineArgs(commandLineArgData[command].definitions, argv);
 	const usage = commandLineUsage(commandLineArgData[command].usage);
 	
-	if (Object.keys(options).length === 0) {
+	const noOptionsSpecified = Object.keys(options).length === 0;
+	if (noOptionsSpecified && argv.length !== 1) {
 		console.log(usage);
 	} else {
 		switch (command) {
@@ -67,6 +68,9 @@ try {
 					shortHandCommand = shortHandMap[command];
 				}
 				
+				if (noOptionsSpecified) {
+					options.unknown =  argv[0];
+				}
 				let handler = new OptionRequestHandler(shortHandCommand, options);
 				executeHandler(handler, usage);
 			break;

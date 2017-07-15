@@ -33,7 +33,7 @@ function generateUsage(options, includeAccount = true) {
 	let usage = [
 		{
 			header: `blocke ${options.command}`,
-			content: `Query the ${options.currencyName} blockchain. Only one option is supported per query.`
+			content: `Query the ${options.currencyName} blockchain. Only one option is supported per query. If no option is specified blocke will search for the right type of the value.`
 		},
 		{
 			header: 'Synopsis',
@@ -48,7 +48,8 @@ function generateUsage(options, includeAccount = true) {
 			content: [
 				{ name: 'Get block by hash', summary: `blocke ${options.command} -b ${options.optionSamples.blockHash}` },
 				{ name: 'Get block by number', summary: `blocke ${options.command} -b ${options.optionSamples.blockNumber}` },
-				{ name: 'Get transaction by hash', summary: `blocke ${options.command} -t ${options.optionSamples.transactionHash}` }
+				{ name: 'Get transaction by hash', summary: `blocke ${options.command} -t ${options.optionSamples.transactionHash}` },
+				{ name: 'Search for value', summary: `blocke ${options.command} ${options.optionSamples.blockHash}` },
 			]
 		}
 	];
