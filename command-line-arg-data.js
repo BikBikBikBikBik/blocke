@@ -31,6 +31,19 @@ eth.usage = dataGenerator.generateUsage({
 	}
 });
 
+const ltc = { definitions: dataGenerator.generateDefinitions() };
+ltc.usage = dataGenerator.generateUsage({
+	command: 'ltc',
+	currencyName: 'Litecoin',
+	optionDefinitions: ltc.definitions,
+	optionSamples: {
+		account: 'LQB2bZJvC4oGvf63eWebX3n54qquWoPhcH',
+		blockHash: '3003cfd2f8ec96c1deb3fc09df99b820189a48a93387882edb83027b507bf7f2',
+		blockNumber: 1200000,
+		transactionHash: 'bc6a355ec34194e43a590e86386a771af15c1eb88cc5ce614920a76e36388fe1'
+	}
+});
+
 const xmr = { definitions: dataGenerator.generateDefinitions(false) };
 xmr.usage = dataGenerator.generateUsage({
 	command: 'xmr',
@@ -72,6 +85,7 @@ const help = {
 			content: [
 				{ name: 'btc', summary: btc.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
+				{ name: 'ltc', summary: ltc.usage[0].content },
 				{ name: 'xmr', summary: xmr.usage[0].content }
 			]
 		}
@@ -122,8 +136,10 @@ module.exports = {
 	bitcoin: btc,
 	eth: eth,
 	ethereum: eth,
-	help: help,
+	ltc: ltc,
+	litecoin: ltc,
 	monero: xmr,
-	null: nullData,
-	xmr: xmr
+	xmr: xmr,
+	help: help,
+	null: nullData
 };

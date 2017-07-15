@@ -9,12 +9,14 @@ const OptionRequestHandler = require('../option-request-handler');
 const shortHandMap = {
 	bitcoin: 'btc',
 	ethereum: 'eth',
+	litecoin: 'ltc',
 	monero: 'xmr'
 };
 const validCommands = [
 	null, 'help',
 	'btc', 'bitcoin',
 	'eth', 'ethereum',
+	'ltc', 'litecoin',
 	'monero', 'xmr'
 ];
 

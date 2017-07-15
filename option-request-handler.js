@@ -7,6 +7,7 @@ let _api = undefined;
 const _apiMap = {
 	btc: new SoChain('btc'),
 	eth: ethApi,
+	ltc: new SoChain('ltc'),
 	xmr: xmrApi
 };
 let _options = {};
