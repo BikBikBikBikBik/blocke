@@ -12,6 +12,7 @@
     "command-line-commands": "^2.0.1",
     "command-line-usage": "^4.0.0",
     "request": "^2.81.0",
-    "request-promise": "^4.2.1"
+    "request-promise": "^4.2.1",
+    "underscore": "^1.8.3"
   }
 }
