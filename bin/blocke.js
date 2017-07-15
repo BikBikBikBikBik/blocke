@@ -15,6 +15,7 @@ const shortHandMap = {
 const validCommands = [
 	null, 'help',
 	'btc', 'bitcoin',
+	'doge', 'dogecoin',
 	'eth', 'ethereum',
 	'ltc', 'litecoin',
 	'monero', 'xmr'
