@@ -146,7 +146,7 @@ nullData.usage = [
 	},
 	{
 		header: 'Command List',
-		content: [{ name: 'help', summary: 'Display help for a specific command.' }].concat(help.usage[2].content)
+		content: [{ name: 'help', summary: 'Display help.' }]
 	},
 	{
 		header: 'Options',
