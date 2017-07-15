@@ -19,7 +19,9 @@ function executeRequest(uriSuffix, objectName) {
 
 class Etherchain {
 	getAccount(account) {
-		return executeRequest(`account/${account}`, 'Account');
+		let formattedAccount = account.startsWith('0x') ? account : '0x' + account;
+		
+		return executeRequest(`account/${formattedAccount}`, 'Account');
 	}
 	
 	getBlockByNumberOrHash(block) {

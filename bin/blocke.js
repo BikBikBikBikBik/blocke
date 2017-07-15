@@ -19,7 +19,7 @@ const validCommands = [
 	'doge', 'dogecoin',
 	'eth', 'ethereum',
 	'ltc', 'litecoin',
-	'monero', 'xmr'
+	'xmr', 'monero'
 ];
 
 function executeHandler(handler, usage) {
