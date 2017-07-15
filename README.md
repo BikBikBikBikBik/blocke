@@ -1,12 +1,13 @@
 # blocke
 Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable). Currently supports:
 * BTC
+* DASH
+* DOGE
 * ETH
+* LTC
 * XMR
 
-With more on the way:
-* LTC
-* ...to be determined
+With more on the way.
 
 <br />
 
