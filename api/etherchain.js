@@ -1,10 +1,9 @@
 const request = require('request-promise');
-const apiBaseAddress = 'https://etherchain.org/api/';
 
 function executeRequest(uriSuffix, objectName) {
 	let requestOptions = {
 		json: true,
-		uri: `${apiBaseAddress}${uriSuffix}`
+		uri: `https://etherchain.org/api/${uriSuffix}`
 	};
 		
 	return request(requestOptions).catch(function(err) {

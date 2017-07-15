@@ -1,16 +1,14 @@
 const request = require('request-promise');
 
-let _apiBaseAddress = undefined;
-
 class ApiClientBase {
 	constructor(apiBaseAddress) {
-		_apiBaseAddress = apiBaseAddress;
+		this._apiBaseAddress = apiBaseAddress;
 	}
 	
 	executeRequest(uriSuffix, objectName, errorHandler) {
 		let requestOptions = {
 			json: true,
-			uri: `${_apiBaseAddress}${uriSuffix}`
+			uri: `${this._apiBaseAddress}${uriSuffix}`
 		};
 
 		return request(requestOptions).then(function(res) {
@@ -23,7 +21,7 @@ class ApiClientBase {
 				return Promise.reject(`${objectName} not found.`);
 			}
 			
-			return Promise.reject(`An error occurred while attempting to retrieve the ${objectName}.`);
+			return Promise.reject(`An error occurred while attempting to retrieve the ${objectName.toLowerCase()}.`);
 		});
 	}
 }
