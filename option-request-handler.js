@@ -54,7 +54,11 @@ class OptionRequestHandler {
 		return this._api.getAccount(account).then(function(res) {
 			spinner.stop(true);
 			
-			return self._typeMapper.mapAccount(res);
+			let mappedAccount = self._typeMapper.mapAccount(res);
+			return `Address:             ${mappedAccount.address}\n` +
+				   `Confirmed Balance:   ${mappedAccount.confirmedBalance}\n` +
+				   `Unconfirmed Balance: ${mappedAccount.unconfirmedBalance}\n` +
+				   `Total Balance:       ${mappedAccount.confirmedBalance + mappedAccount.unconfirmedBalance}`;
 		}).catch(function(error) {
 			spinner.stop(true);
 			
@@ -69,7 +73,12 @@ class OptionRequestHandler {
 		return this._api.getBlockByNumberOrHash(block).then(function(res) {
 			spinner.stop(true);
 			
-			return self._typeMapper.mapBlock(res);
+			let mappedBlock = self._typeMapper.mapBlock(res);
+			return `Hash:           ${mappedBlock.hash}\n` +
+				   `Number:         ${mappedBlock.number}\n` +
+				   `# Transactions: ${mappedBlock.transactionCount}\n` +
+				   `Difficulty:     ${mappedBlock.difficulty}\n` +
+				   `Time:           ${mappedBlock.time.toString()}`;
 		}).catch(function(error) {
 			spinner.stop(true);
 			
@@ -84,7 +93,12 @@ class OptionRequestHandler {
 		return this._api.getTransaction(transaction).then(function(res) {
 			spinner.stop(true);
 			
-			return self._typeMapper.mapTransaction(res);
+			let mappedTransaction = self._typeMapper.mapTransaction(res);
+			return `Amount Sent: ${mappedTransaction.amountSent}\n` +
+				   `Senders:     ${mappedTransaction.senders.join(', ')}\n` +
+				   `Recipients:  ${mappedTransaction.recipients.join(', ')}\n` +
+				   `Block Hash:  ${mappedTransaction.blockHash}\n` +
+				   `Time:        ${mappedTransaction.time.toString()}`;
 		}).catch(function(error) {
 			spinner.stop(true);
 			
