@@ -1,26 +1,37 @@
+const ChainRadarApi = require('./api/chainradar');
+const chainRadarMapper = require('./type-mapper/chainradar');
 const ethApi = require('./api/etherchain');
-const SoChain = require('./api/sochain');
+const ethMapper = require('./type-mapper/etherchain');
+const SoChainApi = require('./api/sochain');
+const soChainMapper = require('./type-mapper/sochain');
 const spinner = new (require('./extended-spinner'))();
-const xmrApi = require('./api/moneroblocks');
 
 const _optionRequestHandlerApiMap = {
-	btc: new SoChain('btc'),
-	dash: new SoChain('dash'),
-	doge: new SoChain('doge'),
+	btc: new SoChainApi('btc'),
+	dash: new SoChainApi('dash'),
+	doge: new SoChainApi('doge'),
 	eth: ethApi,
-	ltc: new SoChain('ltc'),
-	xmr: xmrApi
+	ltc: new SoChainApi('ltc'),
+	xmr: new ChainRadarApi('xmr')
+};
+const _optionRequestHandlerTypeMapperMap = {
+	btc: soChainMapper,
+	dash: soChainMapper,
+	doge: soChainMapper,
+	eth: ethMapper,
+	ltc: soChainMapper,
+	xmr: chainRadarMapper
 };
 
 class OptionRequestHandler {
 	constructor(api, options) {
 		let formattedApi = api.trim().toLowerCase();
-		if (!_optionRequestHandlerApiMap.hasOwnProperty(formattedApi)) {
+		if (!_optionRequestHandlerApiMap.hasOwnProperty(formattedApi) || !_optionRequestHandlerTypeMapperMap.hasOwnProperty(formattedApi)) {
 			throw `Unsupported API: ${api}`;
-		} else {
-			this._api = _optionRequestHandlerApiMap[formattedApi];
 		}
 		
+		this._api = _optionRequestHandlerApiMap[formattedApi];
+		this._typeMapper = _optionRequestHandlerTypeMapperMap[formattedApi];
 		this._options = options;
 	}
 	
@@ -39,10 +50,11 @@ class OptionRequestHandler {
 	handleAccountRequest(account) {
 		spinner.startSpinner('Retrieving account...');
 		
+		let self = this;
 		return this._api.getAccount(account).then(function(res) {
 			spinner.stop(true);
 			
-			return res;
+			return self._typeMapper.mapAccount(res);
 		}).catch(function(error) {
 			spinner.stop(true);
 			
@@ -53,10 +65,11 @@ class OptionRequestHandler {
 	handleBlockRequest(block) {
 		spinner.startSpinner('Retrieving block...');
 
+		let self = this;
 		return this._api.getBlockByNumberOrHash(block).then(function(res) {
 			spinner.stop(true);
 			
-			return res;
+			return self._typeMapper.mapBlock(res);
 		}).catch(function(error) {
 			spinner.stop(true);
 			
@@ -67,10 +80,11 @@ class OptionRequestHandler {
 	handleTransactionRequest(transaction) {
 		spinner.startSpinner('Retrieving transaction...');
 
+		let self = this;
 		return this._api.getTransaction(transaction).then(function(res) {
 			spinner.stop(true);
 			
-			return res;
+			return self._typeMapper.mapTransaction(res);
 		}).catch(function(error) {
 			spinner.stop(true);
 			

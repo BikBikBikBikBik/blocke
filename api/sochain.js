@@ -3,16 +3,16 @@ const request = require('request-promise');
 
 const _soChainSupportedNetworks = [ 'BTC', 'DASH', 'DOGE', 'LTC' ];
 
-class SoChain extends ApiClientBase {
+class SoChainClient extends ApiClientBase {
 	constructor(network) {
 		super('https://chain.so/api/v2/');
 		
 		let formattedNetwork = network.trim().toUpperCase();
 		if (_soChainSupportedNetworks.indexOf(formattedNetwork) === -1) {
 			throw `Unsupported network: ${network}`;
-		} else {
-			this._network = formattedNetwork;
 		}
+		
+		this._network = formattedNetwork;
 	}
 	
 	getAccount(account) {
@@ -34,4 +34,4 @@ class SoChain extends ApiClientBase {
 	}
 }
 
-module.exports = SoChain;
+module.exports = SoChainClient;

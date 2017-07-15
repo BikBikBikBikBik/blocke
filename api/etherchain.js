@@ -17,7 +17,7 @@ function executeRequest(uriSuffix, objectName) {
 	});
 }
 
-class Etherchain {
+class EtherchainClient {
 	getAccount(account) {
 		let formattedAccount = account.startsWith('0x') ? account : '0x' + account;
 		
@@ -33,4 +33,4 @@ class Etherchain {
 	}
 }
 
-module.exports = new Etherchain();
+module.exports = new EtherchainClient();
