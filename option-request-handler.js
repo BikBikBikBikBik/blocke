@@ -5,6 +5,7 @@ const xmrApi = require('./api/moneroblocks');
 
 const _optionRequestHandlerApiMap = {
 	btc: new SoChain('btc'),
+	dash: new SoChain('dash'),
 	doge: new SoChain('doge'),
 	eth: ethApi,
 	ltc: new SoChain('ltc'),

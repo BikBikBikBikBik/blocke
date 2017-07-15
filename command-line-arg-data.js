@@ -18,6 +18,19 @@ btc.usage = dataGenerator.generateUsage({
 	}
 });
 
+const dash = { definitions: dataGenerator.generateDefinitions() };
+dash.usage = dataGenerator.generateUsage({
+	command: 'dash',
+	currencyName: 'Dash',
+	optionDefinitions: dash.definitions,
+	optionSamples: {
+		account: 'XbkfLoZhNXDBu1i6aNuxQ19WcM2VfE42wG',
+		blockHash: '00000000000002958852d255726d695ecccfbfacfac318a9d0ebc558eecefeb9',
+		blockNumber: 700000,
+		transactionHash: 'dbe0d951529f6ff5a0d2a656908d3c3a45cd89e4aacfea104d95b7112ae8a924'
+	}
+});
+
 const doge = { definitions: dataGenerator.generateDefinitions() };
 doge.usage = dataGenerator.generateUsage({
 	command: 'doge',
@@ -97,6 +110,7 @@ const help = {
 			header: 'Command List',
 			content: [
 				{ name: 'btc', summary: btc.usage[0].content },
+				{ name: 'dash', summary: dash.usage[0].content },
 				{ name: 'doge', summary: doge.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
@@ -148,6 +162,7 @@ nullData.usage = [
 module.exports = {
 	btc: btc,
 	bitcoin: btc,
+	dash: dash,
 	doge: doge,
 	dogecoin: doge,
 	eth: eth,
