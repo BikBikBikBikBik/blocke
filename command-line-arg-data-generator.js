@@ -33,7 +33,7 @@ function generateUsage(options, includeAccount = true) {
 	let usage = [
 		{
 			header: `blocke ${options.command}`,
-			content: `Query the ${options.currencyName} blockchain. Only one option is supported per query. If no option is specified blocke will search for the right type of the value.`
+			content: `Query the ${options.currencyName} blockchain. If no option is specified blocke will search for the right type of the value.`
 		},
 		{
 			header: 'Synopsis',
