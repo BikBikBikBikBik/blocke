@@ -1,11 +1,11 @@
-const btcApi = require('./api/blockexplorer');
 const ethApi = require('./api/etherchain');
+const SoChain = require('./api/sochain');
 const spinner = new (require('./extended-spinner'))();
 const xmrApi = require('./api/moneroblocks');
 
 let _api = undefined;
 const _apiMap = {
-	btc: btcApi,
+	btc: new SoChain('btc'),
 	eth: ethApi,
 	xmr: xmrApi
 };
@@ -13,7 +13,13 @@ let _options = {};
 
 class OptionRequestHandler {
 	constructor(api, options) {
-		_api = _apiMap[api];
+		let formattedApi = api.trim().toLowerCase();
+		if (!_apiMap.hasOwnProperty(formattedApi)) {
+			throw `Unsupported API: ${api}`;
+		} else {
+			_api = _apiMap[formattedApi];
+		}
+		
 		_options = options;
 	}
 	
