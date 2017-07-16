@@ -1,27 +1,6 @@
-const ChainRadarApi = require('./api/chainradar');
-const chainRadarMapper = require('./type-mapper/chainradar');
-const ethApi = require('./api/etherchain');
-const ethMapper = require('./type-mapper/etherchain');
-const SoChainApi = require('./api/sochain');
-const soChainMapper = require('./type-mapper/sochain');
 const spinner = new (require('./extended-spinner'))();
-
-const _optionRequestHandlerApiMap = {
-	btc: new SoChainApi('btc'),
-	dash: new SoChainApi('dash'),
-	doge: new SoChainApi('doge'),
-	eth: ethApi,
-	ltc: new SoChainApi('ltc'),
-	xmr: new ChainRadarApi('xmr')
-};
-const _optionRequestHandlerTypeMapperMap = {
-	btc: soChainMapper,
-	dash: soChainMapper,
-	doge: soChainMapper,
-	eth: ethMapper,
-	ltc: soChainMapper,
-	xmr: chainRadarMapper
-};
+const apiFactory = require('./api/factory');
+const typeMapperFactory = require('./type-mapper/factory');
 
 function handleIndividualRequest(apiRequest, resultMapper, waitMessage) {
 	const useSpinner = typeof(waitMessage) === 'string';
@@ -46,14 +25,13 @@ function handleIndividualRequest(apiRequest, resultMapper, waitMessage) {
 
 class OptionRequestHandler {
 	constructor(api, options) {
-		let formattedApi = api.trim().toLowerCase();
-		if (!_optionRequestHandlerApiMap.hasOwnProperty(formattedApi) || !_optionRequestHandlerTypeMapperMap.hasOwnProperty(formattedApi)) {
+		this._api = apiFactory.getApi(api);
+		this._typeMapper = typeMapperFactory.getTypeMapper(api);
+		this._options = options;
+		
+		if (this._api === undefined || this._typeMapper === undefined) {
 			throw `Unsupported API: ${api}`;
 		}
-		
-		this._api = _optionRequestHandlerApiMap[formattedApi];
-		this._typeMapper = _optionRequestHandlerTypeMapperMap[formattedApi];
-		this._options = options;
 	}
 	
 	handleRequest() {
