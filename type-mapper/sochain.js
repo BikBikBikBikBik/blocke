@@ -30,8 +30,8 @@ class SoChainTypeMapper {
 	
 	mapTransaction(transaction) {
 		return new Transaction(_.reduce(transaction.inputs, (total, input) => total + parseFloat(input.value), 0),
-			transaction.blockhash, _.map(transaction.outputs, (output) => output.address),
-			_.map(transaction.inputs, (input) => input.address), new Date(transaction.time * 1000));
+			transaction.blockhash, _.map(transaction.outputs, (output) => ({ address: output.address, amount: parseFloat(output.value) })),
+			_.map(transaction.inputs, (input) => ({ address: input.address, amount: parseFloat(input.value) })), new Date(transaction.time * 1000));
 	}
 }
 

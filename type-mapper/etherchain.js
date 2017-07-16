@@ -30,7 +30,9 @@ class EtherchainTypeMapper {
 	}
 	
 	mapTransaction(transaction) {
-		return new Transaction(transaction.amount / weiPerEther, transaction.blockHash, transaction.recipient, transaction.sender, new Date(transaction.time));
+		const amountInEther = transaction.amount / weiPerEther;
+		
+		return new Transaction(amountInEther, transaction.blockHash, { address: transaction.recipient, amount: amountInEther }, { address: transaction.sender, amount: amountInEther }, new Date(transaction.time));
 	}
 }
 

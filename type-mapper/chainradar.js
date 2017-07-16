@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const { Block, Transaction } = require('./models');
+const _ = require('underscore');
 
-const piconero = 1000000000000;
+const piconeroPerMonero = 1000000000000;
 
 class ChainRadarTypeMapper {
 	mapAccount(account) {
@@ -30,7 +31,8 @@ class ChainRadarTypeMapper {
 	}
 	
 	mapTransaction(transaction) {
-		return new Transaction(transaction.header.totalInputsAmount / piconero, transaction.header.blockHash, [], [], new Date(transaction.header.timestamp * 1000));
+		return new Transaction(transaction.header.totalInputsAmount / piconeroPerMonero, transaction.header.blockHash, _.map(transaction.outputs, (output) => ({ address: '???', amount: output.amount / piconeroPerMonero })),
+			_.map(transaction.inputs, (input) => ({ address: '???', amount: input.amount / piconeroPerMonero })), new Date(transaction.header.timestamp * 1000));
 	}
 }
 
