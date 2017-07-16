@@ -25,7 +25,14 @@ class EtherchainClient {
 	}
 	
 	getBlockByNumberOrHash(block) {
-		return executeRequest(`block/${block}`, 'Block');
+		return executeRequest(`block/${block}`, 'Block').then(function(res) {
+			//There is currently a bug in the API that returns block #0 for many invalid block hashes/numbers
+			if (res.hash !== block && res.number.toString() !== block) {
+				return Promise.reject('Block not found.');
+			}
+			
+			return res;
+		});
 	}
 	
 	getTransaction(transaction) {
