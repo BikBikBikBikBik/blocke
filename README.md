@@ -12,8 +12,9 @@ With more on the way.
 <br />
 
 # Installation
-Clone this repository then run:
 ```
+$ git clone https://github.com/BikBikBikBikBik/blocke.git
+$ cd blocke
 $ npm install
 $ npm link
 ```
