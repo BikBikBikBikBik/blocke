@@ -16,30 +16,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const ChainRadarApi = require('./chainradar');
-const ethApi = require('./etherchain');
-const SoChainApi = require('./sochain');
-const zChainApi = require('./zchain');
+const ApiClientBase = require('./api-client-base');
 
-function getApi(symbol) {
-	if (typeof(symbol) === 'string') {
-		const formattedSymbol = symbol.trim().toLowerCase();
-		const supportedAiMap = {
-			btc: new SoChainApi('btc'),
-			dash: new SoChainApi('dash'),
-			doge: new SoChainApi('doge'),
-			eth: ethApi,
-			ltc: new SoChainApi('ltc'),
-			xmr: new ChainRadarApi('xmr'),
-			zec: zChainApi
-		};
-
-		if (supportedAiMap.hasOwnProperty(formattedSymbol)) {
-			return supportedAiMap[formattedSymbol];
-		}
+class ZChainClient extends ApiClientBase {
+	constructor() {
+		super('https://api.zcha.in/v2/mainnet/');
 	}
 	
-	return undefined;
+	getAccount(accountAddress) {
+		return this.executeRequest(`accounts/${accountAddress}`);
+	}
+	
+	getBlockByNumberOrHash(blockId) {
+		return this.executeRequest(`blocks/${blockId}`);
+	}
+	
+	getTransaction(transactionHash) {
+		return this.executeRequest(`transactions/${transactionHash}`);
+	}
 }
 
-exports.getApi = getApi;
+module.exports = new ZChainClient();

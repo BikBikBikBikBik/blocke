@@ -100,6 +100,19 @@ xmr.usage = dataGenerator.generateUsage({
 	}
 }, false);
 
+const zec = { definitions: dataGenerator.generateDefinitions() };
+zec.usage = dataGenerator.generateUsage({
+	command: 'zec',
+	currencyName: 'Zcash',
+	optionDefinitions: zec.definitions,
+	optionSamples: {
+		account: 't3K4aLYagSSBySdrfAGGeUd5H9z5Qvz88t2',
+		blockHash: '00000000130f2314d98ddfeea36edbce4aacabe06798c26711b25463923550b8',
+		blockNumber: 150000,
+		transactionHash: 'b3a06b6cda21dcae2b515917769deb04b7b90c2bf99cb674569c33af382de7bc'
+	}
+});
+
 /*
  *
  *  Help
@@ -132,7 +145,8 @@ const help = {
 				{ name: 'doge', summary: doge.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
-				{ name: 'xmr', summary: xmr.usage[0].content }
+				{ name: 'xmr', summary: xmr.usage[0].content },
+				{ name: 'zec', summary: zec.usage[0].content }
 			]
 		}
 	]
@@ -187,8 +201,10 @@ module.exports = {
 	ethereum: eth,
 	ltc: ltc,
 	litecoin: ltc,
-	monero: xmr,
 	xmr: xmr,
+	monero: xmr,
+	zec: zec,
+	zcash: zec,
 	help: help,
 	null: nullData
 };

@@ -19,6 +19,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 const chainRadarMapper = require('./chainradar');
 const ethMapper = require('./etherchain');
 const soChainMapper = require('./sochain');
+const zChainMapper = require('./zchain');
 
 function getTypeMapper(symbol) {
 	if (typeof(symbol) === 'string') {
@@ -29,7 +30,8 @@ function getTypeMapper(symbol) {
 			doge: soChainMapper,
 			eth: ethMapper,
 			ltc: soChainMapper,
-			xmr: chainRadarMapper
+			xmr: chainRadarMapper,
+			zec: zChainMapper
 		};
 		
 		if (supportedTypeMapperMap.hasOwnProperty(formattedSymbol)) {

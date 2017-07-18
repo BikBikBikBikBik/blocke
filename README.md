@@ -6,6 +6,7 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * ETH
 * LTC
 * XMR
+* ZEC
 
 With more on the way.
 
