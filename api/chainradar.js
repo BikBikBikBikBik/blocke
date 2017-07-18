@@ -57,12 +57,12 @@ class ChainRadarClient extends ApiClientBase {
 		this._network = formattedNetwork;
 	}
 	
-	getAccount(account) {
+	getAccount() {
 		return Promise.reject('Operation not supported.');
 	}
 	
-	getBlockByNumberOrHash(block) {
-		return this.executeRequest(`${this._network}/blocks/${block}/full`, 'Block').then(handleResponseErrors);
+	getBlockByNumberOrHash(blockId) {
+		return this.executeRequest(`${this._network}/blocks/${blockId}/full`, 'Block').then(handleResponseErrors);
 	}
 	
 	getTransaction(transaction) {

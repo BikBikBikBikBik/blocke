@@ -69,16 +69,16 @@ class OptionRequestHandler {
 		return Promise.reject();
 	}
 	
-	handleAccountRequest(account, showSpinner = true) {
-		return handleIndividualRequest(this._api.getAccount.bind(this._api, account), this._typeMapper.mapAccount, showSpinner ? 'Retrieving account...' : null);
+	handleAccountRequest(accountAddress, showSpinner = true) {
+		return handleIndividualRequest(this._api.getAccount.bind(this._api, accountAddress), this._typeMapper.mapAccount, showSpinner ? 'Retrieving account...' : null);
 	}
 	
-	handleBlockRequest(block, showSpinner = true) {
-		return handleIndividualRequest(this._api.getBlockByNumberOrHash.bind(this._api, block), this._typeMapper.mapBlock, showSpinner ? 'Retrieving block...' : null);
+	handleBlockRequest(blockId, showSpinner = true) {
+		return handleIndividualRequest(this._api.getBlockByNumberOrHash.bind(this._api, blockId), this._typeMapper.mapBlock, showSpinner ? 'Retrieving block...' : null);
 	}
 	
-	handleTransactionRequest(transaction, showSpinner = true) {
-		return handleIndividualRequest(this._api.getTransaction.bind(this._api, transaction), this._typeMapper.mapTransaction, showSpinner ? 'Retrieving transaction...' : null);
+	handleTransactionRequest(transactionHash, showSpinner = true) {
+		return handleIndividualRequest(this._api.getTransaction.bind(this._api, transactionHash), this._typeMapper.mapTransaction, showSpinner ? 'Retrieving transaction...' : null);
 	}
 	
 	handleUnknownRequest(unknown) {

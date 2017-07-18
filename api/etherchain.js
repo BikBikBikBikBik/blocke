@@ -36,16 +36,16 @@ function executeRequest(uriSuffix, objectName) {
 }
 
 class EtherchainClient {
-	getAccount(account) {
-		let formattedAccount = account.startsWith('0x') ? account : '0x' + account;
+	getAccount(accountAddress) {
+		const formattedAccount = accountAddress.startsWith('0x') ? accountAddress : '0x' + accountAddress;
 		
 		return executeRequest(`account/${formattedAccount}`, 'Account');
 	}
 	
-	getBlockByNumberOrHash(block) {
-		return executeRequest(`block/${block}`, 'Block').then(function(res) {
+	getBlockByNumberOrHash(blockId) {
+		return executeRequest(`block/${blockId}`, 'Block').then(function(res) {
 			//There is currently a bug in the API that returns block #0 for many invalid block hashes/numbers
-			const formattedBlock = block.trim().toLowerCase();
+			const formattedBlock = blockId.trim().toLowerCase();
 			if (res.hash.toLowerCase() !== formattedBlock && res.number.toString() !== formattedBlock) {
 				return Promise.reject('Block not found.');
 			}

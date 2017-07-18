@@ -24,7 +24,7 @@ class ApiClientBase {
 	}
 	
 	executeRequest(uriSuffix, objectName, errorHandler) {
-		let requestOptions = {
+		const requestOptions = {
 			json: true,
 			uri: `${this._apiBaseAddress}${uriSuffix}`
 		};
