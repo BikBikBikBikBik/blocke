@@ -31,7 +31,7 @@ class ChainRadarTypeMapper {
 	}
 	
 	mapTransaction(transaction) {
-		return new Transaction(transaction.header.totalInputsAmount / piconeroPerMonero, transaction.header.blockHash, _.map(transaction.outputs, (output) => ({ address: '???', amount: output.amount / piconeroPerMonero })),
+		return new Transaction(transaction.header.totalInputsAmount / piconeroPerMonero, transaction.header.blockHash, transaction.header.hash, _.map(transaction.outputs, (output) => ({ address: '???', amount: output.amount / piconeroPerMonero })),
 			_.map(transaction.inputs, (input) => ({ address: '???', amount: input.amount / piconeroPerMonero })), new Date(transaction.header.timestamp * 1000));
 	}
 }

@@ -52,9 +52,10 @@ class Block {
 }
 
 class Transaction {
-	constructor(amountSent, blockHash, recipients, senders, time) {
+	constructor(amountSent, blockHash, hash, recipients, senders, time) {
 		this._amountSent = amountSent;
 		this._blockHash = blockHash;
+		this._hash = hash;
 		this._recipients = Array.isArray(recipients) ? recipients : [recipients];
 		this._senders = Array.isArray(senders) ? senders : [senders];
 		this._time = time;
@@ -68,6 +69,7 @@ class Transaction {
 			   (senders.length > 0 ? `Senders:     ${senders.join(', ')}\n` : '') +
 			   (recipients.length > 0 ? `Recipients:  ${recipients.join(', ')}\n` : '') +
 			   `Block Hash:  ${this._blockHash}\n` +
+			   `Hash:        ${this._hash}\n` +
 			   `Time:        ${this._time.toString()}`;
 	}
 }
