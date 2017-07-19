@@ -30,17 +30,7 @@ const shortHandMap = {
 	litecoin: 'ltc',
 	monero: 'xmr'
 };
-const validCommands = [
-	null, 'help',
-	'aeon',
-	'btc', 'bitcoin',
-	'dash',
-	'doge', 'dogecoin',
-	'eth', 'ethereum',
-	'ltc', 'litecoin',
-	'xmr', 'monero',
-	'zec', 'zcash'
-];
+const validCommands = Object.keys(commandLineArgData).concat([null]);
 
 function executeHandler(handler, usage) {
 	handler.handleRequest().then(function(res) {
