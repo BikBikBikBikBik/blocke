@@ -23,11 +23,9 @@ const dataGenerator = require('./command-line-arg-data-generator');
  *  Currencies
  *
  */
-const aeon = { definitions: dataGenerator.generateDefinitions(false) };
-aeon.usage = dataGenerator.generateUsage({
+const aeon = dataGenerator.generateCurrency({
 	command: 'aeon',
 	currencyName: 'Aeon',
-	optionDefinitions: aeon.definitions,
 	optionSamples: {
 		blockHash: '8089007cb483e1321c70fbb6ea11082ca733e92ffbb92311a06bd58c9cdd79f5',
 		blockNumber: 845900,
@@ -35,11 +33,9 @@ aeon.usage = dataGenerator.generateUsage({
 	}
 }, false);
 
-const btc = { definitions: dataGenerator.generateDefinitions() };
-btc.usage = dataGenerator.generateUsage({
+const btc = dataGenerator.generateCurrency({
 	command: 'btc',
 	currencyName: 'Bitcoin',
-	optionDefinitions: btc.definitions,
 	optionSamples: {
 		account: '19SokJG7fgk8iTjemJ2obfMj14FM16nqzj',
 		blockHash: '0000000000000000079c58e8b5bce4217f7515a74b170049398ed9b8428beb4a',
@@ -48,11 +44,9 @@ btc.usage = dataGenerator.generateUsage({
 	}
 });
 
-const dash = { definitions: dataGenerator.generateDefinitions() };
-dash.usage = dataGenerator.generateUsage({
+const dash = dataGenerator.generateCurrency({
 	command: 'dash',
 	currencyName: 'Dash',
-	optionDefinitions: dash.definitions,
 	optionSamples: {
 		account: 'XbkfLoZhNXDBu1i6aNuxQ19WcM2VfE42wG',
 		blockHash: '00000000000002958852d255726d695ecccfbfacfac318a9d0ebc558eecefeb9',
@@ -61,11 +55,9 @@ dash.usage = dataGenerator.generateUsage({
 	}
 });
 
-const doge = { definitions: dataGenerator.generateDefinitions() };
-doge.usage = dataGenerator.generateUsage({
+const doge = dataGenerator.generateCurrency({
 	command: 'doge',
 	currencyName: 'Dogecoin',
-	optionDefinitions: doge.definitions,
 	optionSamples: {
 		account: 'DFQc4NVAK7GvFQsHNciE8rcBw6t5ZQ3gdC',
 		blockHash: 'c151a40f121a4f0ee0078e0268563c8299ad12652f939d9c6880aab9a93c1969',
@@ -74,11 +66,9 @@ doge.usage = dataGenerator.generateUsage({
 	}
 });
 
-const eth = { definitions: dataGenerator.generateDefinitions() };
-eth.usage = dataGenerator.generateUsage({
+const eth = dataGenerator.generateCurrency({
 	command: 'eth',
 	currencyName: 'Ethereum',
-	optionDefinitions: eth.definitions,
 	optionSamples: {
 		account: '0x3e65303043928403f8a1a2ca4954386e6f39008c',
 		blockHash: '0x88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6',
@@ -87,11 +77,9 @@ eth.usage = dataGenerator.generateUsage({
 	}
 });
 
-const ltc = { definitions: dataGenerator.generateDefinitions() };
-ltc.usage = dataGenerator.generateUsage({
+const ltc = dataGenerator.generateCurrency({
 	command: 'ltc',
 	currencyName: 'Litecoin',
-	optionDefinitions: ltc.definitions,
 	optionSamples: {
 		account: 'LQB2bZJvC4oGvf63eWebX3n54qquWoPhcH',
 		blockHash: '3003cfd2f8ec96c1deb3fc09df99b820189a48a93387882edb83027b507bf7f2',
@@ -100,11 +88,9 @@ ltc.usage = dataGenerator.generateUsage({
 	}
 });
 
-const xmr = { definitions: dataGenerator.generateDefinitions(false) };
-xmr.usage = dataGenerator.generateUsage({
+const xmr = dataGenerator.generateCurrency({
 	command: 'xmr',
 	currencyName: 'Monero',
-	optionDefinitions: xmr.definitions,
 	optionSamples: {
 		blockHash: 'a886ef5149902d8342475fee9bb296341b891ac67c4842f47a833f23c00ed721',
 		blockNumber: 1000000,
@@ -112,11 +98,9 @@ xmr.usage = dataGenerator.generateUsage({
 	}
 }, false);
 
-const zec = { definitions: dataGenerator.generateDefinitions() };
-zec.usage = dataGenerator.generateUsage({
+const zec = dataGenerator.generateCurrency({
 	command: 'zec',
 	currencyName: 'Zcash',
-	optionDefinitions: zec.definitions,
 	optionSamples: {
 		account: 't3K4aLYagSSBySdrfAGGeUd5H9z5Qvz88t2',
 		blockHash: '00000000130f2314d98ddfeea36edbce4aacabe06798c26711b25463923550b8',

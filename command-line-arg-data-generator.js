@@ -16,7 +16,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-function generateDefinitions(includeAccount = true) {
+function generateCurrency(options, includeAccount = true) {
+	const currencyData = { definitions: generateDefinitions(includeAccount) };
+	options.optionDefinitions = currencyData.definitions;
+	currencyData.usage = generateUsage(options, includeAccount);
+	
+	return currencyData;
+}
+
+function generateDefinitions(includeAccount) {
 	let definitions = [
 		{
 			name: 'block',
@@ -47,7 +55,7 @@ function generateDefinitions(includeAccount = true) {
 	return definitions;
 }
 
-function generateUsage(options, includeAccount = true) {
+function generateUsage(options, includeAccount) {
 	let usage = [
 		{
 			header: `blocke ${options.command}`,
@@ -79,5 +87,4 @@ function generateUsage(options, includeAccount = true) {
 	return usage;
 }
 
-exports.generateDefinitions = generateDefinitions;
-exports.generateUsage = generateUsage;
+exports.generateCurrency = generateCurrency;
