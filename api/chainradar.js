@@ -19,7 +19,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 const ApiClientBase = require('./api-client-base');
 const request = require('request-promise');
 
-const _chainRadarSupportedNetworks = [ 'xmr' ];
+const _chainRadarSupportedNetworks = [ 'aeon', 'xmr' ];
 
 function handleResponseErrors(res) {
 	if (res.hasOwnProperty('code')) {

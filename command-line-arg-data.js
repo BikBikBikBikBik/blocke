@@ -23,6 +23,18 @@ const dataGenerator = require('./command-line-arg-data-generator');
  *  Currencies
  *
  */
+const aeon = { definitions: dataGenerator.generateDefinitions(false) };
+aeon.usage = dataGenerator.generateUsage({
+	command: 'aeon',
+	currencyName: 'Aeon',
+	optionDefinitions: aeon.definitions,
+	optionSamples: {
+		blockHash: '8089007cb483e1321c70fbb6ea11082ca733e92ffbb92311a06bd58c9cdd79f5',
+		blockNumber: 845900,
+		transactionHash: 'efb393f88d66561b908053099cf35f5e12227084eeb1288383179177f927452c'
+	}
+}, false);
+
 const btc = { definitions: dataGenerator.generateDefinitions() };
 btc.usage = dataGenerator.generateUsage({
 	command: 'btc',
@@ -140,6 +152,7 @@ const help = {
 		{
 			header: 'Command List',
 			content: [
+				{ name: 'aeon', summary: aeon.usage[0].content },
 				{ name: 'btc', summary: btc.usage[0].content },
 				{ name: 'dash', summary: dash.usage[0].content },
 				{ name: 'doge', summary: doge.usage[0].content },
@@ -192,6 +205,7 @@ nullData.usage = [
  *
  */
 module.exports = {
+	aeon: aeon,
 	btc: btc,
 	bitcoin: btc,
 	dash: dash,

@@ -1,5 +1,6 @@
 # blocke
 Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable). Currently supports:
+* AEON
 * BTC
 * DASH
 * DOGE

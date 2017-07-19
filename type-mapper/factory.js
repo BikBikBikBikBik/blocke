@@ -25,6 +25,7 @@ function getTypeMapper(symbol) {
 	if (typeof(symbol) === 'string') {
 		const formattedSymbol = symbol.trim().toLowerCase();
 		const supportedTypeMapperMap = {
+			aeon: chainRadarMapper,
 			btc: soChainMapper,
 			dash: soChainMapper,
 			doge: soChainMapper,

@@ -25,6 +25,7 @@ function getApi(symbol) {
 	if (typeof(symbol) === 'string') {
 		const formattedSymbol = symbol.trim().toLowerCase();
 		const supportedAiMap = {
+			aeon: new ChainRadarApi('aeon'),
 			btc: new SoChainApi('btc'),
 			dash: new SoChainApi('dash'),
 			doge: new SoChainApi('doge'),

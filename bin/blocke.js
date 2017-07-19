@@ -32,6 +32,7 @@ const shortHandMap = {
 };
 const validCommands = [
 	null, 'help',
+	'aeon',
 	'btc', 'bitcoin',
 	'dash',
 	'doge', 'dogecoin',
