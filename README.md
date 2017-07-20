@@ -15,10 +15,7 @@ With more on the way.
 
 # Installation
 ```
-$ git clone https://github.com/BikBikBikBikBik/blocke.git
-$ cd blocke
-$ npm install
-$ npm link
+$ npm install -g blocke
 ```
 
 <br />
