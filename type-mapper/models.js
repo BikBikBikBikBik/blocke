@@ -70,7 +70,7 @@ class Transaction {
 			   (recipients.length > 0 ? `Recipients:  ${recipients.join(', ')}\n` : '') +
 			   `Block Hash:  ${this._blockHash}\n` +
 			   `Hash:        ${this._hash}\n` +
-			   `Time:        ${this._time.toString()}`;
+			   (this._time !== undefined ? `Time:        ${this._time.toString()}` : '');
 	}
 }
 

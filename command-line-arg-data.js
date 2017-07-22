@@ -88,6 +88,16 @@ const ltc = dataGenerator.generateCurrency({
 	}
 });
 
+const sc = dataGenerator.generateCurrency({
+	command: 'sc',
+	currencyName: 'Siacoin',
+	optionSamples: {
+		blockHash: '0000000000000028ecc091235afb82bd9aca66ebf175137336191ec1d28be993',
+		blockNumber: 115300,
+		transactionHash: '3cb16b2faeb14244829bdcc77e9b46363e6fd0981945b4195e40332bb3347055'
+	}
+}, false);
+
 const xmr = dataGenerator.generateCurrency({
 	command: 'xmr',
 	currencyName: 'Monero',
@@ -142,6 +152,7 @@ const help = {
 				{ name: 'doge', summary: doge.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
+				{ name: 'sc', summary: sc.usage[0].content },
 				{ name: 'xmr', summary: xmr.usage[0].content },
 				{ name: 'zec', summary: zec.usage[0].content }
 			]
@@ -199,6 +210,8 @@ module.exports = {
 	ethereum: eth,
 	ltc: ltc,
 	litecoin: ltc,
+	sc: sc,
+	siacoin: sc,
 	xmr: xmr,
 	monero: xmr,
 	zec: zec,

@@ -18,6 +18,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const ChainRadarApi = require('./chainradar');
 const ethApi = require('./etherchain');
+const scApi = require('./siatech');
 const SoChainApi = require('./sochain');
 const zChainApi = require('./zchain');
 
@@ -31,6 +32,7 @@ function getApi(symbol) {
 			doge: new SoChainApi('doge'),
 			eth: ethApi,
 			ltc: new SoChainApi('ltc'),
+			sc: scApi,
 			xmr: new ChainRadarApi('xmr'),
 			zec: zChainApi
 		};
