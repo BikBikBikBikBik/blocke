@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const ChainRadarApi = require('./chainradar');
+const dcrApi = require('./decred');
 const ethApi = require('./etherchain');
 const scApi = require('./siatech');
 const SoChainApi = require('./sochain');
@@ -29,6 +30,7 @@ function getApi(symbol) {
 			aeon: new ChainRadarApi('aeon'),
 			btc: new SoChainApi('btc'),
 			dash: new SoChainApi('dash'),
+			dcr: dcrApi,
 			doge: new SoChainApi('doge'),
 			eth: ethApi,
 			ltc: new SoChainApi('ltc'),

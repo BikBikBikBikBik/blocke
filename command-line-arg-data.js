@@ -55,6 +55,17 @@ const dash = dataGenerator.generateCurrency({
 	}
 });
 
+const dcr = dataGenerator.generateCurrency({
+	command: 'dcr',
+	currencyName: 'Decred',
+	optionSamples: {
+		account: 'DsiFdJ2RjLFPM9bTtvn16j3hLvBrcjYK1n3',
+		blockHash: '00000000000000ab859cf034f1048deee4a75e206a7e9a73befdeba6c69b8c08',
+		blockNumber: 153050,
+		transactionHash: 'b1ea1adf3236afee8b15167f130dfc8ec18dd1160e9e5400fc8d9842ad8a71fc'
+	}
+});
+
 const doge = dataGenerator.generateCurrency({
 	command: 'doge',
 	currencyName: 'Dogecoin',
@@ -149,6 +160,7 @@ const help = {
 				{ name: 'aeon', summary: aeon.usage[0].content },
 				{ name: 'btc', summary: btc.usage[0].content },
 				{ name: 'dash', summary: dash.usage[0].content },
+				{ name: 'dcr', summary: dcr.usage[0].content },
 				{ name: 'doge', summary: doge.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
@@ -204,6 +216,8 @@ module.exports = {
 	btc: btc,
 	bitcoin: btc,
 	dash: dash,
+	dcr: dcr,
+	decred: dcr,
 	doge: doge,
 	dogecoin: doge,
 	eth: eth,

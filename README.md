@@ -3,6 +3,7 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * AEON
 * BTC
 * DASH
+* DCR
 * DOGE
 * ETH
 * LTC
