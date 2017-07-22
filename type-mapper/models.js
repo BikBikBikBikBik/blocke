@@ -66,8 +66,8 @@ class Transaction {
 		const senders = _.map(this._senders, (sender) => `${sender.address} (${sender.amount})`);
 		
 		return `Amount Sent: ${this._amountSent}\n` +
-			   (senders.length > 0 ? `Senders:     ${senders.join(', ')}\n` : '') +
-			   (recipients.length > 0 ? `Recipients:  ${recipients.join(', ')}\n` : '') +
+			   (senders.length > 0 ? `Senders:     ${senders.join('\n             ')}\n` : '') +
+			   (recipients.length > 0 ? `Recipients:  ${recipients.join('\n             ')}\n` : '') +
 			   `Block Hash:  ${this._blockHash}\n` +
 			   `Hash:        ${this._hash}\n` +
 			   (this._time !== undefined ? `Time:        ${this._time.toString()}` : '');
