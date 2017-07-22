@@ -28,7 +28,8 @@ const shortHandMap = {
 	bitcoin: 'btc',
 	ethereum: 'eth',
 	litecoin: 'ltc',
-	monero: 'xmr'
+	monero: 'xmr',
+	zcash: 'zec'
 };
 const validCommands = Object.keys(commandLineArgData).concat([null]);
 
@@ -87,5 +88,9 @@ try {
 		}
 	}
 } catch (e) {
-	console.log(e);
+	if (e instanceof Error) {
+		console.log(e.message);
+	} else {
+		console.log(commandLineUsage(commandLineArgData['null'].usage));
+	}
 }
