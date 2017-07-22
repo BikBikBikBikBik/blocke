@@ -23,7 +23,7 @@ const piconeroPerMonero = 1000000000000;
 
 class ChainRadarTypeMapper {
 	mapAccount(account) {
-		throw new 'Operation not supported.';
+		throw new Error('Operation not supported.');
 	}
 	
 	mapBlock(block) {

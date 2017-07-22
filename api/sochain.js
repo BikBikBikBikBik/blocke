@@ -26,7 +26,7 @@ class SoChainClient extends ApiClientBase {
 		
 		let formattedNetwork = network.trim().toUpperCase();
 		if (_soChainSupportedNetworks.indexOf(formattedNetwork) === -1) {
-			throw `Unsupported network: ${network}`;
+			throw new Error(`Unsupported network: ${network}`);
 		}
 		
 		this._network = formattedNetwork;

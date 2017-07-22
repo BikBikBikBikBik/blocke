@@ -48,7 +48,7 @@ class OptionRequestHandler {
 		this._options = options;
 		
 		if (this._api === undefined || this._typeMapper === undefined) {
-			throw `Unsupported API: ${api}`;
+			throw new Error(`Unsupported API: ${api}`);
 		}
 	}
 	

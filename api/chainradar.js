@@ -47,7 +47,7 @@ class ChainRadarClient extends ApiClientBase {
 		
 		let formattedNetwork = network.trim().toLowerCase();
 		if (_chainRadarSupportedNetworks.indexOf(formattedNetwork) === -1) {
-			throw `Unsupported network: ${network}`;
+			throw new Error(`Unsupported network: ${network}`);
 		}
 		if (formattedNetwork === 'xmr') {
 			//ChainRadar uses 'mro' as the symbol for XMR
