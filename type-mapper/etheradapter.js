@@ -20,7 +20,7 @@ const { Account, Block, Transaction } = require('./models');
 
 const weiPerEther = 1000000000000000000;
 
-class EtherchainTypeMapper {
+class EtherAdapterTypeMapper {
 	mapAccount(account) {
 		return new Account(account.address, account.balance / weiPerEther);
 	}
@@ -30,10 +30,11 @@ class EtherchainTypeMapper {
 	}
 	
 	mapTransaction(transaction) {
-		const amountInEther = transaction.amount / weiPerEther;
+		const amount = parseInt(transaction.value, 16) / transaction.valueDivisor;
+		const amountString = `${amount}${transaction.valueSymbol.length > 0 ? ' ' : ''}${transaction.valueSymbol}`;
 		
-		return new Transaction(amountInEther, transaction.blockHash, transaction.hash, { address: transaction.recipient, amount: amountInEther }, { address: transaction.sender, amount: amountInEther }, new Date(transaction.time));
+		return new Transaction(amountString, transaction.blockHash, transaction.hash, { address: transaction.to, amount: amountString }, { address: transaction.from, amount: amountString }, new Date(transaction.time));
 	}
 }
 
-module.exports = new EtherchainTypeMapper();
+module.exports = new EtherAdapterTypeMapper();

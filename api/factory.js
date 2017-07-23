@@ -18,7 +18,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const ChainRadarApi = require('./chainradar');
 const dcrApi = require('./decred');
-const ethApi = require('./etherchain');
+const ethApi = require('./etheradapter');
 const scApi = require('./siatech');
 const SoChainApi = require('./sochain');
 const zChainApi = require('./zchain');

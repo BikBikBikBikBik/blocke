@@ -2,7 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v0.13.0 - 2017-07-23
+### Added
 - This CHANGELOG file
+
+### Changed
+- ERC-20 token transactions will now show the amount of tokens transferred and the proper recipient address (instead of the contract address)
 
 ## v0.12.0 - 2017-07-22
 ### Added

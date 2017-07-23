@@ -18,7 +18,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const chainRadarMapper = require('./chainradar');
 const dcrMapper = require('./decred');
-const ethMapper = require('./etherchain');
+const ethMapper = require('./etheradapter');
 const scMapper = require('./siatech');
 const soChainMapper = require('./sochain');
 const zChainMapper = require('./zchain');
