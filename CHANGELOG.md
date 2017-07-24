@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Changed
+- Simplified account and block outputs when some values are 0
 
 ## v0.14.0 - 2017-07-24
 ### Added

@@ -27,9 +27,11 @@ class Account {
 	
 	toString() {
 		return `Address:             ${this._address}\n` +
+			   (this._unconfirmedBalance > 0 ? (
 			   `Confirmed Balance:   ${this._confirmedBalance}\n` +
 			   `Unconfirmed Balance: ${this._unconfirmedBalance}\n` +
-			   `Total Balance:       ${this._confirmedBalance + this._unconfirmedBalance}`;
+			   `Total Balance:       ${this._confirmedBalance + this._unconfirmedBalance}`)
+			   : (`Balance:             ${this._confirmedBalance}\n`));
 	}
 }
 
@@ -46,7 +48,7 @@ class Block {
 		return `Hash:           ${this._hash}\n` +
 			   `Number:         ${this._number}\n` +
 			   `# Transactions: ${this._transactionCount}\n` +
-			   `Difficulty:     ${this._difficulty}\n` +
+			   (this._difficulty > 0 ? `Difficulty:     ${this._difficulty}\n` : '') +
 			   `Time:           ${this._time.toString()}`;
 	}
 }
