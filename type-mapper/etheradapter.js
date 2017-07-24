@@ -33,7 +33,7 @@ class EtherAdapterTypeMapper {
 		const amount = parseInt(transaction.value, 16) / transaction.valueDivisor;
 		const amountString = `${amount}${transaction.valueSymbol.length > 0 ? ' ' : ''}${transaction.valueSymbol}`;
 		
-		return new Transaction(amountString, transaction.blockHash, transaction.hash, { address: transaction.to, amount: amountString }, { address: transaction.from, amount: amountString }, new Date(transaction.time));
+		return new Transaction(amountString, transaction.blockHash, transaction.hash, { address: transaction.finalRecipient, amount: amountString }, { address: transaction.from, amount: amountString }, new Date(transaction.time));
 	}
 }
 

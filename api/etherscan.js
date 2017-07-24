@@ -35,15 +35,6 @@ function hex2ascii(hexx) {
     return str.trim();
 }
 
-function updateTransactionWithTokenData(transaction, contractTransferInputs, tokenData) {
-	transaction.to = contractTransferInputs.hasOwnProperty('to') ? contractTransferInputs.to : transaction.to;
-	transaction.value = contractTransferInputs.hasOwnProperty('amount') ? contractTransferInputs.amount : transaction.value;
-	transaction.valueDivisor = tokenData.hasOwnProperty('decimals') ? Math.pow(10, tokenData.decimals) : 1000000000000000000;
-	transaction.valueSymbol = tokenData.hasOwnProperty('symbol') ? tokenData.symbol : '';
-	
-	return transaction;
-}
-
 class EtherscanClient extends ApiClientBase {
 	constructor() {
 		super('https://api.etherscan.io/api?');
@@ -59,8 +50,6 @@ class EtherscanClient extends ApiClientBase {
 	
 	getTransaction(transactionHash) {
 		let abi = undefined;
-		let contractTransferInputs = {};
-		let tokenData = {};
 		let transaction = undefined;
 		
 		const self = this;
@@ -68,6 +57,9 @@ class EtherscanClient extends ApiClientBase {
 		return self.executeRequest(`module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}`, 'Transaction').then(function(res) {
 			if (res.hasOwnProperty('result')) {
 				transaction = res.result;
+				transaction.finalRecipient = transaction.to;		//The 'to' field may be a contract address (and therefore needed later) so use 'finalRecipient' as the actual recipient
+				transaction.valueSymbol = '';
+				transaction.valueDivisor = 1000000000000000000;		//Amount of wei in 1 ether
 				
 				return self.executeRequest(`module=contract&action=getabi&address=${transaction.to}`, 'Transaction');
 			}
@@ -77,7 +69,7 @@ class EtherscanClient extends ApiClientBase {
 			if (res.status === '1' && res.message === 'OK') {
 				abi = JSON.parse(res.result);
 				//v0.0.2 of ethereum-input-data-decoder on NPM doesn't account for a null 'inputs' field. The fix is in
-				// on GitHub so this workaround is temporary  until that is published.
+				// on GitHub so this workaround is temporary until that is published.
 				_.each(abi, (obj) => obj.inputs = obj.inputs ? obj.inputs : []);
 
 				const abiDecoder = new AbiDecoder(abi);
@@ -86,8 +78,8 @@ class EtherscanClient extends ApiClientBase {
 				const uint256Index = decodedInput.types.indexOf('uint256');
 				
 				if (decodedInput.name === 'transfer' && addressIndex !== -1 && uint256Index !== -1) {
-					contractTransferInputs.to = '0x' + decodedInput.inputs[addressIndex].toString(16);
-					contractTransferInputs.amount = decodedInput.inputs[uint256Index].toString(16);
+					transaction.finalRecipient = '0x' + decodedInput.inputs[addressIndex].toString(16);
+					transaction.value = decodedInput.inputs[uint256Index].toString(16);
 					
 					const decimals = _.find(abi, (func) => func.name === 'decimals');
 					if (decimals !== undefined) {
@@ -101,7 +93,7 @@ class EtherscanClient extends ApiClientBase {
 			return transaction;
 		}).then(function(res) {
 			if (res.hasOwnProperty('result') && res.result !== '0x') {
-				tokenData.decimals = parseInt(res.result, 16);
+				transaction.valueDivisor = Math.pow(10, parseInt(res.result, 16));
 				
 				const symbol = _.find(abi, (func) => func.name === 'symbol');
 				if (symbol !== undefined) {
@@ -114,11 +106,11 @@ class EtherscanClient extends ApiClientBase {
 			return transaction;
 		}).then(function(res) {
 			if (res.hasOwnProperty('result') && res.result !== '0x') {
-				tokenData.symbol = hex2ascii(res.result);
+				transaction.valueSymbol = hex2ascii(res.result);
 			}
 			
 			return transaction;
-		}).then((res) => updateTransactionWithTokenData(res, contractTransferInputs, tokenData));
+		});
 	}
 }
 
