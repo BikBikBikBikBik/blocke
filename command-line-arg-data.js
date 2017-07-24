@@ -88,6 +88,17 @@ const eth = dataGenerator.generateCurrency({
 	}
 });
 
+const kmd = dataGenerator.generateCurrency({
+	command: 'kmd',
+	currencyName: 'Komodo',
+	optionSamples: {
+		account: 'RXbb9PkefXcsqq8wqiUZZUuq8e3p29mw1G',
+		blockHash: '0b76655d4f4b39b9ca2ddecc9a435ca7479eac5af1c745d9b6bfe7af7298b79a',
+		blockNumber: 419556,
+		transactionHash: '516ad5680feb7779f3af7b47ceb036989fe19c9c00d9543d11d7abec81e79bc2'
+	}
+});
+
 const ltc = dataGenerator.generateCurrency({
 	command: 'ltc',
 	currencyName: 'Litecoin',
@@ -163,6 +174,7 @@ const help = {
 				{ name: 'dcr', summary: dcr.usage[0].content },
 				{ name: 'doge', summary: doge.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
+				{ name: 'kmd', summary: kmd.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
 				{ name: 'sc', summary: sc.usage[0].content },
 				{ name: 'xmr', summary: xmr.usage[0].content },
@@ -222,6 +234,8 @@ module.exports = {
 	dogecoin: doge,
 	eth: eth,
 	ethereum: eth,
+	kmd: kmd,
+	komodo: kmd,
 	ltc: ltc,
 	litecoin: ltc,
 	sc: sc,

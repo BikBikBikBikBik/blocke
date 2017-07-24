@@ -19,7 +19,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 const { Account, Block, Transaction } = require('./models');
 const _ = require('underscore');
 
-class DecredTypeMapper {
+class InsightTypeMapper {
 	mapAccount(account) {
 		return new Account(account.addrStr, account.balance, account.unconfirmedBalance);
 	}
@@ -29,10 +29,13 @@ class DecredTypeMapper {
 	}
 	
 	mapTransaction(transaction) {
-		return new Transaction(_.reduce(transaction.vin, (total, input) => total + input.value, 0), transaction.blockhash, transaction.txid,
-			_.map(transaction.vout, (output) => ({ address: output.scriptPubKey.addresses[0], amount: parseFloat(output.value) })),
-			_.map(transaction.vin, (input) => ({ address: input.addr, amount: input.value })), transaction.time ? new Date(transaction.time * 1000) : undefined);
+		const normalInputs = _.filter(transaction.vin, (input) => input.hasOwnProperty('addr') && input.hasOwnProperty('value'));	//Exclude coinbase inputs
+		const normalOutputs = _.filter(transaction.vout, (output) => output.scriptPubKey.hasOwnProperty('addresses'));
+		
+		return new Transaction(_.reduce(normalInputs, (total, input) => total + input.value, 0), transaction.blockhash, transaction.txid,
+			_.map(normalOutputs, (output) => ({ address: output.scriptPubKey.addresses[0], amount: parseFloat(output.value) })),
+			_.map(normalInputs, (input) => ({ address: input.addr, amount: input.value })), transaction.time ? new Date(transaction.time * 1000) : undefined);
 	}
 }
 
-module.exports = new DecredTypeMapper();
+module.exports = new InsightTypeMapper();

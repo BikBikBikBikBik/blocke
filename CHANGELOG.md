@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v0.14.0 - 2017-07-24
+### Added
+- Support for KMD
+
 ## v0.13.0 - 2017-07-23
 ### Added
 - This CHANGELOG file

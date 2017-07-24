@@ -28,6 +28,7 @@ const shortHandMap = {
 	bitcoin: 'btc',
 	decred: 'dcr',
 	ethereum: 'eth',
+	komodo: 'kmd',
 	litecoin: 'ltc',
 	monero: 'xmr',
 	siacoin: 'sc',

@@ -18,9 +18,19 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const ApiClientBase = require('./api-client-base');
 
-class DecredClient extends ApiClientBase {
-	constructor() {
-		super('https://mainnet.decred.org/api/');
+const _insightApiBaseAddressMap = {
+	dcr: 'https://mainnet.decred.org/api/',
+	kmd: 'http://kmd.explorer.supernet.org/api/'
+};
+
+class InsightClient extends ApiClientBase {
+	constructor(network) {
+		let formattedNetwork = network.trim().toLowerCase();
+		if (!_insightApiBaseAddressMap.hasOwnProperty(formattedNetwork)) {
+			throw new Error(`Unsopported network: ${network}`);
+		}
+		
+		super(_insightApiBaseAddressMap[formattedNetwork]);
 	}
 	
 	getAccount(accountAddress) {
@@ -54,4 +64,4 @@ class DecredClient extends ApiClientBase {
 	}
 }
 
-module.exports = new DecredClient();
+module.exports = InsightClient;

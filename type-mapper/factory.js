@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const chainRadarMapper = require('./chainradar');
-const dcrMapper = require('./decred');
 const ethMapper = require('./etheradapter');
+const insightMapper = require('./insight');
 const scMapper = require('./siatech');
 const soChainMapper = require('./sochain');
 const zChainMapper = require('./zchain');
@@ -30,9 +30,10 @@ function getTypeMapper(symbol) {
 			aeon: chainRadarMapper,
 			btc: soChainMapper,
 			dash: soChainMapper,
-			dcr: dcrMapper,
+			dcr: insightMapper,
 			doge: soChainMapper,
 			eth: ethMapper,
+			kmd: insightMapper,
 			ltc: soChainMapper,
 			sc: scMapper,
 			xmr: chainRadarMapper,
