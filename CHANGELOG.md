@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+- Support for WAVES
+
 ### Changed
 - Simplified account and block outputs when some values are 0
 

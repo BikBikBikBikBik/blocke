@@ -120,6 +120,17 @@ const sc = dataGenerator.generateCurrency({
 	}
 }, false);
 
+const waves = dataGenerator.generateCurrency({
+	command: 'waves',
+	currencyName: 'Waves',
+	optionSamples: {
+		account: '3P51e7GJUTR6hQXq7UTdaX5H4SA1U6gRryn',
+		blockHash: '45ZELbZm5PNXhdixKMniPjU4hGZNyYY53vGVcxAmG76R9ZAwX89p5neMc9MH4ucP5S1E3pePHc99BMUJ8n2xk34',
+		blockNumber: 590750,
+		transactionHash: 'GQcZj4wFnMBqpGYNu7DW4ZwNQSQSAsH7jnGe9eJXxyWH'
+	}
+});
+
 const xmr = dataGenerator.generateCurrency({
 	command: 'xmr',
 	currencyName: 'Monero',
@@ -177,6 +188,7 @@ const help = {
 				{ name: 'kmd', summary: kmd.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
 				{ name: 'sc', summary: sc.usage[0].content },
+				{ name: 'waves', summary: sc.usage[0].content },
 				{ name: 'xmr', summary: xmr.usage[0].content },
 				{ name: 'zec', summary: zec.usage[0].content }
 			]
@@ -240,6 +252,7 @@ module.exports = {
 	litecoin: ltc,
 	sc: sc,
 	siacoin: sc,
+	waves: waves,
 	xmr: xmr,
 	monero: xmr,
 	zec: zec,

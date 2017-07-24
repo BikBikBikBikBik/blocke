@@ -21,6 +21,7 @@ const ethApi = require('./etheradapter');
 const InsightApi = require('./insight');
 const scApi = require('./siatech');
 const SoChainApi = require('./sochain');
+const wavesApi = require('./wavesexplorer');
 const zChainApi = require('./zchain');
 
 function getApi(symbol) {
@@ -36,6 +37,7 @@ function getApi(symbol) {
 			kmd: new InsightApi('kmd'),
 			ltc: new SoChainApi('ltc'),
 			sc: scApi,
+			waves: wavesApi,
 			xmr: new ChainRadarApi('xmr'),
 			zec: zChainApi
 		};

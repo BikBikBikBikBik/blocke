@@ -21,6 +21,7 @@ const ethMapper = require('./etheradapter');
 const insightMapper = require('./insight');
 const scMapper = require('./siatech');
 const soChainMapper = require('./sochain');
+const wavesMapper = require('./wavesexplorer');
 const zChainMapper = require('./zchain');
 
 function getTypeMapper(symbol) {
@@ -36,6 +37,7 @@ function getTypeMapper(symbol) {
 			kmd: insightMapper,
 			ltc: soChainMapper,
 			sc: scMapper,
+			waves: wavesMapper,
 			xmr: chainRadarMapper,
 			zec: zChainMapper
 		};
