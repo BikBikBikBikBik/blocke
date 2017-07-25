@@ -32,6 +32,7 @@ const shortHandMap = {
 	litecoin: 'ltc',
 	monero: 'xmr',
 	siacoin: 'sc',
+	vertcoin: 'vtc',
 	zcash: 'zec'
 };
 const validCommands = Object.keys(commandLineArgData).concat([null]);

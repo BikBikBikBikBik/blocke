@@ -120,6 +120,17 @@ const sc = dataGenerator.generateCurrency({
 	}
 }, false);
 
+const vtc = dataGenerator.generateCurrency({
+	command: 'vtc',
+	currencyName: 'Vertcoin',
+	optionSamples: {
+		account: 'VkdFmDNm7geGEWLHiPvEEaaPs2fAD7bmdc',
+		blockHash: '1b52cf30a05eba4be3bab57303aecc55092ecb44e65b94a7c46fd3a82ef3ec4c',
+		blockNumber: 750100,
+		transactionHash: '8f5de2a5417169e89d4104984a7c6e6d520d2ab467c963e18b543bfc6a52786c'
+	}
+});
+
 const waves = dataGenerator.generateCurrency({
 	command: 'waves',
 	currencyName: 'Waves',
@@ -188,6 +199,7 @@ const help = {
 				{ name: 'kmd', summary: kmd.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
 				{ name: 'sc', summary: sc.usage[0].content },
+				{ name: 'vtc', summary: xmr.usage[0].content },
 				{ name: 'waves', summary: sc.usage[0].content },
 				{ name: 'xmr', summary: xmr.usage[0].content },
 				{ name: 'zec', summary: zec.usage[0].content }
@@ -252,6 +264,8 @@ module.exports = {
 	litecoin: ltc,
 	sc: sc,
 	siacoin: sc,
+	vtc: vtc,
+	vertcoin: vtc,
 	waves: waves,
 	xmr: xmr,
 	monero: xmr,

@@ -25,4 +25,4 @@ class ExtendedSpinner extends Spinner {
 	}
 }
 
-module.exports = ExtendedSpinner;
+module.exports = new ExtendedSpinner();

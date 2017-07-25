@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const spinner = new (require('./extended-spinner'))();
+const spinner = require('./extended-spinner');
 const apiFactory = require('./api/factory');
 const typeMapperFactory = require('./type-mapper/factory');
 

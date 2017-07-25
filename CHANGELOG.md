@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v0.15.0 - 2017-07-25
 ### Added
+- Support for VTC
 - Support for WAVES
 
 ### Changed

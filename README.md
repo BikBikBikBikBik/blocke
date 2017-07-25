@@ -9,6 +9,8 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * KMD
 * LTC
 * SC
+* VTC
+* WAVES
 * XMR
 * ZEC
 
