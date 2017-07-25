@@ -27,6 +27,7 @@ const OptionRequestHandler = require('../option-request-handler');
 const shortHandMap = {
 	bitcoin: 'btc',
 	decred: 'dcr',
+	digibyte: 'dgb',
 	ethereum: 'eth',
 	komodo: 'kmd',
 	litecoin: 'ltc',

@@ -33,6 +33,7 @@ function getApi(symbol) {
 			btc: new SoChainApi('btc'),
 			dash: new SoChainApi('dash'),
 			dcr: new InsightApi('dcr'),
+			dgb: new InsightApi('dgb'),
 			doge: new SoChainApi('doge'),
 			eth: ethApi,
 			kmd: new InsightApi('kmd'),

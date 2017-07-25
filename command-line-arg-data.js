@@ -66,6 +66,17 @@ const dcr = dataGenerator.generateCurrency({
 	}
 });
 
+const dgb = dataGenerator.generateCurrency({
+	command: 'dgb',
+	currencyName: 'DigiByte',
+	optionSamples: {
+		account: 'DMpcX23uinH51jGVSbxkyBQmrwRJaa9uf5',
+		blockHash: 'd37f51107a585e1913f86913da9dc46d0f8ff3399bfb083cb85284b63d2c05de',
+		blockNumber: 4902010,
+		transactionHash: '87412d33557897515e084c6be923008435560bb6d264b4fa885d1af47703aaef'
+	}
+});
+
 const doge = dataGenerator.generateCurrency({
 	command: 'doge',
 	currencyName: 'Dogecoin',
@@ -194,6 +205,7 @@ const help = {
 				{ name: 'btc', summary: btc.usage[0].content },
 				{ name: 'dash', summary: dash.usage[0].content },
 				{ name: 'dcr', summary: dcr.usage[0].content },
+				{ name: 'dgb', summary: dcr.usage[0].content },
 				{ name: 'doge', summary: doge.usage[0].content },
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'kmd', summary: kmd.usage[0].content },
@@ -254,6 +266,8 @@ module.exports = {
 	dash: dash,
 	dcr: dcr,
 	decred: dcr,
+	dgb: dgb,
+	digibyte: dgb,
 	doge: doge,
 	dogecoin: doge,
 	eth: eth,

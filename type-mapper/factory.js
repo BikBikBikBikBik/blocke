@@ -33,6 +33,7 @@ function getTypeMapper(symbol) {
 			btc: soChainMapper,
 			dash: soChainMapper,
 			dcr: insightMapper,
+			dgb: insightMapper,
 			doge: soChainMapper,
 			eth: ethMapper,
 			kmd: insightMapper,

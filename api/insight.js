@@ -20,6 +20,7 @@ const ApiClientBase = require('./api-client-base');
 
 const _insightApiBaseAddressMap = {
 	dcr: 'https://mainnet.decred.org/api/',
+	dgb: 'https://digiexplorer.info/api/',
 	kmd: 'http://kmd.explorer.supernet.org/api/'
 };
 
