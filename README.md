@@ -23,23 +23,23 @@ With more on the way.
 $ npm install -g blocke
 ```
 
-<br />
-If you encounter errors regarding sha3 during installation, try installing from source. Clone the repository:
+### Troubleshooting
+If you encounter errors regarding sha3 during installation, try installing from source. 
+
+The recommended way is using a release available [here](https://github.com/BikBikBikBikBik/blocke/releases):
+
+```
+$ wget https://github.com/BikBikBikBikBik/blocke/archive/vX.Y.Z.zip
+$ unzip vX.Y.Z.zip && cd blocke-X.Y.Z
+$ npm install
+$ npm link
+```
+
+Alternatively, clone the repository for the latest (potentially unreleased) version:
 
 ```
 $ git clone https://github.com/BikBikBikBikBik/blocke.git
 $ cd blocke
-```
-
-While you can always build the latest, it's best to checkout a [specific version](https://github.com/BikBikBikBikBik/blocke/releases). For example:
-
-```
-$ git checkout tags/v0.18.0
-```
-
-Then install with NPM:
-
-```
 $ npm install
 $ npm link
 ```
