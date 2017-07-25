@@ -17,12 +17,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const commandLineArgData = require('../command-line-arg-data');
+const commandLineArgData = require('../lib/command-line-arg-data');
 const commandLineArgs = require('command-line-args');
 const commandLineCommands = require('command-line-commands');
 const commandLineUsage = require('command-line-usage');
 const version = require('../package.json').version;
-const OptionRequestHandler = require('../option-request-handler');
+const OptionRequestHandler = require('../lib/option-request-handler');
 
 const validCommands = Object.keys(commandLineArgData).concat([null]);
 
