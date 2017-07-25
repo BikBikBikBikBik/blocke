@@ -17,13 +17,16 @@ You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 const dataGenerator = require('./command-line-arg-data-generator');
+const _ = require('underscore');
 
 /*
  *
  *  Currencies
  *
  */
-const aeon = dataGenerator.generateCurrency({
+const currencies = {};
+
+currencies.aeon = dataGenerator.generateCurrency({
 	command: 'aeon',
 	currencyName: 'Aeon',
 	optionSamples: {
@@ -33,7 +36,7 @@ const aeon = dataGenerator.generateCurrency({
 	}
 }, false);
 
-const btc = dataGenerator.generateCurrency({
+currencies.btc = dataGenerator.generateCurrency({
 	command: 'btc',
 	currencyName: 'Bitcoin',
 	optionSamples: {
@@ -44,7 +47,7 @@ const btc = dataGenerator.generateCurrency({
 	}
 });
 
-const dash = dataGenerator.generateCurrency({
+currencies.dash = dataGenerator.generateCurrency({
 	command: 'dash',
 	currencyName: 'Dash',
 	optionSamples: {
@@ -55,7 +58,7 @@ const dash = dataGenerator.generateCurrency({
 	}
 });
 
-const dcr = dataGenerator.generateCurrency({
+currencies.dcr = dataGenerator.generateCurrency({
 	command: 'dcr',
 	currencyName: 'Decred',
 	optionSamples: {
@@ -66,7 +69,7 @@ const dcr = dataGenerator.generateCurrency({
 	}
 });
 
-const dgb = dataGenerator.generateCurrency({
+currencies.dgb = dataGenerator.generateCurrency({
 	command: 'dgb',
 	currencyName: 'DigiByte',
 	optionSamples: {
@@ -77,7 +80,7 @@ const dgb = dataGenerator.generateCurrency({
 	}
 });
 
-const doge = dataGenerator.generateCurrency({
+currencies.doge = dataGenerator.generateCurrency({
 	command: 'doge',
 	currencyName: 'Dogecoin',
 	optionSamples: {
@@ -88,7 +91,7 @@ const doge = dataGenerator.generateCurrency({
 	}
 });
 
-const eth = dataGenerator.generateCurrency({
+currencies.eth = dataGenerator.generateCurrency({
 	command: 'eth',
 	currencyName: 'Ethereum',
 	optionSamples: {
@@ -99,7 +102,7 @@ const eth = dataGenerator.generateCurrency({
 	}
 });
 
-const kmd = dataGenerator.generateCurrency({
+currencies.kmd = dataGenerator.generateCurrency({
 	command: 'kmd',
 	currencyName: 'Komodo',
 	optionSamples: {
@@ -110,7 +113,7 @@ const kmd = dataGenerator.generateCurrency({
 	}
 });
 
-const ltc = dataGenerator.generateCurrency({
+currencies.ltc = dataGenerator.generateCurrency({
 	command: 'ltc',
 	currencyName: 'Litecoin',
 	optionSamples: {
@@ -121,7 +124,7 @@ const ltc = dataGenerator.generateCurrency({
 	}
 });
 
-const rdd = dataGenerator.generateCurrency({
+currencies.rdd = dataGenerator.generateCurrency({
 	command: 'rdd',
 	currencyName: 'ReddCoin',
 	optionSamples: {
@@ -132,7 +135,7 @@ const rdd = dataGenerator.generateCurrency({
 	}
 });
 
-const sc = dataGenerator.generateCurrency({
+currencies.sc = dataGenerator.generateCurrency({
 	command: 'sc',
 	currencyName: 'Siacoin',
 	optionSamples: {
@@ -142,7 +145,7 @@ const sc = dataGenerator.generateCurrency({
 	}
 }, false);
 
-const vtc = dataGenerator.generateCurrency({
+currencies.vtc = dataGenerator.generateCurrency({
 	command: 'vtc',
 	currencyName: 'Vertcoin',
 	optionSamples: {
@@ -153,7 +156,7 @@ const vtc = dataGenerator.generateCurrency({
 	}
 });
 
-const waves = dataGenerator.generateCurrency({
+currencies.waves = dataGenerator.generateCurrency({
 	command: 'waves',
 	currencyName: 'Waves',
 	optionSamples: {
@@ -164,7 +167,7 @@ const waves = dataGenerator.generateCurrency({
 	}
 });
 
-const xmr = dataGenerator.generateCurrency({
+currencies.xmr = dataGenerator.generateCurrency({
 	command: 'xmr',
 	currencyName: 'Monero',
 	optionSamples: {
@@ -174,7 +177,7 @@ const xmr = dataGenerator.generateCurrency({
 	}
 }, false);
 
-const zec = dataGenerator.generateCurrency({
+currencies.zec = dataGenerator.generateCurrency({
 	command: 'zec',
 	currencyName: 'Zcash',
 	optionSamples: {
@@ -211,23 +214,9 @@ const help = {
 		},
 		{
 			header: 'Command List',
-			content: [
-				{ name: 'aeon', summary: aeon.usage[0].content },
-				{ name: 'btc', summary: btc.usage[0].content },
-				{ name: 'dash', summary: dash.usage[0].content },
-				{ name: 'dcr', summary: dcr.usage[0].content },
-				{ name: 'dgb', summary: dcr.usage[0].content },
-				{ name: 'doge', summary: doge.usage[0].content },
-				{ name: 'eth', summary: eth.usage[0].content },
-				{ name: 'kmd', summary: kmd.usage[0].content },
-				{ name: 'ltc', summary: ltc.usage[0].content },
-				{ name: 'rdd', summary: sc.usage[0].content },
-				{ name: 'sc', summary: sc.usage[0].content },
-				{ name: 'vtc', summary: xmr.usage[0].content },
-				{ name: 'waves', summary: sc.usage[0].content },
-				{ name: 'xmr', summary: xmr.usage[0].content },
-				{ name: 'zec', summary: zec.usage[0].content }
-			]
+			content: _.map(currencies, function(data, key) {
+				return { name: key, summary: data.usage[0].content };
+			})
 		}
 	]
 };
@@ -271,34 +260,18 @@ nullData.usage = [
  *  Module exports
  *
  */
-module.exports = {
-	aeon: aeon,
-	btc: btc,
-	bitcoin: btc,
-	dash: dash,
-	dcr: dcr,
-	decred: dcr,
-	dgb: dgb,
-	digibyte: dgb,
-	doge: doge,
-	dogecoin: doge,
-	eth: eth,
-	ethereum: eth,
-	kmd: kmd,
-	komodo: kmd,
-	ltc: ltc,
-	litecoin: ltc,
-	rdd: rdd,
-	reddcoin: rdd,
-	sc: sc,
-	siacoin: sc,
-	vtc: vtc,
-	vertcoin: vtc,
-	waves: waves,
-	xmr: xmr,
-	monero: xmr,
-	zec: zec,
-	zcash: zec,
-	help: help,
-	null: nullData
-};
+const moduleExports = _.clone(currencies);
+moduleExports.help = help;
+moduleExports.null = nullData;
+moduleExports.shortHandMap = {};
+
+_.each(currencies, function(data, key) {
+	const formattedName = data.name.toLowerCase();
+	
+	if (!moduleExports.hasOwnProperty(formattedName)) {
+		moduleExports[formattedName] = data;
+		moduleExports.shortHandMap[formattedName] = key;
+	}
+});
+
+module.exports = moduleExports;

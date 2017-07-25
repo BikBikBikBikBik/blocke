@@ -17,7 +17,10 @@ You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
 function generateCurrency(options, includeAccount = true) {
-	const currencyData = { definitions: generateDefinitions(includeAccount) };
+	const currencyData = {
+		definitions: generateDefinitions(includeAccount),
+		name: options.currencyName
+	};
 	options.optionDefinitions = currencyData.definitions;
 	currencyData.usage = generateUsage(options, includeAccount);
 	

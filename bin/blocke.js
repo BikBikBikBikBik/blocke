@@ -24,19 +24,6 @@ const commandLineUsage = require('command-line-usage');
 const version = require('../package.json').version;
 const OptionRequestHandler = require('../option-request-handler');
 
-const shortHandMap = {
-	bitcoin: 'btc',
-	decred: 'dcr',
-	digibyte: 'dgb',
-	ethereum: 'eth',
-	komodo: 'kmd',
-	litecoin: 'ltc',
-	monero: 'xmr',
-	reddcoin: 'rdd',
-	siacoin: 'sc',
-	vertcoin: 'vtc',
-	zcash: 'zec'
-};
 const validCommands = Object.keys(commandLineArgData).concat([null]);
 
 function executeHandler(handler, usage) {
@@ -80,8 +67,8 @@ try {
 			
 			default:
 				let shortHandCommand = command;
-				if (shortHandMap.hasOwnProperty(command)) {
-					shortHandCommand = shortHandMap[command];
+				if (commandLineArgData.shortHandMap.hasOwnProperty(command)) {
+					shortHandCommand = commandLineArgData.shortHandMap[command];
 				}
 				
 				if (noOptionsSpecified) {
