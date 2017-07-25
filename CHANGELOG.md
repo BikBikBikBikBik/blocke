@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Fixed
+- Properly handle non-existent account for VTC
 
 ## v0.15.0 - 2017-07-25
 ### Added

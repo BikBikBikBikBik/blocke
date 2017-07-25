@@ -25,7 +25,13 @@ class VtcOnlineClient extends ApiClientBase {
 	}
 	
 	getAccount(accountAddress) {
-		return this.executeRequest(`ext/getaddress/${accountAddress}`, 'Account');
+		return this.executeRequest(`ext/getaddress/${accountAddress}`, 'Account').then(function(res) {
+			if (typeof(res) === 'object' && !res.hasOwnProperty('error')) {
+				return res;
+			}
+			
+			return Promise.reject('Account not found.');
+		});
 	}
 	
 	getBlockByNumber(blockHeight) {
