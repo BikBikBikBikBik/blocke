@@ -64,8 +64,8 @@ Run `blocke <command> <option> <value>` to explicitly specify the type of value 
 ```
 $ blocke btc -a 1JCe8z4jJVNXSjohjM4i9Hh813dLCNx2Sy
 $ blocke btc --account 1JCe8z4jJVNXSjohjM4i9Hh813dLCNx2Sy
-$ blocke ltc -a LdP8Qox1VAhCzLJNqrr74YovaWYyNBUWvL
-$ blocke ltc --account LdP8Qox1VAhCzLJNqrr74YovaWYyNBUWvL
+$ blocke ltc -t bc6a355ec34194e43a590e86386a771af15c1eb88cc5ce614920a76e36388fe1
+$ blocke ltc --transaction bc6a355ec34194e43a590e86386a771af15c1eb88cc5ce614920a76e36388fe1
 $ blocke xmr -b a886ef5149902d8342475fee9bb296341b891ac67c4842f47a833f23c00ed721
 $ blocke xmr --block a886ef5149902d8342475fee9bb296341b891ac67c4842f47a833f23c00ed721
 ```
