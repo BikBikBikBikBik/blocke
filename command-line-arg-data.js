@@ -82,7 +82,7 @@ const eth = dataGenerator.generateCurrency({
 	currencyName: 'Ethereum',
 	optionSamples: {
 		account: '0x3e65303043928403f8a1a2ca4954386e6f39008c',
-		blockHash: '0x88e96d4537bea4d9c05d12549907b32561d3bf31f45aae734cdc119f13406cb6',
+		blockHash: '0xb8a3f7f5cfc1748f91a684f20fe89031202cbadcd15078c49b85ec2a57f43853',
 		blockNumber: 4000000,
 		transactionHash: '0xf40201acac05384548e6053d3cd2a52c43779bd9a22f054374a9d95f6f1e0886'
 	}

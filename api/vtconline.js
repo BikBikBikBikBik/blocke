@@ -25,7 +25,7 @@ class VtcOnlineClient extends ApiClientBase {
 	}
 	
 	getAccount(accountAddress) {
-		return this.executeRequest(`ext/getaddress/${accountAddress}`, 'Account').then(function(res) {
+		return this.executeRequest(`ext/getaddress/${accountAddress}`, 'Account').then((res) => {
 			if (typeof(res) === 'object' && !res.hasOwnProperty('error')) {
 				return res;
 			}
@@ -35,11 +35,9 @@ class VtcOnlineClient extends ApiClientBase {
 	}
 	
 	getBlockByNumber(blockHeight) {
-		const self = this;
-		
-		return this.executeRequest(`api/getblockhash?index=${blockHeight}`, 'Block').then(function(res) {
+		return this.executeRequest(`api/getblockhash?index=${blockHeight}`, 'Block').then((res) => {
 			if (!res.startsWith('There was an error.')) {
-				return self.getBlockByNumberOrHash(res);
+				return this.getBlockByNumberOrHash(res);
 			}
 			
 			return Promise.reject('Block not found.');
@@ -47,11 +45,9 @@ class VtcOnlineClient extends ApiClientBase {
 	}
 	
 	getBlockByNumberOrHash(blockId) {
-		const self = this;
-		
-		return this.executeRequest(`api/getblock?hash=${blockId}`, 'Block').then(function(res) {
+		return this.executeRequest(`api/getblock?hash=${blockId}`, 'Block').then((res) => {
 			if (typeof(res) === 'string') {
-				return self.getBlockByNumber(blockId);
+				return this.getBlockByNumber(blockId);
 			}
 			
 			return res;
@@ -59,12 +55,10 @@ class VtcOnlineClient extends ApiClientBase {
 	}
 	
 	getTransaction(transactionHash, fetchVinAddresses = true) {
-		const self = this;
-		
-		return this.executeRequest(`api/getrawtransaction?txid=${transactionHash}&decrypt=1`, 'Transaction').then(function(res) {
+		return this.executeRequest(`api/getrawtransaction?txid=${transactionHash}&decrypt=1`, 'Transaction').then((res) => {
 			if (typeof(res) !== 'string') {
 				if (fetchVinAddresses === true) {
-					return self.updateTransactionInputAddresses(res);
+					return this.updateTransactionInputAddresses(res);
 				}
 				
 				return res;
@@ -78,7 +72,7 @@ class VtcOnlineClient extends ApiClientBase {
 		const vinTransactions = _.filter(transaction.vin, (input) => input.hasOwnProperty('txid'));
 		const vinTransactionPromises = _.map(vinTransactions, (input) => this.getTransaction(input.txid, false));
 
-		return Promise.all(vinTransactionPromises).then(function(res) {
+		return Promise.all(vinTransactionPromises).then((res) => {
 			_.each(res, (tx) => {
 				const sourceVin = _.find(vinTransactions, (vin) => vin.txid === tx.txid);
 				

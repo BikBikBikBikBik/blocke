@@ -31,12 +31,12 @@ class EtherAdapter {
 	getTransaction(transactionHash) {
 		let etherscanTransaction = undefined;
 		
-		return etherscanClient.getTransaction(transactionHash).then(function(res) {
+		return etherscanClient.getTransaction(transactionHash).then((res) => {
 			etherscanTransaction = res;
 			
 			//Etherscan does not include the timestamp, so call Etherchain for that
 			return etherchainClient.getTransaction(transactionHash);
-		}).then(function(res) {
+		}).then((res) => {
 			etherscanTransaction.time = res.time;
 			
 			return etherscanTransaction;

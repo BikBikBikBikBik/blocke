@@ -38,9 +38,8 @@ const shortHandMap = {
 const validCommands = Object.keys(commandLineArgData).concat([null]);
 
 function executeHandler(handler, usage) {
-	handler.handleRequest().then(function(res) {
-		console.log(res.toString());
-	}).catch(function(err) {
+	handler.handleRequest().then((res) => console.log(res.toString()))
+	.catch((err) => {
 		if (typeof(err) === 'string') {
 			console.log(err);
 		} else {

@@ -29,9 +29,7 @@ class ApiClientBase {
 			uri: `${this._apiBaseAddress}${uriSuffix}`
 		};
 
-		return request(requestOptions).then(function(res) {
-			return res;
-		}).catch(function(err) {
+		return request(requestOptions).catch((err) => {
 			if (typeof(errorHandler) === 'function') {
 				return errorHandler(err, objectName);
 			}

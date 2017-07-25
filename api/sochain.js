@@ -33,21 +33,15 @@ class SoChainClient extends ApiClientBase {
 	}
 	
 	getAccount(accountAddress) {
-		return this.executeRequest(`get_address_balance/${this._network}/${accountAddress}`, 'Account').then(function(res) {
-			return res.data;
-		});
+		return this.executeRequest(`get_address_balance/${this._network}/${accountAddress}`, 'Account').then((res) => res.data);
 	}
 	
 	getBlockByNumberOrHash(blockId) {
-		return this.executeRequest(`get_block/${this._network}/${blockId}`, 'Block').then(function(res) {
-			return res.data;
-		});
+		return this.executeRequest(`get_block/${this._network}/${blockId}`, 'Block').then((res) => res.data);
 	}
 	
 	getTransaction(transactionHash) {
-		return this.executeRequest(`get_tx/${this._network}/${transactionHash}`, 'Transaction').then(function(res) {
-			return res.data;
-		});
+		return this.executeRequest(`get_tx/${this._network}/${transactionHash}`, 'Transaction').then((res) => res.data);
 	}
 }
 

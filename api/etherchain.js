@@ -24,9 +24,8 @@ function executeRequest(uriSuffix, objectName) {
 		uri: `https://etherchain.org/api/${uriSuffix}`
 	};
 		
-	return request(requestOptions).catch(function(err) {
-		return Promise.reject(`An error occurred while attempting to retrieve the ${objectName.toLowerCase()}.`);
-	}).then(function(res) {
+	return request(requestOptions).catch((err) => Promise.reject(`An error occurred while attempting to retrieve the ${objectName.toLowerCase()}.`))
+	.then((res) => {
 		if (res.data.length === 1) {
 			return res.data[0];
 		}
@@ -43,7 +42,7 @@ class EtherchainClient {
 	}
 	
 	getBlockByNumberOrHash(blockId) {
-		return executeRequest(`block/${blockId}`, 'Block').then(function(res) {
+		return executeRequest(`block/${blockId}`, 'Block').then((res) => {
 			//There is currently a bug in the API that returns block #0 for many invalid block hashes/numbers
 			const formattedBlock = blockId.trim().toLowerCase();
 			if (res.hash.toLowerCase() !== formattedBlock && res.number.toString() !== formattedBlock) {

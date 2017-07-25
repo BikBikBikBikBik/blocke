@@ -30,37 +30,31 @@ class WavesExplorerClient extends ApiClientBase {
 	}
 	
 	getBlockByNumberOrHash(blockId) {
-		const self = this;
-		
-		return this.executeRequest(`blocks/signature/${blockId}`, 'Block').catch(function(err) {
-			return self.executeRequest(`blocks/at/${blockId}`, 'Block');
-		});
+		return this.executeRequest(`blocks/signature/${blockId}`, 'Block').catch((err) => this.executeRequest(`blocks/at/${blockId}`, 'Block'));
 	}
 	
 	getTransaction(transactionHash) {
 		let transaction = undefined;
 		
-		const self = this;
-		
-		return this.executeRequest(`transactions/info/${transactionHash}`, 'Transaction').then(function(res) {
+		return this.executeRequest(`transactions/info/${transactionHash}`, 'Transaction').then((res) => {
 			//Only handle asset transfer transactions
 			if (res.type === 4) {
 				res.valueDivisor = 100000000;
 				res.valueSymbol = '';
 
 				if (typeof(res.assetId) === 'string') {
-					return self.updateTransactionFromAssetInfo(res);
+					return this.updateTransactionFromAssetInfo(res);
 				}
 
 				return res;
 			}
 			
 			return Promise.reject(`Transaction type ${res.type} not supported.`);
-		}).then(function(res) {
+		}).then((res) => {
 			transaction = res;
 			
-			return self.executeRequest(`blocks/at/${transaction.height}`, 'Transaction');
-		}).then(function(res) {
+			return this.executeRequest(`blocks/at/${transaction.height}`, 'Transaction');
+		}).then((res) => {
 			transaction.blockHash = res.signature;
 			
 			return transaction;
@@ -68,7 +62,7 @@ class WavesExplorerClient extends ApiClientBase {
 	}
 	
 	updateTransactionFromAssetInfo(transaction) {
-		return this.executeRequest(`transactions/info/${transaction.assetId}`, 'Transaction').then(function(res) {
+		return this.executeRequest(`transactions/info/${transaction.assetId}`, 'Transaction').then((res) => {
 			transaction.valueDivisor = Math.pow(10, res.decimals);
 			transaction.valueSymbol = res.name;
 			

@@ -29,19 +29,17 @@ class SiaTechClient extends ApiClientBase {
 	}
 	
 	getBlockByNumberOrHash(blockId) {
-		const self = this;
-		
-		return this.executeRequest(`blocks/${blockId}`, 'Block').then(function(res) {
+		return this.executeRequest(`blocks/${blockId}`, 'Block').then((res) => {
 			if (res.block.height.toString() === blockId) {
 				return res.block;
 			}
 			
 			return Promise.reject({blockId: blockId});
-		}).catch(function(err) {
+		}).catch((err) => {
 			if (typeof(err) === 'object' && err.hasOwnProperty('blockId')) {
-				return self.executeRequest(`hashes/${err.blockId}`, 'Block');
+				return this.executeRequest(`hashes/${err.blockId}`, 'Block');
 			}
-		}).then(function(res) {
+		}).then((res) => {
 			if (res.hasOwnProperty('hashtype') && res.hashtype === 'blockid') {
 				return res.block;
 			} else if (!res.hasOwnProperty('hashtype')) {
@@ -53,7 +51,7 @@ class SiaTechClient extends ApiClientBase {
 	}
 	
 	getTransaction(transactionHash) {
-		return this.executeRequest(`hashes/${transactionHash}`, 'Transaction').then(function(res) {
+		return this.executeRequest(`hashes/${transactionHash}`, 'Transaction').then((res) => {
 			if (res.hashtype === 'transactionid') {
 				return res;
 			}

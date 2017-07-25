@@ -26,18 +26,18 @@ function handleIndividualRequest(apiRequest, resultMapper, waitMessage) {
 		spinner.startSpinner(waitMessage);
 	}
 	
-	return apiRequest().then(function(res) {
+	return apiRequest().then((res) => {
 		if (useSpinner) {
 			spinner.stop(true);
 		}
 
 		return resultMapper(res);
-	}).catch(function(error) {
+	}).catch((err) => {
 		if (useSpinner) {
 			spinner.stop(true);
 		}
 
-		return Promise.reject(error);
+		return Promise.reject(err);
 	});
 }
 
@@ -82,18 +82,15 @@ class OptionRequestHandler {
 	}
 	
 	handleUnknownRequest(unknown) {
-		const self = this;
 		spinner.startSpinner('Searching...');
 		
-		return self.handleTransactionRequest(unknown, false).catch(function(err) {
-			return self.handleBlockRequest(unknown, false);
-		}).catch(function(err) {
-			return self.handleAccountRequest(unknown, false);
-		}).catch(function(err) {
+		return this.handleTransactionRequest(unknown, false).catch((err) => this.handleBlockRequest(unknown, false))
+		.catch((err) => this.handleAccountRequest(unknown, false))
+		.catch((err) => {
 			spinner.stop(true);
 
-			return Promise.reject(`Unknown value: ${self._options.unknown}`);
-		}).then(function(res) {
+			return Promise.reject(`Unknown value: ${unknown}`);
+		}).then((res) => {
 			spinner.stop(true);
 
 			return res;

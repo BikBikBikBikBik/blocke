@@ -52,20 +52,18 @@ class EtherscanClient extends ApiClientBase {
 		let abi = undefined;
 		let transaction = undefined;
 		
-		const self = this;
-		
-		return self.executeRequest(`module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}`, 'Transaction').then(function(res) {
+		return this.executeRequest(`module=proxy&action=eth_getTransactionByHash&txhash=${transactionHash}`, 'Transaction').then((res) => {
 			if (res.hasOwnProperty('result')) {
 				transaction = res.result;
 				transaction.finalRecipient = transaction.to;		//The 'to' field may be a contract address (and therefore needed later) so use 'finalRecipient' as the actual recipient
 				transaction.valueSymbol = '';
 				transaction.valueDivisor = 1000000000000000000;		//Amount of wei in 1 ether
 				
-				return self.executeRequest(`module=contract&action=getabi&address=${transaction.to}`, 'Transaction');
+				return this.executeRequest(`module=contract&action=getabi&address=${transaction.to}`, 'Transaction');
 			}
 			
 			return Promise.reject('Transaction not found.');
-		}).then(function(res) {
+		}).then((res) => {
 			if (res.status === '1' && res.message === 'OK') {
 				abi = JSON.parse(res.result);
 				//v0.0.2 of ethereum-input-data-decoder on NPM doesn't account for a null 'inputs' field. The fix is in
@@ -85,13 +83,13 @@ class EtherscanClient extends ApiClientBase {
 					if (decimals !== undefined) {
 						//0x313ce567 is the hash of the 'decimals' field for ERC-20 tokens. It
 						// was derived from require('ethereumjs-abi').methodID('decimals', [])
-						return self.executeRequest(`module=proxy&action=eth_call&to=${transaction.to}&data=0x313ce567&tag=latest`, 'Transaction');
+						return this.executeRequest(`module=proxy&action=eth_call&to=${transaction.to}&data=0x313ce567&tag=latest`, 'Transaction');
 					}
 				}
 			}
 			
 			return transaction;
-		}).then(function(res) {
+		}).then((res) => {
 			if (res.hasOwnProperty('result') && res.result !== '0x') {
 				transaction.valueDivisor = Math.pow(10, parseInt(res.result, 16));
 				
@@ -99,12 +97,12 @@ class EtherscanClient extends ApiClientBase {
 				if (symbol !== undefined) {
 					//0x95d89b41 is the hash of the 'symbol' field for ERC-20 tokens. It
 					// was derived from require('ethereumjs-abi').methodID('symbol', [])
-					return self.executeRequest(`module=proxy&action=eth_call&to=${transaction.to}&data=0x95d89b41&tag=latest`, 'Transaction');
+					return this.executeRequest(`module=proxy&action=eth_call&to=${transaction.to}&data=0x95d89b41&tag=latest`, 'Transaction');
 				}
 			}
 			
 			return transaction;
-		}).then(function(res) {
+		}).then((res) => {
 			if (res.hasOwnProperty('result') && res.result !== '0x') {
 				transaction.valueSymbol = hex2ascii(res.result);
 			}

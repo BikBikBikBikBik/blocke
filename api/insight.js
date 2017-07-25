@@ -38,19 +38,16 @@ class InsightClient extends ApiClientBase {
 	}
 	
 	getBlockByNumberOrHash(blockId) {
-		const self = this;
-		
 		//A block hash may be cast to a valid (different) block height
 		// by the API so try blockId as a block hash first.
-		return this.executeRequest(`block/${blockId}`, 'Block').catch(function(err) {
-			return self.executeRequest(`block-index/${blockId}`, 'Block');
-		}).then(function(res) {
+		return this.executeRequest(`block/${blockId}`, 'Block').catch((err) => this.executeRequest(`block-index/${blockId}`, 'Block'))
+		.then((res) => {
 			if (res.hasOwnProperty('blockHash')) {
-				return self.executeRequest(`block/${res.blockHash}`, 'Block');
+				return this.executeRequest(`block/${res.blockHash}`, 'Block');
 			}
 			
 			return res;
-		}).then(function(res) {
+		}).then((res) => {
 			if (res.hash !== blockId && res.height.toString() !== blockId) {
 				return Promise.reject('Block not found.');
 			}
