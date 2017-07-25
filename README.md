@@ -25,6 +25,7 @@ $ npm install -g blocke
 
 <br />
 If you encounter errors regarding sha3 during installation, try installing from source:
+
 ```
 $ git clone https://github.com/BikBikBikBikBik/blocke.git
 $ cd blocke
