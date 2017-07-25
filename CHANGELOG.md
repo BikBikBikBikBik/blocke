@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+- Instructions to README for handling a possible installation issue with sha3
+
+## v0.17.0 - 2017-07-25
+### Fixed
+- README formatting
 
 ## v0.16.0 - 2017-07-25
 ### Fixed
