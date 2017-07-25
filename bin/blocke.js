@@ -21,14 +21,25 @@ const commandLineArgData = require('../lib/command-line-arg-data');
 const commandLineArgs = require('command-line-args');
 const commandLineCommands = require('command-line-commands');
 const commandLineUsage = require('command-line-usage');
-const version = require('../package.json').version;
 const OptionRequestHandler = require('../lib/option-request-handler');
+const version = require('../package.json').version;
+const _ = require('underscore');
 
 const validCommands = Object.keys(commandLineArgData).concat([null]);
 
 function executeHandler(handler, usage) {
-	handler.handleRequest().then((res) => console.log(res.toString()))
-	.catch((err) => {
+	handler.handleRequest().then((res) => {
+		const resIsArray = Array.isArray(res);
+		
+		if (resIsArray && res.length > 1) {
+			const optionResults = _.map(res, (result) => `${result.option}\n======================\n${result.data.toString()}`);
+			
+			console.log(optionResults.join('\n\n'));
+		} else {
+			console.log((resIsArray ? res[0] : res).data.toString());
+		}
+	}).catch((err) => {
+		console.log(err);
 		if (typeof(err) === 'string') {
 			console.log(err);
 		} else {
@@ -66,15 +77,13 @@ try {
 			break;
 			
 			default:
-				let shortHandCommand = command;
-				if (commandLineArgData.shortHandMap.hasOwnProperty(command)) {
-					shortHandCommand = commandLineArgData.shortHandMap[command];
-				}
-				
 				if (noOptionsSpecified) {
 					options.unknown =  argv[0];
 				}
-				let handler = new OptionRequestHandler(shortHandCommand, options);
+				
+				const shortHandCommand = commandLineArgData.shortHandMap.hasOwnProperty(command) ? commandLineArgData.shortHandMap[command] : command;
+				const handler = new OptionRequestHandler(shortHandCommand, options);
+				
 				executeHandler(handler, usage);
 			break;
 		}
