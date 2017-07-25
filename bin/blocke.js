@@ -32,6 +32,7 @@ const shortHandMap = {
 	komodo: 'kmd',
 	litecoin: 'ltc',
 	monero: 'xmr',
+	reddcoin: 'rdd',
 	siacoin: 'sc',
 	vertcoin: 'vtc',
 	zcash: 'zec'

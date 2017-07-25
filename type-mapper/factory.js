@@ -38,6 +38,7 @@ function getTypeMapper(symbol) {
 			eth: ethMapper,
 			kmd: insightMapper,
 			ltc: soChainMapper,
+			rdd: insightMapper,
 			sc: scMapper,
 			vtc: vtcMapper,
 			waves: wavesMapper,

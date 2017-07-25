@@ -4,10 +4,12 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * BTC
 * DASH
 * DCR
+* DGB
 * DOGE
 * ETH
 * KMD
 * LTC
+* RDD
 * SC
 * VTC
 * WAVES

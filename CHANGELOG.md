@@ -2,9 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v0.18.0 - 2017-07-25
 ### Added
-- Support for DGB
-- Instructions to README for handling a possible installation issue with sha3
+- Support for DGB & RDD
 
 ## v0.17.0 - 2017-07-25
 ### Fixed

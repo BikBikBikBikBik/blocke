@@ -38,6 +38,7 @@ function getApi(symbol) {
 			eth: ethApi,
 			kmd: new InsightApi('kmd'),
 			ltc: new SoChainApi('ltc'),
+			rdd: new InsightApi('rdd'),
 			sc: scApi,
 			vtc: vtcApi,
 			waves: wavesApi,

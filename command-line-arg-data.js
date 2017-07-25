@@ -121,6 +121,17 @@ const ltc = dataGenerator.generateCurrency({
 	}
 });
 
+const rdd = dataGenerator.generateCurrency({
+	command: 'rdd',
+	currencyName: 'ReddCoin',
+	optionSamples: {
+		account: 'RuATrumnHgJHCCjp3WCTGReeHhX4fcZHdQ',
+		blockHash: 'b75fa90a7256f7cfdb81b6ad01f048dc6df182db6c8a5e4153bace583109cb8c',
+		blockNumber: 1818000,
+		transactionHash: '3e0406b7b8fa393fc0a92d36534f3ea8806d469283189dc04523bd96b888d39b'
+	}
+});
+
 const sc = dataGenerator.generateCurrency({
 	command: 'sc',
 	currencyName: 'Siacoin',
@@ -210,6 +221,7 @@ const help = {
 				{ name: 'eth', summary: eth.usage[0].content },
 				{ name: 'kmd', summary: kmd.usage[0].content },
 				{ name: 'ltc', summary: ltc.usage[0].content },
+				{ name: 'rdd', summary: sc.usage[0].content },
 				{ name: 'sc', summary: sc.usage[0].content },
 				{ name: 'vtc', summary: xmr.usage[0].content },
 				{ name: 'waves', summary: sc.usage[0].content },
@@ -276,6 +288,8 @@ module.exports = {
 	komodo: kmd,
 	ltc: ltc,
 	litecoin: ltc,
+	rdd: rdd,
+	reddcoin: rdd,
 	sc: sc,
 	siacoin: sc,
 	vtc: vtc,
