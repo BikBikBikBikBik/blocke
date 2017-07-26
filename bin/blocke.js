@@ -32,20 +32,35 @@ function executeHandler(handler, usage) {
 		const resIsArray = Array.isArray(res);
 		
 		if (resIsArray && res.length > 1) {
-			const optionResults = _.map(res, (result) => `${result.option}\n======================\n${result.data.toString()}`);
+			//[0] = Account results
+			//[1] = The rest of the results
+			const accountsAndOthers = _.partition(res, (result) => result.option === 'Account');
+			//[0] = Block results
+			//[1] = Transaction results
+			const blocksAndTransactions = _.partition(accountsAndOthers[1], (result) => result.option === 'Block');
 			
-			console.log(optionResults.join('\n\n'));
+			const accountOutput = formatOutputResults(accountsAndOthers[0], 'Accounts');
+			const blockOutput = formatOutputResults(blocksAndTransactions[0], 'Blocks');
+			const transactionOutput = formatOutputResults(blocksAndTransactions[1], 'Transactions');
+			
+			console.log(`${accountOutput}${(accountOutput.length > 0 && blockOutput.length > 0 ? '\n\n' : '')}${blockOutput}` +
+						`${((blockOutput.length > 0 || accountOutput.length > 0) && transactionOutput.length > 0 ? '\n\n' : '')}${transactionOutput}`);
 		} else {
 			console.log((resIsArray ? res[0] : res).data.toString());
 		}
 	}).catch((err) => {
-		console.log(err);
 		if (typeof(err) === 'string') {
 			console.log(err);
 		} else {
 			console.log(usage);
 		}
 	});
+}
+
+function formatOutputResults(results, outputTitle) {
+	const resultStrings = _.map(results, (result) => result.data.toString());
+
+	return resultStrings.length > 0 ? `${outputTitle}\n======================\n${resultStrings.join('\n\n')}` : '';
 }
 
 try {

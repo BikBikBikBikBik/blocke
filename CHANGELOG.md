@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 ### Changed
- - Allow multiple different options to be specified. Multiple instances of one option not yet supported.
+ - Allow multiple different options to be specified, including multiple instances of one option type
 
 ## v0.18.0 - 2017-07-25
 ### Added
