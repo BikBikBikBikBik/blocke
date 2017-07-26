@@ -7,6 +7,7 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * DGB
 * DOGE
 * ETH
+* GAME
 * KMD
 * LTC
 * RDD
@@ -16,7 +17,7 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * XMR
 * ZEC
 
-With more on the way.
+Addition of more coins is halted until test suite for current codebase is complete.
 
 <br />
 

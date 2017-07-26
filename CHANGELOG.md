@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v0.20.0 - 2017-07-26
+### Added
+- Support for GAME
+
 ## v0.19.0 - 2017-07-26
 ### Changed
  - Allow multiple different options to be specified, including multiple instances of one option type
