@@ -17,7 +17,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const commandLineArgData = require('../lib/command-line-arg-data');
+const commandLineArgData = require('../lib/command-line-arg-data-usage');
 const commandLineArgs = require('command-line-args');
 const commandLineCommands = require('command-line-commands');
 const commandLineUsage = require('command-line-usage');
