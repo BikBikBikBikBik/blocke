@@ -1,4 +1,7 @@
 # blocke
+[![Build Status](https://travis-ci.org/BikBikBikBikBik/blocke.svg?branch=master)](https://travis-ci.org/BikBikBikBikBik/blocke/)
+
+## Introduction
 Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable). Currently supports:
 * AEON
 * BTC
@@ -17,11 +20,11 @@ Command-line tool to query the blockchain for a variety of cryptos. View blocks,
 * XMR
 * ZEC
 
-Addition of more coins is halted until test suite for current codebase is complete.
+With more on the way.
 
 <br />
 
-# Installation
+## Installation
 ```
 $ npm install -g blocke
 ```
@@ -49,7 +52,7 @@ $ npm link
 
 <br />
 
-# Usage
+## Usage
 See `blocke help` and `blocke help <command>` (or the shorter `blocke <command>`) to view more information and instructions, as well as examples:
 
 ```
