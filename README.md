@@ -1,4 +1,5 @@
 # blocke
+[![NPM Version](https://img.shields.io/npm/v/blocke.svg)](https://www.npmjs.com/package/blocke)
 [![Build Status](https://travis-ci.org/BikBikBikBikBik/blocke.svg?branch=master)](https://travis-ci.org/BikBikBikBikBik/blocke/)
 [![Code Climate](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/gpa.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/)
 
