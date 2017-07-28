@@ -91,7 +91,7 @@ try {
 				}
 			break;
 			
-			default:
+			default: {
 				if (noOptionsSpecified) {
 					options.unknown =  argv[0];
 				}
@@ -100,7 +100,8 @@ try {
 				const handler = new OptionRequestHandler(shortHandCommand, options);
 				
 				executeHandler(handler, usage);
-			break;
+				break;
+			}
 		}
 	}
 } catch (e) {
