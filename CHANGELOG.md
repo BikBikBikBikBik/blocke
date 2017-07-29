@@ -2,8 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+
+## v0.21.0 - 2017-07-29
 ### Added
 - Support for BCN
+- Support for LSK
 - Support for XDN
 
 ## v0.20.0 - 2017-07-26

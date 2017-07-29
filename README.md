@@ -16,6 +16,7 @@ Command-line tool to query the blockchain for a variety of cryptocurrencies. Vie
 * ETH
 * GAME
 * KMD
+* LSK
 * LTC
 * RDD
 * SC
