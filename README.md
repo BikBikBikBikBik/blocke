@@ -21,6 +21,7 @@ Command-line tool to query the blockchain for a variety of cryptocurrencies. Vie
 * SC
 * VTC
 * WAVES
+* XDN
 * XMR
 * ZEC
 
