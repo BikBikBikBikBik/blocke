@@ -32,6 +32,7 @@ describe('type-mapper/*', function() {
 		this.etheradapter = require('../../lib/type-mapper/etheradapter');
 		this.gamecredits = require('../../lib/type-mapper/gamecredits');
 		this.insight = require('../../lib/type-mapper/insight');
+		this.lisk = require('../../lib/type-mapper/lisk');
 		this.siatech = require('../../lib/type-mapper/siatech');
 		this.sochain = require('../../lib/type-mapper/sochain');
 		this.vtconline = require('../../lib/type-mapper/vtconline');
@@ -52,6 +53,22 @@ describe('type-mapper/*', function() {
 				height: 1000000,
 				timestamp: 3453456546,
 				transactions: [ {}, {}, {} ]
+			},
+			transaction: {
+				amountSent: 20000000000000,
+				blockHash: '247575ca01657e2f61845dc2b6a64424c7e45952355757b950220b8def3fe5a0',
+				hash: 'dbb1ddacd2ae0137752f0e761adcab64d463a0f74d1f506f49cd92a11b336bf1',
+				recipients: [
+					{ address: '???', amount: 10000000000000 },
+					{ address: '???', amount: 5000000000000 },
+					{ address: '???', amount: 5000000000000 }
+				],
+				senders: [
+					{ address: '???', amount: 15000000000000 },
+					{ address: '???', amount: 3000000000000 },
+					{ address: '???', amount: 2000000000000 }
+				],
+				timestamp: 345634856739
 			}
 		},
 		etheradapter: {
@@ -65,6 +82,14 @@ describe('type-mapper/*', function() {
 				height: 4000000,
 				timestamp: 1923874932,
 				transactions: [ {}, {} ]
+			},
+			transaction: {
+				amountSent: 12,
+				blockHash: '0x4bae534f0d843a715bf39451e6e4743bb6c6ccc62413a6d0e449143507eeeecb',
+				hash: '0xf40201acac05384548e6053d3cd2a52c43779bd9a22f054374a9d95f6f1e0886',
+				recipients: [{ address: '0x3e65303043928403f8a1a2ca4954386e6f39008c', amount: 12 }],
+				senders: [{ address: '0x3e653030439284g5798gh39g4h5gh9h5g98h9dfa', amount: 12 }],
+				timestamp: 347985634
 			}
 		},
 		gamecredits: {
@@ -92,6 +117,20 @@ describe('type-mapper/*', function() {
 				height: 1818000,
 				timestamp: 398457345,
 				transactions: [ {} ]
+			}
+		},
+		lisk: {
+			account: {
+				address: '18278674964748191682L',
+				balance: 777,
+				unconfirmedBalance: 12.345
+			},
+			block: {
+				difficulty: 0,
+				hash: '9104732968165782510',
+				height: 3494520,
+				timestamp: 1467092942,
+				transactions: [ {}, {} ]
 			}
 		},
 		siatech: {
@@ -169,9 +208,20 @@ describe('type-mapper/*', function() {
 						timestamp: data.chainradar.block.timestamp
 					},
 					transactions: data.chainradar.block.transactions
+				},
+				transaction: {
+					header: {
+						blockHash: data.chainradar.transaction.blockHash,
+						hash: data.chainradar.transaction.hash,
+						timestamp: data.chainradar.transaction.timestamp,
+						totalInputsAmount: data.chainradar.transaction.amountSent
+					},
+					inputs: _.map(data.chainradar.transaction.senders, (sender) => ({amount: sender.amount})),
+					outputs: _.map(data.chainradar.transaction.recipients, (recipient) => ({amount: recipient.amount}))
 				}
 			},
 			expected: {
+				transaction: new Transaction(data.chainradar.transaction.amountSent / 1000000000000, data.chainradar.transaction.blockHash, data.chainradar.transaction.hash, _.map(data.chainradar.transaction.recipients, (r) => ({ address: r.address, amount: r.amount / 1000000000000 })), _.map(data.chainradar.transaction.senders, (s) => ({ address: s.address, amount: s.amount / 1000000000000 })), new Date(data.chainradar.transaction.timestamp * 1000))
 			}
 		},
 		{
@@ -184,6 +234,8 @@ describe('type-mapper/*', function() {
 					number: data.etheradapter.block.height,
 					time: data.etheradapter.block.timestamp,
 					tx_count: data.etheradapter.block.transactions.length
+				},
+				transaction: {
 				}
 			},
 			expected: {
@@ -219,6 +271,24 @@ describe('type-mapper/*', function() {
 				}
 			},
 			expected: {
+			}
+		},
+		{
+			mapper: 'lisk',
+			inputs: {
+				account: { address: data.lisk.account.address, balance: `${data.lisk.account.balance + data.lisk.account.unconfirmedBalance}`, unconfirmedBalance: `${data.lisk.account.unconfirmedBalance}` },
+				block: {
+					block: {
+						id: data.lisk.block.hash,
+						height: data.lisk.block.height,
+						timestamp: data.lisk.block.timestamp - 1464109200,
+						numberOfTransactions: data.lisk.block.transactions.length
+					}
+				}
+			},
+			expected: {
+				account: new Account(data.lisk.account.address, data.lisk.account.balance / 100000000, data.lisk.account.unconfirmedBalance / 100000000),
+				block: new Block(0, data.lisk.block.hash, data.lisk.block.height, new Date(data.lisk.block.timestamp * 1000), data.lisk.block.transactions.length)
 			}
 		},
 		{
@@ -334,6 +404,24 @@ describe('type-mapper/*', function() {
 				const mappedBlock = this[test.mapper].mapBlock(test.inputs.block);
 
 				assert.isTrue(equal(mappedBlock, expectedBlock, {strict: true}), `Actual:\n${mappedBlock}\n\nExpected:\n${expectedBlock}`);
+			});
+		});
+	});
+	
+	/*
+	 *
+	 *  mapTransaction
+	 *
+	 */
+	describe.skip('mapTransaction', function() {
+		tests.forEach(function(test) {
+			const infoString = test.hasOwnProperty('extraTestInfo') ? ` (${test.extraTestInfo})` : '';
+			
+			it(`should map a transaction using ${test.mapper} type mapper${infoString}`, function() {
+				const expectedTransaction = test.expected.hasOwnProperty('transaction') ? test.expected.transaction : new Transaction(data[test.mapper].transaction.amountSent, data[test.mapper].transaction.blockHash, data[test.mapper].transaction.hash, data[test.mapper].transaction.recipients, data[test.mapper].transaction.senders, new Date(data[test.mapper].transaction.timestamp * 1000));
+				const mappedTransaction = this[test.mapper].mapTransaction(test.inputs.transaction);
+
+				assert.isTrue(equal(mappedTransaction, expectedTransaction, {strict: true}), `Actual:\n${mappedTransaction}\n\nExpected:\n${expectedTransaction}`);
 			});
 		});
 	});
