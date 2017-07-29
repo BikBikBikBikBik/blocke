@@ -5,6 +5,8 @@
   "description": "Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable).",
   "keywords": [
     "aeon",
+    "bcn",
+    "bytecoin",
     "btc",
     "bitcoin",
     "dash",
@@ -36,7 +38,8 @@
     "zcash",
     "blockchain",
     "explorer",
-    "cryptocurrency"
+    "cryptocurrency",
+    "cryptocurrencies"
   ],
   "repository": {
     "type": "git",
