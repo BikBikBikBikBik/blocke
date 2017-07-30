@@ -19,6 +19,7 @@ along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 const { Account, Block, Transaction } = require('../../lib/type-mapper/models');
 const assert = require('../chai-setup');
 const equal = require('deep-equal');
+const typeMapperResources = require('../../lib/type-mapper/resources');
 const _ = require('underscore');
 
 describe('type-mapper/*', function() {
@@ -83,14 +84,24 @@ describe('type-mapper/*', function() {
 				timestamp: 1923874932,
 				transactions: [ {}, {} ]
 			},
-			transaction: {
-				amountSent: 12,
-				blockHash: '0x4bae534f0d843a715bf39451e6e4743bb6c6ccc62413a6d0e449143507eeeecb',
-				hash: '0xf40201acac05384548e6053d3cd2a52c43779bd9a22f054374a9d95f6f1e0886',
-				recipients: [{ address: '0x3e65303043928403f8a1a2ca4954386e6f39008c', amount: 12 }],
-				senders: [{ address: '0x3e653030439284g5798gh39g4h5gh9h5g98h9dfa', amount: 12 }],
-				timestamp: 347985634
-			}
+			transaction: [
+				{
+					amountSent: 1500000000000000000,
+					blockHash: '0xb8a3f722222222222222222222222222202cbadcd15078c49b85ec2a57f43853',
+					hash: '0xc29be27791cea31fd0f6eff81bb94ce74061530e678374653847563847563485',
+					recipients: [{ address: '0x3e653030434534111111111114954386e6f39008', amount: 1500000000000000000 }],
+					senders: [{ address: '0x3e65303043453453453452ca4954386e6f39008c', amount: 1500000000000000000 }],
+					timestamp: 36745837465
+				},
+				{
+					amountSent: 23000000000000000,
+					blockHash: '0xb8a3f7f5cfc174833333333333333331202cbadcd15078c49b85ec2a57f43853',
+					hash: '0xf99f296134792eca91bd7c93478539845739485734958fab19443e351516ccba',
+					recipients: [{ address: '0x3e345345345555555554a1a2ca4954386e6f3008', amount: 23000000000000000 }],
+					senders: [{ address: '0x3e34534534534534534a1a2ca4954386e6f39008', amount: 23000000000000000 }],
+					timestamp: 34503987453
+				}
+			]
 		},
 		gamecredits: {
 			account: {
@@ -103,7 +114,32 @@ describe('type-mapper/*', function() {
 				height: 1721200,
 				timestamp: 934786539846,
 				transactions: [ {}, {}, {}, {} ]
-			}
+			},
+			transaction: [
+				{
+					amountSent: 100,
+					blockHash: '29dcb10822ccb97b408d3ff6fbe001cf632e0878374bf9fe9bf98b71e61a6a20',
+					hash: '7211303094d5d32dec027f45713b9a0a009e6c9493518b4c5d57c974841aca39',
+					recipients: [
+						{ address: 'GHdfgdfgsfgsbcvxbxcvbxcvbxcvbcvbtn', amount: 65 },
+						{ address: 'GHr1DdrcVw6vbxcvbcvnbbnvmbnmbgsgtn', amount: 35 }
+					],
+					senders: [
+						{ address: 'GHr1DdrcVw6zEasdfasdfa64vpohFp5ftn', amount: 25 },
+						{ address: 'GHr1Dasdfasdfasdfasdfasdfsadfp5ftn', amount: 35 },
+						{ address: 'Gasdfasdfasdfasdfcxvvcbxcvbvcbxftn', amount: 40 }
+					],
+					timestamp: 345634856739
+				},
+				{
+					amountSent: 12,
+					blockHash: '29dcb10822ccb97b4657467547647654674764878374bf9fe9bf98b71e61a6a0',
+					hash: '7211303094d5d3456456456713b9a0a009e6c9493518b4c5d457c974841aca39',
+					recipients: [{ address: 'GHdfgdfgsfgsdfgsxcvbxcvbxcvbcvbtng', amount: 12 }],
+					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 12 }],
+					timestamp: 345634856739
+				}
+			]
 		},
 		insight: {
 			account: {
@@ -117,7 +153,32 @@ describe('type-mapper/*', function() {
 				height: 1818000,
 				timestamp: 398457345,
 				transactions: [ {} ]
-			}
+			},
+			transaction: [
+				{
+					amountSent: 100,
+					blockHash: '29dcb10822ccb97b408d3ff6fbe001cf632e0878374bf9fe9bf98b71e61a6a20',
+					hash: '7211303094d5d32dec027f45713b9a0a009e6c9493518b4c5d57c974841aca39',
+					recipients: [
+						{ address: 'GHdfgdfgsfgsbcvxbxcvbxcvbxcvbcvbtn', amount: 65 },
+						{ address: 'GHr1DdrcVw6vbxcvbcvnbbnvmbnmbgsgtn', amount: 35 }
+					],
+					senders: [
+						{ address: 'GHr1DdrcVw6zEasdfasdfa64vpohFp5ftn', amount: 25 },
+						{ address: 'GHr1Dasdfasdfasdfasdfasdfsadfp5ftn', amount: 35 },
+						{ address: 'Gasdfasdfasdfasdfcxvvcbxcvbvcbxftn', amount: 40 }
+					],
+					timestamp: 34536456456
+				},
+				{
+					amountSent: 18,
+					blockHash: '29dcb10822ccb97b4657467547647654674764878374bf9fe9bf98b71e61a6a0',
+					hash: '7211303094d5d3456456456713b9a0a009e6c9493518b4c5d457c974841aca39',
+					recipients: [{ address: 'GHdfgdfgsfgsdfgsxcvbxcvbxcvbcvbtng', amount: 18 }],
+					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 18 }],
+					timestamp: 789789789778
+				}
+			]
 		},
 		lisk: {
 			account: {
@@ -140,6 +201,20 @@ describe('type-mapper/*', function() {
 				height: 115300,
 				timestamp: 3849756348,
 				transactions: [ {}, {}, {}, {}, {}, {} ]
+			},
+			transaction: {
+				amountSent: 24,
+				blockHash: '0000000000000028ecc091235afb82bd9aca66ebf175137336191ec1d28be993',
+				hash: '3cb16b2faeb14244829bdcc77e9b46363e6fd0981945b4195e40332bb3347055',
+				recipients: [
+					{ address: '6a92902a983f072def4cee6d3940a58b9d8fc543ab934495d173f20e2907f38c146bfd2c6e2a', amount: 24 },
+					{ address: '6a92902a983f072def4cee6d3940a58b9d8fc543ab934495d173f20e2907f38c146bfd2c6e2a', amount: 'dust' }
+				],
+				senders: [
+					{ address: '1545d1cafd40a529ba501941a7c7576558aeaa67337a0fb253137d5b3f826ff9001ad77cd0e5', amount: 24 },
+					{ address: 'ef9e7c7bef7ad4a1e83ed1e39a092105b90e0a78bb26ce3c2b7a3d7e91d716c6bc89dbfc537e', amount: 'dust' }
+				],
+				timestamp: 345634856739
 			}
 		},
 		sochain: {
@@ -154,7 +229,32 @@ describe('type-mapper/*', function() {
 				height: 1200000,
 				timestamp: 2398467293,
 				transactions: [ {}, {}, {}, {}, {} ]
-			}
+			},
+			transaction: [
+				{
+					amountSent: 100,
+					blockHash: '29dcb10822ccb97b408d3ff6fbe001cf632e0878374bf9fe9bf98b71e61a6a20',
+					hash: '7211303094d5d32dec027f45713b9a0a009e6c9493518b4c5d57c974841aca39',
+					recipients: [
+						{ address: 'GHdfgdfgsfgsbcvxbxcvbxcvbxcvbcvbtn', amount: 65 },
+						{ address: 'GHr1DdrcVw6vbxcvbcvnbbnvmbnmbgsgtn', amount: 35 }
+					],
+					senders: [
+						{ address: 'GHr1DdrcVw6zEasdfasdfa64vpohFp5ftn', amount: 25 },
+						{ address: 'GHr1Dasdfasdfasdfasdfasdfsadfp5ftn', amount: 35 },
+						{ address: 'Gasdfasdfasdfasdfcxvvcbxcvbvcbxftn', amount: 40 }
+					],
+					timestamp: 34536456456
+				},
+				{
+					amountSent: 18,
+					blockHash: '29dcb10822ccb97b4657467547647654674764878374bf9fe9bf98b71e61a6a0',
+					hash: '7211303094d5d3456456456713b9a0a009e6c9493518b4c5d457c974841aca39',
+					recipients: [{ address: 'GHdfgdfgsfgsdfgsxcvbxcvbxcvbcvbtng', amount: 18 }],
+					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 18 }],
+					timestamp: 789789789778
+				}
+			]
 		},
 		vtconline: {
 			account: {
@@ -217,7 +317,8 @@ describe('type-mapper/*', function() {
 						totalInputsAmount: data.chainradar.transaction.amountSent
 					},
 					inputs: _.map(data.chainradar.transaction.senders, (sender) => ({amount: sender.amount})),
-					outputs: _.map(data.chainradar.transaction.recipients, (recipient) => ({amount: recipient.amount}))
+					outputs: _.map(data.chainradar.transaction.recipients, (recipient) => ({amount: recipient.amount})),
+					valueDivisor: 1000000000000
 				}
 			},
 			expected: {
@@ -235,12 +336,38 @@ describe('type-mapper/*', function() {
 					time: data.etheradapter.block.timestamp,
 					tx_count: data.etheradapter.block.transactions.length
 				},
-				transaction: {
-				}
+				transaction: [
+					{
+						blockHash: data.etheradapter.transaction[0].blockHash,
+						hash: data.etheradapter.transaction[0].hash,
+						finalRecipient: data.etheradapter.transaction[0].recipients[0].address,
+						from: data.etheradapter.transaction[0].senders[0].address,
+						time: data.etheradapter.transaction[0].timestamp,
+						value: data.etheradapter.transaction[0].amountSent.toString(16),
+						valueDivisor: 1000000000000000000,
+						valueSymbol: '',
+						extraTestInfo: 'ETH transfer'
+					},
+					{
+						blockHash: data.etheradapter.transaction[1].blockHash,
+						hash: data.etheradapter.transaction[1].hash,
+						finalRecipient: data.etheradapter.transaction[1].recipients[0].address,
+						from: data.etheradapter.transaction[1].senders[0].address,
+						time: data.etheradapter.transaction[1].timestamp,
+						value: data.etheradapter.transaction[1].amountSent.toString(16),
+						valueDivisor: 1000000000000000,
+						valueSymbol: 'GNT',
+						extraTestInfo: 'ERC-20 token transfer'
+					}
+				]
 			},
 			expected: {
 				account: new Account(data.etheradapter.account.address, data.etheradapter.account.balance / 1000000000000000000),
-				block: new Block(data.etheradapter.block.difficulty, data.etheradapter.block.hash, data.etheradapter.block.height, new Date(data.etheradapter.block.timestamp), data.etheradapter.block.transactions.length)
+				block: new Block(data.etheradapter.block.difficulty, data.etheradapter.block.hash, data.etheradapter.block.height, new Date(data.etheradapter.block.timestamp), data.etheradapter.block.transactions.length),
+				transaction: [
+					new Transaction(`${data.etheradapter.transaction[0].amountSent / 1000000000000000000}`, data.etheradapter.transaction[0].blockHash, data.etheradapter.transaction[0].hash, { address: data.etheradapter.transaction[0].recipients[0].address, amount: `${data.etheradapter.transaction[0].recipients[0].amount / 1000000000000000000}` }, { address: data.etheradapter.transaction[0].senders[0].address, amount: `${data.etheradapter.transaction[0].senders[0].amount / 1000000000000000000}` }, new Date(data.etheradapter.transaction[0].timestamp)),
+					new Transaction(`${data.etheradapter.transaction[1].amountSent / 1000000000000000} GNT`, data.etheradapter.transaction[1].blockHash, data.etheradapter.transaction[1].hash, { address: data.etheradapter.transaction[1].recipients[0].address, amount: `${data.etheradapter.transaction[1].recipients[0].amount / 1000000000000000} GNT` }, { address: data.etheradapter.transaction[1].senders[0].address, amount: `${data.etheradapter.transaction[1].senders[0].amount / 1000000000000000} GNT` }, new Date(data.etheradapter.transaction[1].timestamp))
+				]
 			}
 		},
 		{
@@ -253,7 +380,26 @@ describe('type-mapper/*', function() {
 					height: data.gamecredits.block.height,
 					time: data.gamecredits.block.timestamp,
 					tx: data.gamecredits.block.transactions
-				}
+				},
+				transaction: [
+					{
+						blockhash: data.gamecredits.transaction[0].blockHash,
+						blocktime: data.gamecredits.transaction[0].timestamp,
+						txid: data.gamecredits.transaction[0].hash,
+						vin: _.map(data.gamecredits.transaction[0].senders, (sender) => ({ address: sender.address, value: sender.amount })),
+						vout: _.map(data.gamecredits.transaction[0].recipients, (recipient) => ({ addresses: [recipient.address], value: recipient.amount })),
+						extraTestInfo: 'Standard transaction'
+					},
+					{
+						blockhash: data.gamecredits.transaction[1].blockHash,
+						blocktime: data.gamecredits.transaction[1].timestamp,
+						total: data.gamecredits.transaction[1].amountSent,
+						txid: data.gamecredits.transaction[1].hash,
+						vin: [{coinbase: '0239847234'}],
+						vout: _.map(data.gamecredits.transaction[1].recipients, (recipient) => ({ addresses: [recipient.address], value: recipient.amount })),
+						extraTestInfo: 'Coinbase transaction'
+					}
+				]
 			},
 			expected: {
 			}
@@ -268,7 +414,27 @@ describe('type-mapper/*', function() {
 					height: data.insight.block.height,
 					time: data.insight.block.timestamp,
 					tx: data.insight.block.transactions
-				}
+				},
+				transaction: [
+					{
+						blockhash: data.insight.transaction[0].blockHash,
+						time: data.insight.transaction[0].timestamp,
+						txid: data.insight.transaction[0].hash,
+						vin: _.map(data.insight.transaction[0].senders, (sender) => ({ addr: sender.address, value: sender.amount })),
+						vout: _.map(data.insight.transaction[0].recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: `${recipient.amount}` })),
+						extraTestInfo: 'Standard transaction, includes timestamp'
+					},
+					{
+						blockhash: data.insight.transaction[1].blockHash,
+						isCoinBase: true,
+						total: data.insight.transaction[1].amountSent,
+						txid: data.insight.transaction[1].hash,
+						vin: [{}],
+						vout: _.map(data.insight.transaction[1].recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: `${recipient.amount}` })),
+						excludeTimestamp: true,
+						extraTestInfo: 'Coinbase transaction, no timestamp'
+					}
+				]
 			},
 			expected: {
 			}
@@ -300,6 +466,25 @@ describe('type-mapper/*', function() {
 					height: data.siatech.block.height,
 					maturitytimestamp: data.siatech.block.timestamp,
 					transactions: data.siatech.block.transactions
+				},
+				transaction: {
+					transaction: {
+						id: data.siatech.transaction.hash,
+						parent: data.siatech.transaction.blockHash,
+						rawtransaction: {
+							siacoinoutputs: _.map(data.siatech.transaction.recipients, (recipient) => {
+								const returnRecipient = { unlockhash: recipient.address, value: `${(recipient.amount === 'dust' ? 0 : recipient.amount) * 1000000000000000000000000}` };
+
+								return returnRecipient;
+							})
+						},
+						siacoininputoutputs: _.map(data.siatech.transaction.senders, (sender) => {
+							const returnSender = { unlockhash: sender.address, value: `${(sender.amount === 'dust' ? 0 : sender.amount) * 1000000000000000000000000}` };
+							
+							return returnSender;
+						})
+					},
+					excludeTimestamp: true
 				}
 			},
 			expected: {
@@ -315,7 +500,25 @@ describe('type-mapper/*', function() {
 					block_no: data.sochain.block.height,
 					time: data.sochain.block.timestamp,
 					txs: data.sochain.block.transactions
-				}
+				},
+				transaction: [
+					{
+						blockhash: data.sochain.transaction[0].blockHash,
+						inputs: _.map(data.sochain.transaction[0].senders, (sender) => ({ address: sender.address, value: `${sender.amount}` })),
+						outputs: _.map(data.sochain.transaction[0].recipients, (recipient) => ({ address: recipient.address, value: `${recipient.amount}` })),
+						time: data.sochain.transaction[0].timestamp,
+						txid: data.sochain.transaction[0].hash,
+						extraTestInfo: 'Standard transaction'
+					},
+					{
+						blockhash: data.sochain.transaction[1].blockHash,
+						inputs: [{ address: 'coinbase', value: `${data.sochain.transaction[1].senders[0].amount}`}],
+						outputs: _.map(data.sochain.transaction[1].recipients, (recipient) => ({ address: recipient.address, value: `${recipient.amount}` })).concat([{type: 'nulldata'}]),
+						time: data.sochain.transaction[1].timestamp,
+						txid: data.sochain.transaction[1].hash,
+						extraTestInfo: 'Coinbase transaction'
+					}
+				]
 			},
 			expected: {
 			}
@@ -377,7 +580,7 @@ describe('type-mapper/*', function() {
 		const testPartition = _.partition(tests, (test) => typeof(test.inputs.account) === 'object');
 		
 		testPartition[0].forEach(function(test) {
-			it(`should map an account using ${test.mapper} type mapper`, function() {
+			it(`should map an account using '${test.mapper}' type mapper`, function() {
 				const expectedAccount = test.expected.hasOwnProperty('account') ? test.expected.account : new Account(data[test.mapper].account.address, data[test.mapper].account.balance, data[test.mapper].account.unconfirmedBalance);
 				const mappedAccount = this[test.mapper].mapAccount(test.inputs.account);
 				
@@ -386,7 +589,7 @@ describe('type-mapper/*', function() {
 		});
 		
 		testPartition[1].forEach(function(test) {
-			it(`should not map an account using ${test.mapper} type mapper`, function() {
+			it(`should not map an account using '${test.mapper}' type mapper`, function() {
 				assert.throws(() => this[test.mapper].mapAccount(test.inputs.account), Error);
 			});
 		});
@@ -399,7 +602,7 @@ describe('type-mapper/*', function() {
 	 */
 	describe('mapBlock', function() {
 		tests.forEach(function(test) {
-			it(`should map a block using ${test.mapper} type mapper`, function() {
+			it(`should map a block using '${test.mapper}' type mapper`, function() {
 				const expectedBlock = test.expected.hasOwnProperty('block') ? test.expected.block : new Block(data[test.mapper].block.difficulty, data[test.mapper].block.hash, data[test.mapper].block.height, new Date(data[test.mapper].block.timestamp * 1000), data[test.mapper].block.transactions.length);
 				const mappedBlock = this[test.mapper].mapBlock(test.inputs.block);
 
@@ -413,15 +616,27 @@ describe('type-mapper/*', function() {
 	 *  mapTransaction
 	 *
 	 */
-	describe.skip('mapTransaction', function() {
+	describe('mapTransaction', function() {
 		tests.forEach(function(test) {
-			const infoString = test.hasOwnProperty('extraTestInfo') ? ` (${test.extraTestInfo})` : '';
+			const inputTransactionsArray = Array.isArray(test.inputs.transaction) ? test.inputs.transaction : [test.inputs.transaction];
+			const expectedArray = Array.isArray(test.expected.transaction) ? test.expected.transaction: [test.expected.transaction];
+			const dataArray = Array.isArray(data[test.mapper].transaction) ? data[test.mapper].transaction : [data[test.mapper].transaction];
 			
-			it(`should map a transaction using ${test.mapper} type mapper${infoString}`, function() {
-				const expectedTransaction = test.expected.hasOwnProperty('transaction') ? test.expected.transaction : new Transaction(data[test.mapper].transaction.amountSent, data[test.mapper].transaction.blockHash, data[test.mapper].transaction.hash, data[test.mapper].transaction.recipients, data[test.mapper].transaction.senders, new Date(data[test.mapper].transaction.timestamp * 1000));
-				const mappedTransaction = this[test.mapper].mapTransaction(test.inputs.transaction);
+			_.each(inputTransactionsArray, (inputTransaction, index) => {
+				if (typeof(inputTransaction) !== 'object') {
+					return;
+				}
+				
+				const infoString = inputTransaction.hasOwnProperty('extraTestInfo') ? ` (${inputTransaction.extraTestInfo})` : '';
+				
+				it(`should map a transaction using '${test.mapper}' type mapper${infoString}`, function() {
+					const transactionTimestamp = inputTransaction.hasOwnProperty('excludeTimestamp') && inputTransaction.excludeTimestamp === true ? undefined : new Date(dataArray[index].timestamp * 1000);
+					const expectedTransaction = (index < expectedArray.length && typeof(expectedArray[index]) === 'object') ? expectedArray[index]
+						: new Transaction(dataArray[index].amountSent, dataArray[index].blockHash, dataArray[index].hash, dataArray[index].recipients, dataArray[index].senders, transactionTimestamp);
+					const mappedTransaction = this[test.mapper].mapTransaction(inputTransaction);
 
-				assert.isTrue(equal(mappedTransaction, expectedTransaction, {strict: true}), `Actual:\n${mappedTransaction}\n\nExpected:\n${expectedTransaction}`);
+					assert.isTrue(equal(mappedTransaction, expectedTransaction, {strict: true}), `Actual:\n${JSON.stringify(mappedTransaction)}\n\nExpected:\n${JSON.stringify(expectedTransaction)}`);
+				});
 			});
 		});
 	});
