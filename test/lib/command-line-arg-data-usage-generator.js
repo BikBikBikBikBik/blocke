@@ -16,10 +16,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const assert = require('./chai-setup');
+const assert = require('../chai-setup');
 const _ = require('underscore');
 
-describe('command-line-arg-data-usage-generator', function() {
+describe('lib/command-line-arg-data-usage-generator', function() {
 	function validateDefinition(definitions, expectedDefinition) {
 		const actualDefinition = _.find(definitions, (def) => def.name === expectedDefinition.name);
 
@@ -105,7 +105,7 @@ describe('command-line-arg-data-usage-generator', function() {
 			}
 		};
 		
-		this.dataUsageGenerator = require('../lib/command-line-arg-data-usage-generator');
+		this.dataUsageGenerator = require('../../lib/command-line-arg-data-usage-generator');
 
 		this.expectedAccountDefinition = {
 			alias: 'a',

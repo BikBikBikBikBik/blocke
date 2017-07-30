@@ -16,52 +16,52 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const assert = require('../chai-setup');
-const commandLineDataSource = require('../../lib/command-line-arg-data-source');
-const typeMapperFactory = require('../../lib/type-mapper/factory');
+const assert = require('../../chai-setup');
+const commandLineDataSource = require('../../../lib/command-line-arg-data-source');
+const apiFactory = require('../../../lib/api/factory');
 const _ = require('underscore');
 
-describe('type-mapper/factory', function() {
+describe('lib/api/factory', function() {
 	/*
 	 *
 	 *  Hooks
 	 *
 	 */
 	beforeEach(function() {
-		this.typeMapperFactory = require('../../lib/type-mapper/factory');
+		this.apiFactory = require('../../../lib/api/factory');
 	});
 	
 	/*
 	 *
-	 *  getTypeMapper
+	 *  getApi
 	 *
 	 */
-	describe('getTypeMapper', function() {
+	describe('getApi', function() {
 		const networks = _.map(commandLineDataSource.currencies, (currency, key) => key);
-		const expectedMethods = [ 'mapAccount', 'mapBlock', 'mapTransaction' ];
+		const expectedMethods = [ 'getAccount', 'getBlockByNumberOrHash', 'getTransaction' ];
 		
 		networks.forEach(function(network) {
-			it(`should return a valid type mapper for '${network}'`, function() {
-				const typeMapper = this.typeMapperFactory.getTypeMapper(network);
+			it(`should return a valid api for '${network}'`, function() {
+				const api = this.apiFactory.getApi(network);
 				
-				assert.exists(typeMapper);
+				assert.exists(api);
 				
-				const typeMapperProperties = Object.getOwnPropertyNames(Object.getPrototypeOf(typeMapper));
+				const apiProperties = Object.getOwnPropertyNames(Object.getPrototypeOf(api));
 				
-				expectedMethods.forEach((method) => { assert.isTrue(typeMapperProperties.includes(method), `TypeMapper method not found: ${method}\n`) });
+				expectedMethods.forEach((method) => { assert.isTrue(apiProperties.includes(method), `API method not found: ${method}\n`) });
 			});
 		});
 		
 		it('should return undefined for invalid input', function() {
-			const typeMapper = this.typeMapperFactory.getTypeMapper('asjkldfhlaksjdfsdfkjslhd');
+			const api = this.apiFactory.getApi('asdfasdfsadf');
 			
-			assert.notExists(typeMapper);
+			assert.notExists(api);
 		});
 		
 		it('should return undefined for unsupported networks', function() {
-			const typeMapper = this.typeMapperFactory.getTypeMapper({someProp: 'someVal'});
+			const api = this.apiFactory.getApi({someOtherProp: 'someOtherVal'});
 			
-			assert.notExists(typeMapper);
+			assert.notExists(api);
 		});
 	});
 });

@@ -16,29 +16,29 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const { Account, Block, Transaction } = require('../../lib/type-mapper/models');
-const assert = require('../chai-setup');
+const { Account, Block, Transaction } = require('../../../lib/type-mapper/models');
+const assert = require('../../chai-setup');
 const equal = require('deep-equal');
-const typeMapperResources = require('../../lib/type-mapper/resources');
+const typeMapperResources = require('../../../lib/type-mapper/resources');
 const _ = require('underscore');
 
-describe('type-mapper/*', function() {
+describe('lib/type-mapper/*', function() {
 	/*
 	 *
 	 *  Hooks
 	 *
 	 */
 	beforeEach(function() {
-		this.chainradar = require('../../lib/type-mapper/chainradar');
-		this.etheradapter = require('../../lib/type-mapper/etheradapter');
-		this.gamecredits = require('../../lib/type-mapper/gamecredits');
-		this.insight = require('../../lib/type-mapper/insight');
-		this.lisk = require('../../lib/type-mapper/lisk');
-		this.siatech = require('../../lib/type-mapper/siatech');
-		this.sochain = require('../../lib/type-mapper/sochain');
-		this.vtconline = require('../../lib/type-mapper/vtconline');
-		this.wavesexplorer = require('../../lib/type-mapper/wavesexplorer');
-		this.zchain = require('../../lib/type-mapper/zchain');
+		this.chainradar = require('../../../lib/type-mapper/chainradar');
+		this.etheradapter = require('../../../lib/type-mapper/etheradapter');
+		this.gamecredits = require('../../../lib/type-mapper/gamecredits');
+		this.insight = require('../../../lib/type-mapper/insight');
+		this.lisk = require('../../../lib/type-mapper/lisk');
+		this.siatech = require('../../../lib/type-mapper/siatech');
+		this.sochain = require('../../../lib/type-mapper/sochain');
+		this.vtconline = require('../../../lib/type-mapper/vtconline');
+		this.wavesexplorer = require('../../../lib/type-mapper/wavesexplorer');
+		this.zchain = require('../../../lib/type-mapper/zchain');
 	});
 	
 	/*
