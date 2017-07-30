@@ -137,7 +137,7 @@ describe('type-mapper/*', function() {
 					hash: '7211303094d5d3456456456713b9a0a009e6c9493518b4c5d457c974841aca39',
 					recipients: [{ address: 'GHdfgdfgsfgsdfgsxcvbxcvbxcvbcvbtng', amount: 12 }],
 					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 12 }],
-					timestamp: 345634856739
+					timestamp: 123143242342
 				}
 			]
 		},
@@ -168,7 +168,7 @@ describe('type-mapper/*', function() {
 						{ address: 'GHr1Dasdfasdfasdfasdfasdfsadfp5ftn', amount: 35 },
 						{ address: 'Gasdfasdfasdfasdfcxvvcbxcvbvcbxftn', amount: 40 }
 					],
-					timestamp: 34536456456
+					timestamp: 234234234234
 				},
 				{
 					amountSent: 18,
@@ -176,7 +176,7 @@ describe('type-mapper/*', function() {
 					hash: '7211303094d5d3456456456713b9a0a009e6c9493518b4c5d457c974841aca39',
 					recipients: [{ address: 'GHdfgdfgsfgsdfgsxcvbxcvbxcvbcvbtng', amount: 18 }],
 					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 18 }],
-					timestamp: 789789789778
+					timestamp: 3453451231
 				}
 			]
 		},
@@ -192,7 +192,52 @@ describe('type-mapper/*', function() {
 				height: 3494520,
 				timestamp: 1467092942,
 				transactions: [ {}, {} ]
-			}
+			},
+			transaction: [
+				{
+					amountSent: 1111,
+					blockHash: '9104734534534782510',
+					hash: '13724323423444843049',
+					recipients: [{ address: '18278674964748191682L', amount: 1111 }],
+					senders: [{ address: '55578674964748191682L', amount: 1111 }],
+					timestamp: 345345345345
+				},
+				{
+					amountSent: 2222,
+					blockHash: '9104733453453453451',
+					hash: '13724322224234843049',
+					recipients: [{ address: 'Second signature creation', amount: 2222 }],
+					senders: [{ address: '44478674964748191682L', amount: 2222 }],
+					timestamp: 345345345345
+				}
+				,
+				{
+					amountSent: 3333,
+					blockHash: '9104734534534525105',
+					hash: '13721111134234843049',
+					recipients: [{ address: 'Delegate registration', amount: 3333 }],
+					senders: [{ address: '33378674964748191682L', amount: 3333 }],
+					timestamp: 345345354345
+				}
+				,
+				{
+					amountSent: 4444,
+					blockHash: '9104345345345348251',
+					hash: '13724333333334843049',
+					recipients: [{ address: 'Delegate vote', amount: 4444 }],
+					senders: [{ address: '22278674964748191682L', amount: 4444 }],
+					timestamp: 345345345348
+				}
+				,
+				{
+					amountSent: 5555,
+					blockHash: '9345345345345333510',
+					hash: '13724397634234800000',
+					recipients: [{ address: 'Multisignature registration', amount: 5555 }],
+					senders: [{ address: '11178674964748191682L', amount: 5555 }],
+					timestamp: 345345345346
+				}
+			]
 		},
 		siatech: {
 			block: {
@@ -214,7 +259,7 @@ describe('type-mapper/*', function() {
 					{ address: '1545d1cafd40a529ba501941a7c7576558aeaa67337a0fb253137d5b3f826ff9001ad77cd0e5', amount: 24 },
 					{ address: 'ef9e7c7bef7ad4a1e83ed1e39a092105b90e0a78bb26ce3c2b7a3d7e91d716c6bc89dbfc537e', amount: 'dust' }
 				],
-				timestamp: 345634856739
+				timestamp: 345634563456
 			}
 		},
 		sochain: {
@@ -232,27 +277,27 @@ describe('type-mapper/*', function() {
 			},
 			transaction: [
 				{
-					amountSent: 100,
-					blockHash: '29dcb10822ccb97b408d3ff6fbe001cf632e0878374bf9fe9bf98b71e61a6a20',
+					amountSent: 26,
+					blockHash: '29dcb10822ccb97b408d3ff6fbefgdhdfghdfghdfghfdghfhbf98b71e61a6a20',
 					hash: '7211303094d5d32dec027f45713b9a0a009e6c9493518b4c5d57c974841aca39',
 					recipients: [
-						{ address: 'GHdfgdfgsfgsbcvxbxcvbxcvbxcvbcvbtn', amount: 65 },
-						{ address: 'GHr1DdrcVw6vbxcvbcvnbbnvmbnmbgsgtn', amount: 35 }
+						{ address: '19SokJG7fsbfgbdfgbbfbgMj14FM16nqzj', amount: 14 },
+						{ address: '19dfgbfgbdfgbdfgbfgbdfgbf4FM16nqzj', amount: 12 }
 					],
 					senders: [
-						{ address: 'GHr1DdrcVw6zEasdfasdfa64vpohFp5ftn', amount: 25 },
-						{ address: 'GHr1Dasdfasdfasdfasdfasdfsadfp5ftn', amount: 35 },
-						{ address: 'Gasdfasdfasdfasdfcxvvcbxcvbvcbxftn', amount: 40 }
+						{ address: '19SokJdfgbdfgbdfgbfbfgbdgfFM16nqzj', amount: 6 },
+						{ address: '143564564564564456456456454M16nqzj', amount: 6 },
+						{ address: '19SokJG7fg456456456456456456456qzj', amount: 14 }
 					],
-					timestamp: 34536456456
+					timestamp: 34563453634
 				},
 				{
-					amountSent: 18,
-					blockHash: '29dcb10822ccb97b4657467547647654674764878374bf9fe9bf98b71e61a6a0',
-					hash: '7211303094d5d3456456456713b9a0a009e6c9493518b4c5d457c974841aca39',
-					recipients: [{ address: 'GHdfgdfgsfgsdfgsxcvbxcvbxcvbcvbtng', amount: 18 }],
-					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 18 }],
-					timestamp: 789789789778
+					amountSent: 14,
+					blockHash: '29dcb10456456456456456456456456456464674764878374bf9fe9971e61a60',
+					hash: '7211303094d5d34564564534534534534534534534534535435345f74841aca3',
+					recipients: [{ address: '19SokJ3453453453453453Mj14FM16nqzj', amount: 14 }],
+					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 14 }],
+					timestamp: 45634563456
 				}
 			]
 		},
@@ -267,6 +312,20 @@ describe('type-mapper/*', function() {
 				height: 750100,
 				timestamp: 98347693584,
 				transactions: [ {}, {}, {}, {}, {}, {}, {}, {} ]
+			},
+			transaction: {
+				amountSent: 35,
+				blockHash: '1b52cf30a05eba4be3bab57303ae234234234223e65b94a7c46fd3a82ef3ec4c',
+				hash: '8f5de2a5417169e89345345345345345345345b467c963e18b543bfc6a52786c',
+				recipients: [
+					{ address: 'VkdFmDNm7fghdfghhgvEEaaPs2fAD7bmdc', amount: 20 },
+					{ address: 'VkdFmDNm7geGEWasdfssEaaPs2fAD7bmdc', amount: 15 }
+				],
+				senders: [
+					{ address: 'VkdFmasdfasdfasdfasdfasdf2fAD7bmdc', amount: 15 },
+					{ address: 'VkdFmDNm7geasdfasdfasdfasdsAD7bmdc', amount: 20 }
+				],
+				timestamp: 4567456
 			}
 		},
 		wavesexplorer: {
@@ -280,7 +339,25 @@ describe('type-mapper/*', function() {
 				height: 590750,
 				timestamp: 398457634985,
 				transactions: [ {}, {}, {}, {}, {}, {}, {} ]
-			}
+			},
+			transaction: [
+				{
+					amountSent: 800000000000000000,
+					blockHash: '45ZELbZm5PNXhdixKMasdfasdafasdfasgfgbgfhdgadfrtryytujyujfghs4ucP5S1E3pePHc99BMUJ8n2xk34',
+					hash: 'GQcZj4wFnMBqpGYsdfasdfasdasdfasdfasdfeJXxyWH',
+					recipients: [{ address: '3P51e7GJUTasdfasdafssX5H4SA1U6gRryn', amount: 800000000000000000 }],
+					senders: [{ address: '3P51e7GJUTRzcvxcvdaX5H4SA1U6gvvRryn', amount: 800000000000000000 }],
+					timestamp: 674542443
+				},
+				{
+					amountSent: 2000000000000000,
+					blockHash: '45ZELbZm5PNXhdixKMsdfgsdfgsdfbvncvbncvbncvbnvbngfhhdjghdfghdfghfghdfghhPHc99BMUJ8n2xk34',
+					hash: 'GQcZj4wFnMBqpGYNuasdfasdfasdfasdfsdf9eJXxyWH',
+					recipients: [{ address: '1W3P51e7GJUTR6hQXasdfasdffSA1U6gRryns', amount: 2000000000000000 }],
+					senders: [{ address: '1W3P51e7asdfasdf7UTdaX5H4ffSA1U6gRryn', amount: 2000000000000000 }],
+					timestamp: 234565675
+				}
+			]
 		},
 		zchain: {
 			account: {
@@ -293,7 +370,32 @@ describe('type-mapper/*', function() {
 				height: 150000,
 				timestamp: 798547359843,
 				transactions: [ {}, {}, {}, {}, {}, {}, {}, {}, {} ]
-			}
+			},
+			transaction: [
+				{
+					amountSent: 60,
+					blockHash: '00000000130f2asdfasdfaasdfasdffddaacabe06798c26711b25463f923550b',
+					hash: 'b3a06b6cda21dcaasdfasdfsdfasdfasdfasdfasdffdsb674569c33af382de7b',
+					recipients: [
+						{ address: 't3K4aasdfasdfsdfasdfasdfsadfQvz88t2', amount: 44 },
+						{ address: 't3K4aLsdfsdfsdfsdfsdfsdfsdffQvz88t2', amount: 16 }
+					],
+					senders: [
+						{ address: 't3K4aLYsdfasdfasafgdsgdfgsdfgvz88t2', amount: 20 },
+						{ address: 't3K4aLYsdafsdfasdfasdfsdfasffvz88t2', amount: 24 },
+						{ address: 't3Kdsfgxcvxbxcvbxvcbcvbcvbxcvvz88t2', amount: 16 }
+					],
+					timestamp: 4235436547
+				},
+				{
+					amountSent: 9,
+					blockHash: '00000000130f2314d98ddfeesadfasdfaasdffe06798c26711b25463923550b8',
+					hash: 'b3a06b6cda21dcasdfasdfasdfasfds04b7b90c2bf99cb674569c33af382de7b',
+					recipients: [{ address: 't3K4aLYagasdfasdfasdffd5H9z5Qvz88t2', amount: 9 }],
+					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 9 }],
+					timestamp: 76853453456
+				}
+			]
 		},
 	};
 	const tests = [
@@ -450,7 +552,69 @@ describe('type-mapper/*', function() {
 						timestamp: data.lisk.block.timestamp - 1464109200,
 						numberOfTransactions: data.lisk.block.transactions.length
 					}
-				}
+				},
+				transaction: [
+					{
+						transaction: {
+							amount: data.lisk.transaction[0].amountSent * 100000000,
+							blockId: data.lisk.transaction[0].blockHash,
+							id: data.lisk.transaction[0].hash,
+							recipientId: data.lisk.transaction[0].recipients[0].address,
+							senderId: data.lisk.transaction[0].senders[0].address,
+							timestamp: data.lisk.transaction[0].timestamp - 1464109200,
+							type: 0
+						},
+						extraTestInfo: 'Standard transaction'
+					},
+					{
+						transaction: {
+							amount: data.lisk.transaction[1].amountSent * 100000000,
+							blockId: data.lisk.transaction[1].blockHash,
+							id: data.lisk.transaction[1].hash,
+							recipientId: data.lisk.transaction[1].recipients[0].address,
+							senderId: data.lisk.transaction[1].senders[0].address,
+							timestamp: data.lisk.transaction[1].timestamp - 1464109200,
+							type: 1
+						},
+						extraTestInfo: 'Second signature creation transaction'
+					},
+					{
+						transaction: {
+							amount: data.lisk.transaction[2].amountSent * 100000000,
+							blockId: data.lisk.transaction[2].blockHash,
+							id: data.lisk.transaction[2].hash,
+							recipientId: data.lisk.transaction[2].recipients[0].address,
+							senderId: data.lisk.transaction[2].senders[0].address,
+							timestamp: data.lisk.transaction[2].timestamp - 1464109200,
+							type: 2
+						},
+						extraTestInfo: 'Delegate registration transaction'
+					},
+					{
+						transaction: {
+							amount: data.lisk.transaction[3].amountSent * 100000000,
+							blockId: data.lisk.transaction[3].blockHash,
+							id: data.lisk.transaction[3].hash,
+							recipientId: data.lisk.transaction[3].recipients[0].address,
+							senderId: data.lisk.transaction[3].senders[0].address,
+							timestamp: data.lisk.transaction[3].timestamp - 1464109200,
+							type: 3
+						},
+						extraTestInfo: 'Delegate vote transaction'
+					},
+					{
+						transaction: {
+							amount: data.lisk.transaction[4].amountSent * 100000000,
+							blockId: data.lisk.transaction[4].blockHash,
+							id: data.lisk.transaction[4].hash,
+							recipientId: data.lisk.transaction[4].recipients[0].address,
+							senderId: data.lisk.transaction[4].senders[0].address,
+							timestamp: data.lisk.transaction[4].timestamp - 1464109200,
+							type: 4
+						},
+						extraTestInfo: 'Multisignature registration transaction'
+					}
+				]
 			},
 			expected: {
 				account: new Account(data.lisk.account.address, data.lisk.account.balance / 100000000, data.lisk.account.unconfirmedBalance / 100000000),
@@ -533,6 +697,13 @@ describe('type-mapper/*', function() {
 					height: data.vtconline.block.height,
 					time: data.vtconline.block.timestamp,
 					tx: data.vtconline.block.transactions
+				},
+				transaction: {
+					blockhash: data.vtconline.transaction.blockHash,
+					time: data.vtconline.transaction.timestamp,
+					txid: data.vtconline.transaction.hash,
+					vin: _.map(data.vtconline.transaction.senders, (sender) => ({ address: sender.address, value: sender.amount })),
+					vout: _.map(data.vtconline.transaction.recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: recipient.amount }))
 				}
 			},
 			expected: {
@@ -547,11 +718,39 @@ describe('type-mapper/*', function() {
 					height: data.wavesexplorer.block.height,
 					timestamp: data.wavesexplorer.block.timestamp,
 					transactions: data.wavesexplorer.block.transactions
-				}
+				},
+				transaction: [
+					{
+						amount: data.wavesexplorer.transaction[0].amountSent,
+						blockHash: data.wavesexplorer.transaction[0].blockHash,
+						id: data.wavesexplorer.transaction[0].hash,
+						recipient: data.wavesexplorer.transaction[0].recipients[0].address,
+						sender: data.wavesexplorer.transaction[0].senders[0].address,
+						timestamp: data.wavesexplorer.transaction[0].timestamp,
+						valueDivisor: 100000000,
+						valueSymbol: '',
+						extraTestInfo: 'WAVES transfer'
+					},
+					{
+						amount: data.wavesexplorer.transaction[1].amountSent,
+						blockHash: data.wavesexplorer.transaction[1].blockHash,
+						id: data.wavesexplorer.transaction[1].hash,
+						recipient: data.wavesexplorer.transaction[1].recipients[0].address,
+						sender: data.wavesexplorer.transaction[1].senders[0].address,
+						timestamp: data.wavesexplorer.transaction[1].timestamp,
+						valueDivisor: 100000000000,
+						valueSymbol: 'WavesGO',
+						extraTestInfo: 'Token transfer'
+					}
+				]
 			},
 			expected: {
 				account: new Account(`1W${data.wavesexplorer.account.address}`, data.wavesexplorer.account.balance / 100000000),
-				block: new Block(0, data.wavesexplorer.block.hash, data.wavesexplorer.block.height, new Date(data.wavesexplorer.block.timestamp), data.wavesexplorer.block.transactions.length)
+				block: new Block(0, data.wavesexplorer.block.hash, data.wavesexplorer.block.height, new Date(data.wavesexplorer.block.timestamp), data.wavesexplorer.block.transactions.length),
+				transaction: [
+					new Transaction(`${data.wavesexplorer.transaction[0].amountSent / 100000000}`, data.wavesexplorer.transaction[0].blockHash, data.wavesexplorer.transaction[0].hash, { address: `1W${data.wavesexplorer.transaction[0].recipients[0].address}`, amount: `${data.wavesexplorer.transaction[0].recipients[0].amount / 100000000}` }, { address: `1W${data.wavesexplorer.transaction[0].senders[0].address}`, amount: `${data.wavesexplorer.transaction[0].senders[0].amount / 100000000}` }, new Date(data.wavesexplorer.transaction[0].timestamp)),
+					new Transaction(`${data.wavesexplorer.transaction[1].amountSent / 100000000000} WavesGO`, data.wavesexplorer.transaction[1].blockHash, data.wavesexplorer.transaction[1].hash, { address: data.wavesexplorer.transaction[1].recipients[0].address, amount: `${data.wavesexplorer.transaction[1].recipients[0].amount / 100000000000} WavesGO` }, { address: data.wavesexplorer.transaction[1].senders[0].address, amount: `${data.wavesexplorer.transaction[1].senders[0].amount / 100000000000} WavesGO` }, new Date(data.wavesexplorer.transaction[1].timestamp))
+				]
 			}
 		},
 		{
@@ -564,7 +763,27 @@ describe('type-mapper/*', function() {
 					height: data.zchain.block.height,
 					timestamp: data.zchain.block.timestamp,
 					transactions: data.zchain.block.transactions.length
-				}
+				},
+				transaction: [
+					{
+						blockHash: data.zchain.transaction[0].blockHash,
+						hash: data.zchain.transaction[0].hash,
+						timestamp: data.zchain.transaction[0].timestamp,
+						value: data.zchain.transaction[0].amountSent,
+						vin: _.map(data.zchain.transaction[0].senders, (sender) => ({retrievedVout: { scriptPubKey: {addresses: [sender.address]}, value: sender.amount }})),
+						vout: _.map(data.zchain.transaction[0].recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: recipient.amount })),
+						extraTestInfo: 'Standard transaction'
+					},
+					{
+						blockHash: data.zchain.transaction[1].blockHash,
+						hash: data.zchain.transaction[1].hash,
+						timestamp: data.zchain.transaction[1].timestamp,
+						value: data.zchain.transaction[1].amountSent,
+						vin: [{coinbase: '234234234'}],
+						vout: _.map(data.zchain.transaction[1].recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: recipient.amount })),
+						extraTestInfo: 'Coinbase transaction'
+					}
+				]
 			},
 			expected: {
 			}
@@ -623,10 +842,6 @@ describe('type-mapper/*', function() {
 			const dataArray = Array.isArray(data[test.mapper].transaction) ? data[test.mapper].transaction : [data[test.mapper].transaction];
 			
 			_.each(inputTransactionsArray, (inputTransaction, index) => {
-				if (typeof(inputTransaction) !== 'object') {
-					return;
-				}
-				
 				const infoString = inputTransaction.hasOwnProperty('extraTestInfo') ? ` (${inputTransaction.extraTestInfo})` : '';
 				
 				it(`should map a transaction using '${test.mapper}' type mapper${infoString}`, function() {
