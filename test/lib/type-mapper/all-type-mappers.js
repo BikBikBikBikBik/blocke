@@ -86,11 +86,11 @@ describe('lib/type-mapper/*', function() {
 			},
 			transaction: [
 				{
-					amountSent: 1500000000000000000,
+					amountSent: 15,
 					blockHash: '0xb8a3f722222222222222222222222222202cbadcd15078c49b85ec2a57f43853',
 					hash: '0xc29be27791cea31fd0f6eff81bb94ce74061530e678374653847563847563485',
-					recipients: [{ address: '0x3e653030434534111111111114954386e6f39008', amount: 1500000000000000000 }],
-					senders: [{ address: '0x3e65303043453453453452ca4954386e6f39008c', amount: 1500000000000000000 }],
+					recipients: [{ address: '0x3e653030434534111111111114954386e6f39008', amount: 15 }],
+					senders: [{ address: '0x3e65303043453453453452ca4954386e6f39008c', amount: 15 }],
 					timestamp: 36745837465
 				},
 				{
@@ -442,21 +442,21 @@ describe('lib/type-mapper/*', function() {
 					{
 						blockHash: data.etheradapter.transaction[0].blockHash,
 						hash: data.etheradapter.transaction[0].hash,
-						finalRecipient: data.etheradapter.transaction[0].recipients[0].address,
+						to: data.etheradapter.transaction[0].recipients[0].address,
 						from: data.etheradapter.transaction[0].senders[0].address,
-						time: data.etheradapter.transaction[0].timestamp,
-						value: data.etheradapter.transaction[0].amountSent.toString(16),
-						valueDivisor: 1000000000000000000,
+						timestamp: data.etheradapter.transaction[0].timestamp,
+						value: data.etheradapter.transaction[0].amountSent,
+						valueDivisor: 1,
 						valueSymbol: '',
 						extraTestInfo: 'ETH transfer'
 					},
 					{
 						blockHash: data.etheradapter.transaction[1].blockHash,
 						hash: data.etheradapter.transaction[1].hash,
-						finalRecipient: data.etheradapter.transaction[1].recipients[0].address,
+						to: data.etheradapter.transaction[1].recipients[0].address,
 						from: data.etheradapter.transaction[1].senders[0].address,
-						time: data.etheradapter.transaction[1].timestamp,
-						value: data.etheradapter.transaction[1].amountSent.toString(16),
+						timestamp: data.etheradapter.transaction[1].timestamp,
+						value: data.etheradapter.transaction[1].amountSent,
 						valueDivisor: 1000000000000000,
 						valueSymbol: 'GNT',
 						extraTestInfo: 'ERC-20 token transfer'
@@ -467,8 +467,8 @@ describe('lib/type-mapper/*', function() {
 				account: new Account(data.etheradapter.account.address, data.etheradapter.account.balance / 1000000000000000000),
 				block: new Block(data.etheradapter.block.difficulty, data.etheradapter.block.hash, data.etheradapter.block.height, new Date(data.etheradapter.block.timestamp), data.etheradapter.block.transactions.length),
 				transaction: [
-					new Transaction(`${data.etheradapter.transaction[0].amountSent / 1000000000000000000}`, data.etheradapter.transaction[0].blockHash, data.etheradapter.transaction[0].hash, { address: data.etheradapter.transaction[0].recipients[0].address, amount: `${data.etheradapter.transaction[0].recipients[0].amount / 1000000000000000000}` }, { address: data.etheradapter.transaction[0].senders[0].address, amount: `${data.etheradapter.transaction[0].senders[0].amount / 1000000000000000000}` }, new Date(data.etheradapter.transaction[0].timestamp)),
-					new Transaction(`${data.etheradapter.transaction[1].amountSent / 1000000000000000} GNT`, data.etheradapter.transaction[1].blockHash, data.etheradapter.transaction[1].hash, { address: data.etheradapter.transaction[1].recipients[0].address, amount: `${data.etheradapter.transaction[1].recipients[0].amount / 1000000000000000} GNT` }, { address: data.etheradapter.transaction[1].senders[0].address, amount: `${data.etheradapter.transaction[1].senders[0].amount / 1000000000000000} GNT` }, new Date(data.etheradapter.transaction[1].timestamp))
+					new Transaction(`${data.etheradapter.transaction[0].amountSent}`, data.etheradapter.transaction[0].blockHash, data.etheradapter.transaction[0].hash, { address: data.etheradapter.transaction[0].recipients[0].address, amount: `${data.etheradapter.transaction[0].recipients[0].amount}` }, { address: data.etheradapter.transaction[0].senders[0].address, amount: `${data.etheradapter.transaction[0].senders[0].amount}` }, new Date(data.etheradapter.transaction[0].timestamp * 1000)),
+					new Transaction(`${data.etheradapter.transaction[1].amountSent / 1000000000000000} GNT`, data.etheradapter.transaction[1].blockHash, data.etheradapter.transaction[1].hash, { address: data.etheradapter.transaction[1].recipients[0].address, amount: `${data.etheradapter.transaction[1].recipients[0].amount / 1000000000000000} GNT` }, { address: data.etheradapter.transaction[1].senders[0].address, amount: `${data.etheradapter.transaction[1].senders[0].amount / 1000000000000000} GNT` }, new Date(data.etheradapter.transaction[1].timestamp * 1000))
 				]
 			}
 		},
@@ -798,7 +798,7 @@ describe('lib/type-mapper/*', function() {
 	describe('mapAccount', function() {
 		const testPartition = _.partition(tests, (test) => typeof(test.inputs.account) === 'object');
 		
-		testPartition[0].forEach(function(test) {
+		testPartition[0].forEach((test) => {
 			it(`should map an account using '${test.mapper}' type mapper`, function() {
 				const expectedAccount = test.expected.hasOwnProperty('account') ? test.expected.account : new Account(data[test.mapper].account.address, data[test.mapper].account.balance, data[test.mapper].account.unconfirmedBalance);
 				const mappedAccount = this[test.mapper].mapAccount(test.inputs.account);
@@ -807,7 +807,7 @@ describe('lib/type-mapper/*', function() {
 			});
 		});
 		
-		testPartition[1].forEach(function(test) {
+		testPartition[1].forEach((test) => {
 			it(`should not map an account using '${test.mapper}' type mapper`, function() {
 				assert.throws(() => this[test.mapper].mapAccount(test.inputs.account), Error);
 			});
