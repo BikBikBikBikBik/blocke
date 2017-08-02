@@ -799,17 +799,21 @@ describe('lib/type-mapper/*', function() {
 		const testPartition = _.partition(tests, (test) => typeof(test.inputs.account) === 'object');
 		
 		testPartition[0].forEach((test) => {
-			it(`should map an account using '${test.mapper}' type mapper`, function() {
-				const expectedAccount = test.expected.hasOwnProperty('account') ? test.expected.account : new Account(data[test.mapper].account.address, data[test.mapper].account.balance, data[test.mapper].account.unconfirmedBalance);
-				const mappedAccount = this[test.mapper].mapAccount(test.inputs.account);
-				
-				assert.isTrue(equal(mappedAccount, expectedAccount, {strict: true}), `Actual: ${mappedAccount}\n\nExpected: ${expectedAccount}`);
+			describe(test.mapper, function() {
+				it(`should map an account`, function() {
+					const expectedAccount = test.expected.hasOwnProperty('account') ? test.expected.account : new Account(data[test.mapper].account.address, data[test.mapper].account.balance, data[test.mapper].account.unconfirmedBalance);
+					const mappedAccount = this[test.mapper].mapAccount(test.inputs.account);
+
+					assert.isTrue(equal(mappedAccount, expectedAccount, {strict: true}), `Actual: ${mappedAccount}\n\nExpected: ${expectedAccount}`);
+				});
 			});
 		});
 		
 		testPartition[1].forEach((test) => {
-			it(`should not map an account using '${test.mapper}' type mapper`, function() {
-				assert.throws(() => this[test.mapper].mapAccount(test.inputs.account), Error);
+			describe(test.mapper, function() {
+				it(`should not map an account (Operation not supported)`, function() {
+					assert.throws(() => this[test.mapper].mapAccount(test.inputs.account), Error);
+				});
 			});
 		});
 	});
@@ -821,11 +825,13 @@ describe('lib/type-mapper/*', function() {
 	 */
 	describe('mapBlock', function() {
 		tests.forEach(function(test) {
-			it(`should map a block using '${test.mapper}' type mapper`, function() {
-				const expectedBlock = test.expected.hasOwnProperty('block') ? test.expected.block : new Block(data[test.mapper].block.difficulty, data[test.mapper].block.hash, data[test.mapper].block.height, new Date(data[test.mapper].block.timestamp * 1000), data[test.mapper].block.transactions.length);
-				const mappedBlock = this[test.mapper].mapBlock(test.inputs.block);
+			describe(test.mapper, function() {
+				it(`should map a block`, function() {
+					const expectedBlock = test.expected.hasOwnProperty('block') ? test.expected.block : new Block(data[test.mapper].block.difficulty, data[test.mapper].block.hash, data[test.mapper].block.height, new Date(data[test.mapper].block.timestamp * 1000), data[test.mapper].block.transactions.length);
+					const mappedBlock = this[test.mapper].mapBlock(test.inputs.block);
 
-				assert.isTrue(equal(mappedBlock, expectedBlock, {strict: true}), `Actual:\n${mappedBlock}\n\nExpected:\n${expectedBlock}`);
+					assert.isTrue(equal(mappedBlock, expectedBlock, {strict: true}), `Actual:\n${mappedBlock}\n\nExpected:\n${expectedBlock}`);
+				});
 			});
 		});
 	});
@@ -837,20 +843,22 @@ describe('lib/type-mapper/*', function() {
 	 */
 	describe('mapTransaction', function() {
 		tests.forEach(function(test) {
-			const inputTransactionsArray = Array.isArray(test.inputs.transaction) ? test.inputs.transaction : [test.inputs.transaction];
-			const expectedArray = Array.isArray(test.expected.transaction) ? test.expected.transaction: [test.expected.transaction];
-			const dataArray = Array.isArray(data[test.mapper].transaction) ? data[test.mapper].transaction : [data[test.mapper].transaction];
-			
-			_.each(inputTransactionsArray, (inputTransaction, index) => {
-				const infoString = inputTransaction.hasOwnProperty('extraTestInfo') ? ` (${inputTransaction.extraTestInfo})` : '';
-				
-				it(`should map a transaction using '${test.mapper}' type mapper${infoString}`, function() {
-					const transactionTimestamp = inputTransaction.hasOwnProperty('excludeTimestamp') && inputTransaction.excludeTimestamp === true ? undefined : new Date(dataArray[index].timestamp * 1000);
-					const expectedTransaction = (index < expectedArray.length && typeof(expectedArray[index]) === 'object') ? expectedArray[index]
-						: new Transaction(dataArray[index].amountSent, dataArray[index].blockHash, dataArray[index].hash, dataArray[index].recipients, dataArray[index].senders, transactionTimestamp);
-					const mappedTransaction = this[test.mapper].mapTransaction(inputTransaction);
+			describe(test.mapper, function() {
+				const inputTransactionsArray = Array.isArray(test.inputs.transaction) ? test.inputs.transaction : [test.inputs.transaction];
+				const expectedArray = Array.isArray(test.expected.transaction) ? test.expected.transaction: [test.expected.transaction];
+				const dataArray = Array.isArray(data[test.mapper].transaction) ? data[test.mapper].transaction : [data[test.mapper].transaction];
 
-					assert.isTrue(equal(mappedTransaction, expectedTransaction, {strict: true}), `Actual:\n${JSON.stringify(mappedTransaction)}\n\nExpected:\n${JSON.stringify(expectedTransaction)}`);
+				_.each(inputTransactionsArray, (inputTransaction, index) => {
+					const infoString = inputTransaction.hasOwnProperty('extraTestInfo') ? ` (${inputTransaction.extraTestInfo})` : '';
+
+					it(`should map a transaction${infoString}`, function() {
+						const transactionTimestamp = inputTransaction.hasOwnProperty('excludeTimestamp') && inputTransaction.excludeTimestamp === true ? undefined : new Date(dataArray[index].timestamp * 1000);
+						const expectedTransaction = (index < expectedArray.length && typeof(expectedArray[index]) === 'object') ? expectedArray[index]
+							: new Transaction(dataArray[index].amountSent, dataArray[index].blockHash, dataArray[index].hash, dataArray[index].recipients, dataArray[index].senders, transactionTimestamp);
+						const mappedTransaction = this[test.mapper].mapTransaction(inputTransaction);
+
+						assert.isTrue(equal(mappedTransaction, expectedTransaction, {strict: true}), `Actual:\n${JSON.stringify(mappedTransaction)}\n\nExpected:\n${JSON.stringify(expectedTransaction)}`);
+					});
 				});
 			});
 		});
