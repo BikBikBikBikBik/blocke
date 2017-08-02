@@ -586,17 +586,19 @@ describe('lib/api/*', function() {
 	 *
 	 */
 	describe('constructor', function() {
-		const multiNetworkApiTests = _.filter(tests, (test) => Array.isArray(test.networks));
+		const multiNetworkApiTests = _.filter(tests, (test) => typeof(test.networks) === 'object');
 		
 		multiNetworkApiTests.forEach((test) => {
-			test.networks.forEach((network) => {
-				it(`should construct a valid '${test.api}' client for '${network}' network`, function() {
-					assert.doesNotThrow(() => new this[test.api](network), Error);
+			describe(test.api, function() {
+				_.each(test.networks, (data, network) => {
+					it(`should construct a valid client for '${network}' network`, function() {
+						assert.doesNotThrow(() => new this[test.api](network), Error);
+					});
 				});
-			});
-			
-			it(`should not construct a valid '${test.api}' client for unsupported networks`, function() {
-				assert.throws(() => new this[test.api]('asdfssafdsdfa'), Error);
+
+				it(`should not construct a valid client for unsupported networks`, function() {
+					assert.throws(() => new this[test.api]('asdfssafdsdfa'), Error);
+				});
 			});
 		});
 	});
