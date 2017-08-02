@@ -20,6 +20,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiAsPromised);
+chai.should();
 
 if (!chai.assert.hasOwnProperty('startsWith')) {
 	chai.assert.startsWith = function(value, prefix) {
