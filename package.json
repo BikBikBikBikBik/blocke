@@ -69,6 +69,7 @@
     "mocha": "^3.4.2",
     "nock": "^9.0.14",
     "nyc": "^11.0.3",
+    "proxyquire": "^1.8.0",
     "seedrandom": "^2.4.3"
   },
   "scripts": {
