@@ -234,7 +234,7 @@ describe('lib/api/*', function() {
 							values: [ '[network]', '[input]' ]
 						}
 					],
-					expectedError: apiResources.apiNotAvailable,
+					expectedError: apiResources.apiNotAvailableMessage,
 					extraTestInfo: 'ApiNotAvailable response'
 				},
 				{
@@ -277,7 +277,7 @@ describe('lib/api/*', function() {
 							values: [ '[network]', '[input]' ]
 						}
 					],
-					expectedError: apiResources.apiNotAvailable,
+					expectedError: apiResources.apiNotAvailableMessage,
 					extraTestInfo: 'ApiNotAvailable response'
 				},
 				{
@@ -887,6 +887,267 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.transactionNotFoundMessage,
 					extraTestInfo: 'Non-transaction hash'
+				}
+			]
+		},
+		{
+			api: 'sochain',
+			apiBaseAddress: 'https://chain.so',
+			networks: {
+				BTC: {},
+				DASH: {},
+				DOGE: {},
+				LTC: {}
+			},
+			urlFormatters: {
+				account: '/api/v2/get_address_balance/[0]/[1]',
+				block: '/api/v2/get_block/[0]/[1]',
+				transaction: '/api/v2/get_tx/[0]/[1]'
+			},
+			getAccountTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '98uiojk'),
+					mockResponseData: [
+						{
+							response: { data: {data: {address: random.generateRandomHashString(32, '98uiojk')}}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[network]', '[input]' ]
+						}
+					],
+					expectedResult: {address: random.generateRandomHashString(32, '98uiojk')},
+					extraTestInfo: 'Valid account address'
+				}
+			],
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: random.generateRandomHashString(32, 'kiujhg'),
+					mockResponseData: [
+						{
+							response: { data: {data: {hash: random.generateRandomHashString(32, 'kiujhg')}}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[network]', '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, 'kiujhg')},
+					extraTestInfo: 'Valid block id'
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '76uyjhg'),
+					mockResponseData: [
+						{
+							response: { data: {data: {txid: random.generateRandomHashString(32, '76uyjhg')}}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[network]', '[input]' ]
+						}
+					],
+					expectedResult: {txid: random.generateRandomHashString(32, '76uyjhg')},
+					extraTestInfo: 'Valid transaction hash'
+				}
+			]
+		},
+		{
+			api: 'wavesexplorer',
+			apiBaseAddress: 'https://nodes.wavesnodes.com',
+			urlFormatters: {
+				account: '/addresses/balance/[0]',
+				blockAt: '/blocks/at/[0]',
+				blockSignature: '/blocks/signature/[0]',
+				transaction: '/transactions/info/[0]'
+			},
+			getAccountTests: [
+				{
+					methodInput: `1W${random.generateRandomHashString(32, '3regfnvb')}`,
+					mockResponseData: [
+						{
+							response: { data: {address: random.generateRandomHashString(32, '3regfnvb')}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ random.generateRandomHashString(32, '3regfnvb') ]
+						}
+					],
+					expectedResult: {address: random.generateRandomHashString(32, '3regfnvb')},
+					extraTestInfo: `Valid account address with '1W' prefix`
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '678tuyhgf'),
+					mockResponseData: [
+						{
+							response: { data: {address: random.generateRandomHashString(32, '678tuyhgf')}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {address: random.generateRandomHashString(32, '678tuyhgf')},
+					extraTestInfo: `Valid account address without '1W' prefix`,
+					useAsErrorTestResponseTemplate: true
+				}
+			],
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: random.generateRandomHashString(32, 'bncfy34'),
+					mockResponseData: [
+						{
+							response: { data: {hash: random.generateRandomHashString(32, 'bncfy34')}, statusCode: 200 },
+							urlFormatter: 'blockSignature',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, 'bncfy34')},
+					extraTestInfo: 'Valid block hash'
+				},
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000, '56tryhfg'),
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 404 },
+							urlFormatter: 'blockSignature',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {height: random.generateRandomIntInclusive(1, 5000000, '56tryhfg')}, statusCode: 200 },
+							urlFormatter: 'blockAt',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {height: random.generateRandomIntInclusive(1, 5000000, '56tryhfg')},
+					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000),
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 404 },
+							urlFormatter: 'blockSignature',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {success: false}, statusCode: 404 },
+							urlFormatter: 'blockAt',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Invalid block id'
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '23wrtegf'),
+					mockResponseData: [
+						{
+							response: { data: { height: random.generateRandomIntInclusive(1, 5000000, '978i7utyh'), txid: random.generateRandomHashString(32, '23wrtegf'), type: 4 }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {signature: random.generateRandomHashString(32, '98o8ikyujt')}, statusCode: 200 },
+							urlFormatter: 'blockAt',
+							values: [ random.generateRandomIntInclusive(1, 5000000, '978i7utyh') ]
+						}
+					],
+					expectedResult: {
+						blockHash:random.generateRandomHashString(32, '98o8ikyujt'),
+						height: random.generateRandomIntInclusive(1, 5000000, '978i7utyh'),
+						txid: random.generateRandomHashString(32, '23wrtegf'),
+						type: 4,
+						valueDivisor: 100000000,
+						valueSymbol: ''
+					},
+					extraTestInfo: 'WAVES transfer'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, 'i87yujh'),
+					mockResponseData: [
+						{
+							response: { data: { assetId: random.generateRandomHashString(32, '576tjg'), height: random.generateRandomIntInclusive(1, 5000000, '54tryghf'), txid: random.generateRandomHashString(32, 'i87yujh'), type: 4 }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: { decimals: random.generateRandomIntInclusive(2, 8, '5rtfsd'), name: random.generateRandomHashString(5, '65rtyfg') }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, '576tjg') ]
+						},
+						{
+							response: { data: {signature: random.generateRandomHashString(32, '7rtgdf')}, statusCode: 200 },
+							urlFormatter: 'blockAt',
+							values: [ random.generateRandomIntInclusive(1, 5000000, '54tryghf') ]
+						}
+					],
+					expectedResult: {
+						assetId: random.generateRandomHashString(32, '576tjg'),
+						blockHash: random.generateRandomHashString(32, '7rtgdf'),
+						height: random.generateRandomIntInclusive(1, 5000000, '54tryghf'),
+						txid: random.generateRandomHashString(32, 'i87yujh'),
+						type: 4,
+						valueDivisor: Math.pow(10, random.generateRandomIntInclusive(2, 8, '5rtfsd')),
+						valueSymbol: random.generateRandomHashString(5, '65rtyfg')
+					},
+					extraTestInfo: 'Token transfer'
+				},
+				{
+					methodInput: random.generateRandomHashString(32),
+					mockResponseData: [
+						{
+							response: { data: {type: random.generateRandomIntInclusive(0, 3, '3refdg')}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.transactionTypeNotSupportedMessage(random.generateRandomIntInclusive(0, 3, '3refdg')),
+					extraTestInfo: 'Non-asset transfer type'
+				}
+			]
+		},
+		{
+			api: 'zchain',
+			apiBaseAddress: 'https://api.zcha.in',
+			urlFormatters: {
+				account: '/v2/mainnet/accounts/[0]',
+				block: '/v2/mainnet/blocks/[0]',
+				transaction: '/v2/mainnet/transactions/[0]'
+			},
+			getAccountTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '789iuykhj'),
+					mockResponseData: [
+						{
+							response: { data: {address: random.generateRandomHashString(32, '789iuykhj')}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {address: random.generateRandomHashString(32, '789iuykhj')},
+					extraTestInfo: 'Valid account address'
+				}
+			],
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '657yutghj'),
+					mockResponseData: [
+						{
+							response: { data: {hash: random.generateRandomHashString(32, '657yutghj')}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, '657yutghj')},
+					extraTestInfo: 'Valid block id'
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '68uiyjh'),
+					mockResponseData: [
+						{
+							response: { data: {txid: random.generateRandomHashString(32, '68uiyjh')}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {txid: random.generateRandomHashString(32, '68uiyjh')},
+					extraTestInfo: 'Valid transaction hash'
 				}
 			]
 		}
