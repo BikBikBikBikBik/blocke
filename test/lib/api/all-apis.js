@@ -30,11 +30,12 @@ describe('lib/api/*', function() {
 	function addAllGenericErrorTests() {
 		function addGenericErrorTests(test, testFieldName, notFoundMessage, objectName) {
 			if (test.hasOwnProperty(testFieldName)) {
-				const largestMockResponseDataTest = _.sortBy(test[testFieldName], (data) => -data.mockResponseData.length)[0];
-				const urlFormatters = _.pluck(largestMockResponseDataTest.mockResponseData, 'urlFormatter');
+				const mockErrorTestResponseTemplate = _.find(test[testFieldName], (data) => data.useAsErrorTestResponseTemplate === true);
+				const testData = mockErrorTestResponseTemplate !== undefined ? mockErrorTestResponseTemplate : _.sortBy(test[testFieldName], (data) => -data.mockResponseData.length)[0];
+				const urlFormatters = _.pluck(testData.mockResponseData, 'urlFormatter');
 				const uniqueUrlFormatters = _.uniq(urlFormatters);
 				
-				test[testFieldName] = test[testFieldName].concat(generateGenericErrorTests(uniqueUrlFormatters, largestMockResponseDataTest.mockResponseData[0].values, notFoundMessage, apiResources.generateGenericObjectErrorMessage(objectName)));
+				test[testFieldName] = test[testFieldName].concat(generateGenericErrorTests(uniqueUrlFormatters, testData.mockResponseData[0].values, notFoundMessage, apiResources.generateGenericObjectErrorMessage(objectName)));
 			}
 		}
 		
@@ -180,7 +181,8 @@ describe('lib/api/*', function() {
 	 */
 	beforeEach(function() {
 		this.chainradar = require('../../../lib/api/chainradar');
-		this.etheradapter = require('../../../lib/api/etheradapter');
+		this.etherchain = require('../../../lib/api/etherchain');
+		this.ethplorer = require('../../../lib/api/ethplorer');
 		this.gamecredits = require('../../../lib/api/gamecredits');
 		this.insight = require('../../../lib/api/insight');
 		this.lisk = require('../../../lib/api/lisk');
@@ -289,6 +291,204 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.tooManyRequestsMessage,
 					extraTestInfo: 'RequestLimitExceeded response'
+				}
+			]
+		},
+		{
+			api: 'etherchain',
+			apiBaseAddress: 'https://etherchain.org',
+			urlFormatters: {
+				block: '/api/block/[0]'
+			},
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '54teryghdf'),
+					mockResponseData: [
+						{
+							response: { data: {data: [{hash: random.generateRandomHashString(32, '54teryghdf')}]}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, '54teryghdf')},
+					extraTestInfo: 'Valid block hash'
+				},
+				{
+					methodInput: `${random.generateRandomIntInclusive(1, 5000000, 'asdgfs435')}`,
+					mockResponseData: [
+						{
+							response: { data: {data: [{ hash: random.generateRandomHashString(32, '23tgfda'), number: random.generateRandomIntInclusive(1, 5000000, 'asdgfs435') }]}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: { hash: random.generateRandomHashString(32, '23tgfda'), number: random.generateRandomIntInclusive(1, 5000000, 'asdgfs435') },
+					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '2354ythdjg'),
+					mockResponseData: [
+						{
+							response: { data: {data: [{ hash: random.generateRandomHashString(32, 'asgfdb4'), number: random.generateRandomIntInclusive(1, 5000000, '254thgfsb') }]}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Default block #0 response'
+				},
+				{
+					methodInput: random.generateRandomHashString(32),
+					mockResponseData: [
+						{
+							response: { data: { data: [], success: false }, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Generic error response'
+				}
+			]
+		},
+		{
+			api: 'ethplorer',
+			apiBaseAddress: 'https://api.ethplorer.io',
+			urlFormatters: {
+				account: '/getAddressInfo/[0]?apiKey=freekey',
+				accountPlusPrefix: '/getAddressInfo/0x[0]?apiKey=freekey',
+				transaction: '/getTxInfo/[0]?apiKey=freekey'
+			},
+			getAccountTests: [
+				{
+					methodInput: `0x${random.generateRandomHashString(32, '245ythdgf')}`,
+					mockResponseData: [
+						{
+							response: { data: {address: `0x${random.generateRandomHashString(32, '245ythdgf')}`}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {address: `0x${random.generateRandomHashString(32, '245ythdgf')}`},
+					extraTestInfo: `Valid account address with '0x' prefix`
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '43565ythdd'),
+					mockResponseData: [
+						{
+							response: { data: {address: `0x${random.generateRandomHashString(32, '43565ythdd')}`}, statusCode: 200 },
+							urlFormatter: 'accountPlusPrefix',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {address: `0x${random.generateRandomHashString(32, '43565ythdd')}`},
+					extraTestInfo: `Valid account address without '0x' prefix`,
+					useAsErrorTestResponseTemplate: true
+				},
+				{
+					methodInput: `0x${random.generateRandomHashString(32, '45trgfh')}`,
+					mockResponseData: [
+						{
+							response: { data: {error: 'Invalid account'}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.accountNotFoundMessage,
+					extraTestInfo: `Generic error response`
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '234htgnbx'),
+					mockResponseData: [
+						{
+							response: { data: {txid: random.generateRandomHashString(32, '234htgnbx')}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: { txid: random.generateRandomHashString(32, '234htgnbx'), valueDivisor: 1, valueSymbol: '' },
+					extraTestInfo: 'ETH transfer'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '27yuerofdsa'),
+					mockResponseData: [
+						{
+							response: {
+								data: { operations: [{
+									from: random.generateRandomHashString(32, 'rtgsiuodl'),
+									intValue: random.generateRandomIntInclusive(1, 1000, '4578orthyg'),
+									to: random.generateRandomHashString(32, '243trg'),
+									tokenInfo: {
+										decimals: `${random.generateRandomIntInclusive(2, 8, '324trh')}`,
+										symbol: random.generateRandomHashString(3, 'eutiohsldjf')
+									},
+									type: 'transfer'
+								}]},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {
+						from: random.generateRandomHashString(32, 'rtgsiuodl'),
+						operations: [{
+							from: random.generateRandomHashString(32, 'rtgsiuodl'),
+							intValue: random.generateRandomIntInclusive(1, 1000, '4578orthyg'),
+							to: random.generateRandomHashString(32, '243trg'),
+							tokenInfo: {
+								decimals: `${random.generateRandomIntInclusive(2, 8, '324trh')}`,
+								symbol: random.generateRandomHashString(3, 'eutiohsldjf')
+							},
+							type: 'transfer'
+						}],
+						to: random.generateRandomHashString(32, '243trg'),
+						value: random.generateRandomIntInclusive(1, 1000, '4578orthyg'),
+						valueDivisor: Math.pow(10, random.generateRandomIntInclusive(2, 8, '324trh')),
+						valueSymbol: random.generateRandomHashString(3, 'eutiohsldjf')
+					},
+					extraTestInfo: 'Token transfer'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '43tytrhgf'),
+					mockResponseData: [
+						{
+							response: {
+								data: { operations: [{
+									from: random.generateRandomHashString(32, '35ythdg'),
+									to: random.generateRandomHashString(32, '243regsf'),
+									type: random.generateRandomHashString(32, '378teruhgilf')
+								}]},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {
+						operations: [{
+							from: random.generateRandomHashString(32, '35ythdg'),
+							to: random.generateRandomHashString(32, '243regsf'),
+							type: random.generateRandomHashString(32, '378teruhgilf')
+						}],
+						valueDivisor: 1,
+						valueSymbol: ''
+					},
+					extraTestInfo: 'Non-transfer contract operation'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '234thygdf'),
+					mockResponseData: [
+						{
+							response: { data: {error: 'Invalid transaction'}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.transactionNotFoundMessage,
+					extraTestInfo: `Generic error response`
 				}
 			]
 		},
@@ -463,6 +663,18 @@ describe('lib/api/*', function() {
 					],
 					expectedResult: {height: random.generateRandomIntInclusive(1, 5000000, '234t5ydhfg')},
 					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '453trgh'),
+					mockResponseData: [
+						{
+							response: { data: { hash: random.generateRandomHashString(32, 're4tgdfh'), height: random.generateRandomIntInclusive(1, 5000000, 'sldkjf') }, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Incorrect block response'
 				}
 			],
 			getTransactionTests: [

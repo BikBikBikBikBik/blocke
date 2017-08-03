@@ -47,7 +47,7 @@ function generateRandomHashString(length, seed) {
 
 function generateRandomIntInclusive(min, max, seed) {
 	const date = new Date();
-	const random = seed !== undefined ? seedrandom(seed + date.getUTCDate() + date.getUTCFullYear()) : seedrandom();
+	const random = seed !== undefined ? seedrandom(seed + date.getUTCDate() + date.getUTCMonth() + date.getUTCFullYear()) : seedrandom();
 	
 	min = Math.ceil(min);
 	max = Math.ceil(max);
