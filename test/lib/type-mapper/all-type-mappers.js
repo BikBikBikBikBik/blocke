@@ -75,7 +75,7 @@ describe('lib/type-mapper/*', function() {
 		etheradapter: {
 			account: {
 				address: '0x3e65303043928403f8a1a2ca4954386e6f39008c',
-				balance: 25000000000000000
+				balance: 250
 			},
 			block: {
 				difficulty: 567567567,
@@ -430,7 +430,7 @@ describe('lib/type-mapper/*', function() {
 		{
 			mapper: 'etheradapter',
 			inputs: {
-				account: { address: data.etheradapter.account.address, balance: data.etheradapter.account.balance },
+				account: { address: data.etheradapter.account.address, ETH: {balance: data.etheradapter.account.balance} },
 				block: {
 					difficulty: data.etheradapter.block.difficulty,
 					hash: data.etheradapter.block.hash,
@@ -464,7 +464,6 @@ describe('lib/type-mapper/*', function() {
 				]
 			},
 			expected: {
-				account: new Account(data.etheradapter.account.address, data.etheradapter.account.balance / 1000000000000000000),
 				block: new Block(data.etheradapter.block.difficulty, data.etheradapter.block.hash, data.etheradapter.block.height, new Date(data.etheradapter.block.timestamp), data.etheradapter.block.transactions.length),
 				transaction: [
 					new Transaction(`${data.etheradapter.transaction[0].amountSent}`, data.etheradapter.transaction[0].blockHash, data.etheradapter.transaction[0].hash, { address: data.etheradapter.transaction[0].recipients[0].address, amount: `${data.etheradapter.transaction[0].recipients[0].amount}` }, { address: data.etheradapter.transaction[0].senders[0].address, amount: `${data.etheradapter.transaction[0].senders[0].amount}` }, new Date(data.etheradapter.transaction[0].timestamp * 1000)),
