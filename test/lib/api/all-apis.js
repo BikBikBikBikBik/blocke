@@ -691,6 +691,122 @@ describe('lib/api/*', function() {
 					extraTestInfo: 'Valid transaction hash'
 				}
 			]
+		},
+		{
+			api: 'lisk',
+			apiBaseAddress: 'https://explorer.lisk.io',
+			urlFormatters: {
+				account: '/api/getAccount?address=[0]',
+				block: '/api/getBlock?blockId=[0]',
+				search: '/api/search?id=[0]',
+				transaction: '/api/getTransaction?transactionId=[0]'
+			},
+			getAccountTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '234resgf'),
+					mockResponseData: [
+						{
+							response: { data: {address: random.generateRandomHashString(32, '234resgf')}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {address: random.generateRandomHashString(32, '234resgf')},
+					extraTestInfo: 'Valid account address'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '4tgrt'),
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.accountNotFoundMessage,
+					extraTestInfo: 'Generic error response'
+				}
+			],
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '234resgdf'),
+					mockResponseData: [
+						{
+							response: { data: {hash: random.generateRandomHashString(32, '234resgdf')}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, '234resgdf')},
+					extraTestInfo: 'Valid block hash'
+				},
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000, 'rewgftgh'),
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: { id: random.generateRandomHashString(32, 'dsffghbh'), type: 'block' }, statusCode: 200 },
+							urlFormatter: 'search',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {hash: random.generateRandomHashString(32, 'dsffghbh')}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ random.generateRandomHashString(32, 'dsffghbh') ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, 'dsffghbh')},
+					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, 'ritsuhgd'),
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {success: false}, statusCode: 200 },
+							urlFormatter: 'search',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Invalid block id',
+					useAsErrorTestResponseTemplate: true
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, 'sadgh3'),
+					mockResponseData: [
+						{
+							response: { data: {txid: random.generateRandomHashString(32, 'sadgh3')}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {txid: random.generateRandomHashString(32, 'sadgh3')},
+					extraTestInfo: 'Valid transaction hash'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '4tgrt'),
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.transactionNotFoundMessage,
+					extraTestInfo: 'Generic error response'
+				}
+			]
 		}
 	];
 	
