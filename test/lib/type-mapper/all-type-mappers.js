@@ -811,7 +811,7 @@ describe('lib/type-mapper/*', function() {
 		testPartition[1].forEach((test) => {
 			describe(test.mapper, function() {
 				it(`should not map an account (Operation not supported)`, function() {
-					assert.throws(() => this[test.mapper].mapAccount(test.inputs.account), Error);
+					assert.throws(() => this[test.mapper].mapAccount(test.inputs.account), Error, typeMapperResources.operationNotSupportedMessage);
 				});
 			});
 		});
