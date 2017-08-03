@@ -20,16 +20,77 @@ const apiResources = require('../../../lib/api/resources');
 const assert = require('../../chai-setup');
 const equal = require('deep-equal');
 const nock = require('nock');
+const random = require('../../random-generator');
 const _ = require('underscore');
 
+//Had issues with timing of before() hook, this is part of a workaround
+let addAllGenericErrorTestsWasCalled = false;
+
 describe('lib/api/*', function() {
+	function addAllGenericErrorTests() {
+		function addGenericErrorTests(test, testFieldName, notFoundMessage, objectName) {
+			if (test.hasOwnProperty(testFieldName)) {
+				const largestMockResponseDataTest = _.sortBy(test[testFieldName], (data) => -data.mockResponseData.length)[0];
+				const urlFormatters = _.pluck(largestMockResponseDataTest.mockResponseData, 'urlFormatter');
+				const uniqueUrlFormatters = _.uniq(urlFormatters);
+				
+				test[testFieldName] = test[testFieldName].concat(generateGenericErrorTests(uniqueUrlFormatters, largestMockResponseDataTest.mockResponseData[0].values, notFoundMessage, apiResources.generateGenericObjectErrorMessage(objectName)));
+			}
+		}
+		
+		tests.forEach((test) => {
+			addGenericErrorTests(test, 'getAccountTests', apiResources.accountNotFoundMessage, 'Account');
+			addGenericErrorTests(test, 'getBlockByNumberOrHashTests', apiResources.blockNotFoundMessage, 'Block');
+			addGenericErrorTests(test, 'getTransactionTests', apiResources.transactionNotFoundMessage, 'Transaction');
+		});
+	}
+	
+	function generateGenericErrorTests(urlFormatters, urlFormatterValues, notFoundMessage, genericErrorMessage) {
+		function generateMockResponseData(statusCode) {
+			return _.map(urlFormatters, (urlFormatter) => ({
+				response: { data: {success: false}, statusCode: statusCode },
+				urlFormatter: urlFormatter,
+				values: urlFormatterValues
+			}));
+		}
+		
+		const urlFormattersArray = Array.isArray(urlFormatters) ? urlFormatters : [urlFormatters];
+		
+		return [
+			{
+				methodInput: random.generateRandomHashString(32),
+				mockResponseData: generateMockResponseData(400),
+				expectedError: notFoundMessage,
+				extraTestInfo: 'HTTP 400 response'
+			},
+			{
+				methodInput: random.generateRandomHashString(32),
+				mockResponseData: generateMockResponseData(404),
+				expectedError: notFoundMessage,
+				extraTestInfo: 'HTTP 404 response'
+			},
+			{
+				methodInput: random.generateRandomHashString(32),
+				mockResponseData: generateMockResponseData(429),
+				expectedError: apiResources.tooManyRequestsMessage,
+				extraTestInfo: 'HTTP 429 response'
+			},
+			{
+				methodInput: random.generateRandomHashString(32),
+				mockResponseData: generateMockResponseData(500),
+				expectedError: genericErrorMessage,
+				extraTestInfo: 'HTTP 500 response'
+			}
+		];
+	}
+	
 	function prepareMockHttpResponses(test, testData, apiData, networkForApiUrl) {
 		testData.mockResponseData.forEach((mockResponse) => {
 			const apiBaseAddress = apiData.hasOwnProperty('apiBaseAddress') ? apiData.apiBaseAddress : test.apiBaseAddress;
 			let urlSuffix = test.urlFormatters[mockResponse.urlFormatter];
 
 			_.each(mockResponse.values, (replacementValue, index) => {
-				const actualValue = ((value) => {
+				const actualValue = (() => {
 					switch (replacementValue) {
 						case '[input]':
 							return testData.methodInput;
@@ -40,7 +101,7 @@ describe('lib/api/*', function() {
 						default:
 							return replacementValue;
 					}
-				})(replacementValue);
+				})();
 
 				urlSuffix = urlSuffix.replace(`[${index}]`, actualValue);
 			});
@@ -50,14 +111,20 @@ describe('lib/api/*', function() {
 	}
 	
 	function runTestForApiClientMethod(test, methodName, objectName) {
+		if (addAllGenericErrorTestsWasCalled === false) {
+			addAllGenericErrorTests();
+			
+			addAllGenericErrorTestsWasCalled = true;
+		}
+		
 		describe(test.api, function() {
 			const apiArray = typeof(test.networks) === 'object' ? _.map(test.networks, (data, network) => {
 				const apiData = { api: (self) => new self[test.api](network), network: network };
 				if (data.hasOwnProperty('apiBaseAddress')) {
 					apiData.apiBaseAddress = data.apiBaseAddress;
 				}
-				if (data.hasOwnProperty('replacement')) {
-					apiData.replacement = data.replacement;
+				if (data.hasOwnProperty('networkAlias')) {
+					apiData.networkAlias = data.networkAlias;
 				}
 
 				return apiData;
@@ -65,7 +132,7 @@ describe('lib/api/*', function() {
 
 			apiArray.forEach((apiData) => {
 				const isMultiNetworkApi = apiData.hasOwnProperty('network');
-				const networkForApiUrl = apiData.hasOwnProperty('replacement') ? apiData.replacement : apiData.network;
+				const networkForApiUrl = apiData.hasOwnProperty('networkAlias') ? apiData.networkAlias : apiData.network;
 
 				function runTests() {
 					if (test.hasOwnProperty(`${methodName}Tests`)) {
@@ -136,8 +203,8 @@ describe('lib/api/*', function() {
 			networks: {
 				aeon: {},
 				bcn: {},
-				xdn: { replacement: 'duck' },
-				xmr: { replacement: 'mro' }
+				xdn: { networkAlias: 'duck' },
+				xmr: { networkAlias: 'mro' }
 			},
 			urlFormatters: {
 				block: '/api/v1/[0]/blocks/[1]/full',
@@ -145,24 +212,19 @@ describe('lib/api/*', function() {
 			},
 			getBlockByNumberOrHashTests: [
 				{
-					methodInput: '345645645667',
+					methodInput: random.generateRandomHashString(32, '235tgwfrvsc'),
 					mockResponseData: [
 						{
-							response: { data: {success: true}, statusCode: 200 },
+							response: { data: {hash: random.generateRandomHashString(32, '235tgwfrvsc')}, statusCode: 200 },
 							urlFormatter: 'block',
 							values: [ '[network]', '[input]' ]
 						}
 					],
-					expectedResult: {
-						aeon: {success: true},
-						bcn: {success: true},
-						xdn: {success: true},
-						xmr: {success: true},
-					},
+					expectedResult: {hash: random.generateRandomHashString(32, '235tgwfrvsc')},
 					extraTestInfo: 'Valid block id'
 				},
 				{
-					methodInput: '0978785',
+					methodInput: random.generateRandomHashString(32),
 					mockResponseData: [
 						{
 							response: { data: {code: 'ApiNotAvailable'}, statusCode: 200 },
@@ -174,7 +236,7 @@ describe('lib/api/*', function() {
 					extraTestInfo: 'ApiNotAvailable response'
 				},
 				{
-					methodInput: '23546',
+					methodInput: random.generateRandomHashString(32),
 					mockResponseData: [
 						{
 							response: { data: {code: 'RequestLimitExceeded'}, statusCode: 200 },
@@ -184,76 +246,28 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.tooManyRequestsMessage,
 					extraTestInfo: 'RequestLimitExceeded response'
-				},
-				{
-					methodInput: '456778',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 400 },
-							urlFormatter: 'block',
-							values: [ '[network]', '[input]' ]
-						}
-					],
-					expectedError: apiResources.blockNotFoundMessage,
-					extraTestInfo: 'HTTP 400 response'
-				},
-				{
-					methodInput: '698765',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 404 },
-							urlFormatter: 'block',
-							values: [ '[network]', '[input]' ]
-						}
-					],
-					expectedError: apiResources.blockNotFoundMessage,
-					extraTestInfo: 'HTTP 404 response'
-				},
-				{
-					methodInput: '34543667',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 429 },
-							urlFormatter: 'block',
-							values: [ '[network]', '[input]' ]
-						}
-					],
-					expectedError: apiResources.tooManyRequestsMessage,
-					extraTestInfo: 'HTTP 429 response'
-				},
-				{
-					methodInput: '7585673',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 500 },
-							urlFormatter: 'block',
-							values: [ '[network]', '[input]' ]
-						}
-					],
-					expectedError: apiResources.generateGenericObjectErrorMessage('Block'),
-					extraTestInfo: 'HTTP 500 response'
 				}
 			],
 			getTransactionTests: [
 				{
-					methodInput: '23423',
+					methodInput: random.generateRandomHashString(32, 'aeg4rbtfgr2'),
 					mockResponseData: [
 						{
-							response: { data: {success: true}, statusCode: 200 },
+							response: { data: {txid: random.generateRandomHashString(32, 'aeg4rbtfgr2')}, statusCode: 200 },
 							urlFormatter: 'transaction',
 							values: [ '[network]', '[input]' ]
 						}
 					],
 					expectedResult: {
-						aeon: { success: true, valueDivisor: 1000000000000 },
-						bcn: { success: true, valueDivisor: 100000000 },
-						xdn: { success: true, valueDivisor: 100000000 },
-						xmr: { success: true, valueDivisor: 1000000000000 },
+						aeon: { txid: random.generateRandomHashString(32, 'aeg4rbtfgr2'), valueDivisor: 1000000000000 },
+						bcn: { txid: random.generateRandomHashString(32, 'aeg4rbtfgr2'), valueDivisor: 100000000 },
+						xdn: { txid: random.generateRandomHashString(32, 'aeg4rbtfgr2'), valueDivisor: 100000000 },
+						xmr: { txid: random.generateRandomHashString(32, 'aeg4rbtfgr2'), valueDivisor: 1000000000000 },
 					},
 					extraTestInfo: 'Valid transaction hash'
 				},
 				{
-					methodInput: '12334534',
+					methodInput: random.generateRandomHashString(32),
 					mockResponseData: [
 						{
 							response: { data: {code: 'ApiNotAvailable'}, statusCode: 200 },
@@ -265,7 +279,7 @@ describe('lib/api/*', function() {
 					extraTestInfo: 'ApiNotAvailable response'
 				},
 				{
-					methodInput: '324546',
+					methodInput: random.generateRandomHashString(32),
 					mockResponseData: [
 						{
 							response: { data: {code: 'RequestLimitExceeded'}, statusCode: 200 },
@@ -275,54 +289,107 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.tooManyRequestsMessage,
 					extraTestInfo: 'RequestLimitExceeded response'
-				},
+				}
+			]
+		},
+		{
+			api: 'gamecredits',
+			apiBaseAddress: 'http://blockexplorer.gamecredits.com',
+			urlFormatters: {
+				account: '/api/addresses/[0]/balance',
+				block: '/api/blocks/[0]',
+				blockHeight: '/api/blocks?height=[0]',
+				transaction: '/api/transactions/[0]'
+			},
+			getAccountTests: [
 				{
-					methodInput: '345345',
+					methodInput: random.generateRandomHashString(32, 'asdfghbfgff'),
 					mockResponseData: [
 						{
-							response: { data: {success: false}, statusCode: 400 },
-							urlFormatter: 'transaction',
-							values: [ '[network]', '[input]' ]
+							response: { data: `${random.generateRandomIntInclusive(1, 5000000, '1234233')}`, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
 						}
 					],
-					expectedError: apiResources.transactionNotFoundMessage,
-					extraTestInfo: 'HTTP 400 response'
-				},
+					expectedResult: { address: random.generateRandomHashString(32, 'asdfghbfgff'), balance: random.generateRandomIntInclusive(1, 5000000, '1234233') },
+					extraTestInfo: 'Valid account address'
+				}
+			],
+			getBlockByNumberOrHashTests: [
 				{
-					methodInput: '2435354',
+					methodInput: random.generateRandomHashString(32, '234radsf'),
 					mockResponseData: [
 						{
 							response: { data: {success: false}, statusCode: 404 },
-							urlFormatter: 'transaction',
-							values: [ '[network]', '[input]' ]
+							urlFormatter: 'blockHeight',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {hash: random.generateRandomHashString(32, '234radsf')}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
 						}
 					],
-					expectedError: apiResources.transactionNotFoundMessage,
-					extraTestInfo: 'HTTP 404 response'
+					expectedResult: {hash: random.generateRandomHashString(32, '234radsf')},
+					extraTestInfo: 'Valid block hash'
 				},
 				{
-					methodInput: '23543345',
+					methodInput: random.generateRandomIntInclusive(1, 5000000, '423wraedf'),
 					mockResponseData: [
 						{
-							response: { data: {success: false}, statusCode: 429 },
-							urlFormatter: 'transaction',
-							values: [ '[network]', '[input]' ]
+							response: { data: {height: random.generateRandomIntInclusive(1, 5000000, '423wraedf')}, statusCode: 200 },
+							urlFormatter: 'blockHeight',
+							values: [ '[input]' ]
 						}
 					],
-					expectedError: apiResources.tooManyRequestsMessage,
-					extraTestInfo: 'HTTP 429 response'
-				},
+					expectedResult: {height: random.generateRandomIntInclusive(1, 5000000, '423wraedf')},
+					extraTestInfo: 'Valid block height'
+				}
+			],
+			getTransactionTests: [
 				{
-					methodInput: '2343534',
+					methodInput: random.generateRandomHashString(32, '23rtsgf'),
 					mockResponseData: [
 						{
-							response: { data: {success: false}, statusCode: 500 },
+							response: {
+								data: {
+									txid: random.generateRandomHashString(32, '23rtsgf'),
+									vin: [ { prev_txid: random.generateRandomHashString(32, 'asrhgwe5t'), vout_index: 0 }, { prev_txid: random.generateRandomHashString(32, '2radgfsg'), vout_index: 0 } ]
+								},
+								statusCode: 200
+							},
 							urlFormatter: 'transaction',
-							values: [ '[network]', '[input]' ]
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: { txid: random.generateRandomHashString(32, 'asrhgwe5t'), vout: [{ addresses: [random.generateRandomHashString(32, 'a235tgb')], value: random.generateRandomIntInclusive(1, 1000, 'fdgw3455')}] }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, 'asrhgwe5t') ]
+						},
+						{
+							response: { data: { txid: random.generateRandomHashString(32, '2radgfsg'), vout: [{ addresses: [random.generateRandomHashString(32, 'asdgbg')], value: random.generateRandomIntInclusive(1, 1000, '35yjtgdhf')}] }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, '2radgfsg') ]
 						}
 					],
-					expectedError: apiResources.generateGenericObjectErrorMessage('Transaction'),
-					extraTestInfo: 'HTTP 500 response'
+					expectedResult: {
+						txid: random.generateRandomHashString(32, '23rtsgf'),
+						vin: [
+							{
+								address: random.generateRandomHashString(32, 'a235tgb'),
+								prev_txid: random.generateRandomHashString(32, 'asrhgwe5t'),
+								value: random.generateRandomIntInclusive(1, 1000, 'fdgw3455'),
+								vout_index: 0
+							},
+							{
+								address: random.generateRandomHashString(32, 'asdgbg'),
+								prev_txid: random.generateRandomHashString(32, '2radgfsg'),
+								value: random.generateRandomIntInclusive(1, 1000, '35yjtgdhf'),
+								vout_index: 0
+							}
+						]
+					},
+					extraTestInfo: 'Valid transaction hash'
 				}
 			]
 		},
@@ -330,16 +397,16 @@ describe('lib/api/*', function() {
 			api: 'insight',
 			networks: {
 				dcr: {
-					apiBaseAddress: 'https://mainnet.decred.org/'
+					apiBaseAddress: 'https://mainnet.decred.org'
 				},
 				dgb: {
-					apiBaseAddress: 'https://digiexplorer.info/'
+					apiBaseAddress: 'https://digiexplorer.info'
 				},
 				kmd: {
-					apiBaseAddress: 'http://kmd.explorer.supernet.org/'
+					apiBaseAddress: 'http://kmd.explorer.supernet.org'
 				},
 				rdd: {
-					apiBaseAddress: 'http://live.reddcoin.com/'
+					apiBaseAddress: 'http://live.reddcoin.com'
 				}
 			},
 			urlFormatters: {
@@ -350,81 +417,33 @@ describe('lib/api/*', function() {
 			},
 			getAccountTests: [
 				{
-					methodInput: '2345trgfdsghf',
+					methodInput: random.generateRandomHashString(32, '2345trgfdsghf'),
 					mockResponseData: [
 						{
-							response: { data: {addrStr: '2345trgfdsghf'}, statusCode: 200 },
+							response: { data: {addrStr: random.generateRandomHashString(32, '2345trgfdsghf')}, statusCode: 200 },
 							urlFormatter: 'account',
 							values: [ '[input]' ]
 						}
 					],
-					expectedResult: {addrStr: '2345trgfdsghf'},
+					expectedResult: {addrStr: random.generateRandomHashString(32, '2345trgfdsghf')},
 					extraTestInfo: 'Valid account address'
-				},
-				{
-					methodInput: '234trgsdfhss',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 400 },
-							urlFormatter: 'account',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.accountNotFoundMessage,
-					extraTestInfo: 'HTTP 400 response'
-				},
-				{
-					methodInput: '23trsgfdffds',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 404 },
-							urlFormatter: 'account',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.accountNotFoundMessage,
-					extraTestInfo: 'HTTP 404 response'
-				},
-				{
-					methodInput: 'AFDGSFGBDJH',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 429 },
-							urlFormatter: 'account',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.tooManyRequestsMessage,
-					extraTestInfo: 'HTTP 429 response'
-				},
-				{
-					methodInput: 'asgfsghnjfd',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 500 },
-							urlFormatter: 'account',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.generateGenericObjectErrorMessage('Account'),
-					extraTestInfo: 'HTTP 500 response'
 				}
 			],
 			getBlockByNumberOrHashTests: [
 				{
-					methodInput: '3425654',
+					methodInput: random.generateRandomHashString(32, '3425654'),
 					mockResponseData: [
 						{
-							response: { data: {hash: '3425654'}, statusCode: 200 },
+							response: { data: {hash: random.generateRandomHashString(32, '3425654')}, statusCode: 200 },
 							urlFormatter: 'block',
 							values: [ '[input]' ]
 						}
 					],
-					expectedResult: {hash: '3425654'},
+					expectedResult: {hash: random.generateRandomHashString(32, '3425654')},
 					extraTestInfo: 'Valid block hash'
 				},
 				{
-					methodInput: '1234',
+					methodInput: `${random.generateRandomIntInclusive(1, 5000000, '234t5ydhfg')}`,
 					mockResponseData: [
 						{
 							response: { data: {success: false}, statusCode: 404 },
@@ -432,149 +451,32 @@ describe('lib/api/*', function() {
 							values: [ '[input]' ]
 						},
 						{
-							response: { data: {blockHash: '0808'}, statusCode: 200 },
+							response: { data: {blockHash: random.generateRandomHashString(32, '234rasdf')}, statusCode: 200 },
 							urlFormatter: 'blockIndex',
 							values: [ '[input]' ]
 						},
 						{
-							response: { data: {height: 1234}, statusCode: 200 },
+							response: { data: {height: random.generateRandomIntInclusive(1, 5000000, '234t5ydhfg')}, statusCode: 200 },
 							urlFormatter: 'block',
-							values: [ '0808' ]
+							values: [ random.generateRandomHashString(32, '234rasdf') ]
 						}
 					],
-					expectedResult: {height: 1234},
+					expectedResult: {height: random.generateRandomIntInclusive(1, 5000000, '234t5ydhfg')},
 					extraTestInfo: 'Valid block height'
-				},
-				{
-					methodInput: '234t5ryghf',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 400 },
-							urlFormatter: 'block',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: {success: false}, statusCode: 400 },
-							urlFormatter: 'blockIndex',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.blockNotFoundMessage,
-					extraTestInfo: 'HTTP 400 response'
-				},
-				{
-					methodInput: '235t4yrgh',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 404 },
-							urlFormatter: 'block',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: {success: false}, statusCode: 404 },
-							urlFormatter: 'blockIndex',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.blockNotFoundMessage,
-					extraTestInfo: 'HTTP 404 response'
-				},
-				{
-					methodInput: '2345tyrhgf',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 429 },
-							urlFormatter: 'block',
-							values: [ '[input]' ]
-						}
-						,
-						{
-							response: { data: {success: false}, statusCode: 429 },
-							urlFormatter: 'blockIndex',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.tooManyRequestsMessage,
-					extraTestInfo: 'HTTP 429 response'
-				},
-				{
-					methodInput: 'qweasdfg3454',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 500 },
-							urlFormatter: 'block',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: {success: false}, statusCode: 500 },
-							urlFormatter: 'blockIndex',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.generateGenericObjectErrorMessage('Block'),
-					extraTestInfo: 'HTTP 500 response'
 				}
 			],
 			getTransactionTests: [
 				{
-					methodInput: '345456456',
+					methodInput: random.generateRandomHashString(32, '345456456'),
 					mockResponseData: [
 						{
-							response: { data: {success: true}, statusCode: 200 },
+							response: { data: {txid: random.generateRandomHashString(32, '345456456')}, statusCode: 200 },
 							urlFormatter: 'transaction',
 							values: [ '[input]' ]
 						}
 					],
-					expectedResult: {success: true},
+					expectedResult: {txid: random.generateRandomHashString(32, '345456456')},
 					extraTestInfo: 'Valid transaction hash'
-				},
-				{
-					methodInput: '876iuykhjgf',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 400 },
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.transactionNotFoundMessage,
-					extraTestInfo: 'HTTP 400 response'
-				},
-				{
-					methodInput: 'ghjkkr788',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 404 },
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.transactionNotFoundMessage,
-					extraTestInfo: 'HTTP 404 response'
-				},
-				{
-					methodInput: '4678ikutjhhfg',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 429 },
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.tooManyRequestsMessage,
-					extraTestInfo: 'HTTP 429 response'
-				},
-				{
-					methodInput: '4356uiyktjhgf',
-					mockResponseData: [
-						{
-							response: { data: {success: false}, statusCode: 500 },
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.generateGenericObjectErrorMessage('Transaction'),
-					extraTestInfo: 'HTTP 500 response'
 				}
 			]
 		}
