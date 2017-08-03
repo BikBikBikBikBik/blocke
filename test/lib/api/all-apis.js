@@ -807,6 +807,88 @@ describe('lib/api/*', function() {
 					extraTestInfo: 'Generic error response'
 				}
 			]
+		},
+		{
+			api: 'siatech',
+			apiBaseAddress: 'https://explore.sia.tech',
+			urlFormatters: {
+				block: '/explorer/blocks/[0]',
+				hash: '/explorer/hashes/[0]',
+			},
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: `${random.generateRandomIntInclusive(1, 5000000, 'asdfvbn')}`,
+					mockResponseData: [
+						{
+							response: { data: {block: {height: random.generateRandomIntInclusive(1, 5000000, 'asfdghj')}}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: { block: {hash: random.generateRandomHashString(32, 'mdfggsdf')}, hashtype: 'blockid' }, statusCode: 200 },
+							urlFormatter: 'hash',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, 'mdfggsdf')},
+					extraTestInfo: 'Valid block hash'
+				},
+				{
+					methodInput: `${random.generateRandomIntInclusive(1, 5000000, '2435rtgf')}`,
+					mockResponseData: [
+						{
+							response: { data: {block: {height: random.generateRandomIntInclusive(1, 5000000, '2435rtgf')}}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {height: random.generateRandomIntInclusive(1, 5000000, '2435rtgf')},
+					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: `${random.generateRandomIntInclusive(1, 5000000, 'afkjhln')}`,
+					mockResponseData: [
+						{
+							response: { data: {block: {height: random.generateRandomIntInclusive(1, 5000000, '324t5rg')}}, statusCode: 200 },
+							urlFormatter: 'block',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {success: false}, statusCode: 404 },
+							urlFormatter: 'hash',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Invalid block id'
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, 'fdsghfdnb'),
+					mockResponseData: [
+						{
+							response: { data: { hashtype: 'transactionid', txid: random.generateRandomHashString(32, 'fdsghfdnb') }, statusCode: 200 },
+							urlFormatter: 'hash',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: { hashtype: 'transactionid', txid: random.generateRandomHashString(32, 'fdsghfdnb') },
+					extraTestInfo: 'Valid transaction hash'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '43erwtdgfh'),
+					mockResponseData: [
+						{
+							response: { data: {hashtype: random.generateRandomHashString(10, '45tergfd')}, statusCode: 200 },
+							urlFormatter: 'hash',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.transactionNotFoundMessage,
+					extraTestInfo: 'Non-transaction hash'
+				}
+			]
 		}
 	];
 	
