@@ -68,7 +68,8 @@
     "deep-equal": "^1.0.1",
     "mocha": "^3.4.2",
     "nock": "^9.0.14",
-    "nyc": "^11.0.3"
+    "nyc": "^11.0.3",
+    "seedrandom": "^2.4.3"
   },
   "scripts": {
     "test": "nyc --all --reporter=lcov mocha --recursive"
