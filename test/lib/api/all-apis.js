@@ -138,6 +138,13 @@ describe('lib/api/*', function() {
 
 				function runTests() {
 					if (test.hasOwnProperty(`${methodName}Tests`)) {
+						function callApiMethod(self, testData) {
+							const apiInstance = apiData.api(self);
+							const apiMethod = apiInstance[methodName];
+							
+							return Array.isArray(testData.methodInput) ? apiMethod.apply(apiInstance, testData.methodInput) : (apiMethod.bind(apiInstance, testData.methodInput))();
+						}
+						
 						const successAndErrorTests = _.partition(test[`${methodName}Tests`], (testData) => testData.hasOwnProperty('expectedResult'));
 
 						successAndErrorTests[0].forEach((testData) => {
@@ -145,12 +152,8 @@ describe('lib/api/*', function() {
 								const expectedResult = testData.expectedResult.hasOwnProperty(apiData.network) ? testData.expectedResult[apiData.network] : testData.expectedResult;
 
 								prepareMockHttpResponses(test, testData, apiData, networkForApiUrl);
-								
-								const apiInstance = apiData.api(this);
-								const apiMethod = apiInstance[methodName];
-								const apiMethodCaller = Array.isArray(testData.methodInput) ? () => apiMethod.apply(apiInstance, testData.methodInput) : apiMethod.bind(apiInstance, testData.methodInput);
 
-								apiMethodCaller().should.eventually.deep.equal(expectedResult).and.notify(done);
+								callApiMethod(this, testData).should.eventually.deep.equal(expectedResult).and.notify(done);
 							});
 						});
 
@@ -159,12 +162,8 @@ describe('lib/api/*', function() {
 								const expectedError = testData.expectedError.hasOwnProperty(apiData.network) ? testData.expectedError[apiData.network] : testData.expectedError;
 
 								prepareMockHttpResponses(test, testData, apiData, networkForApiUrl);
-								
-								const apiInstance = apiData.api(this);
-								const apiMethod = apiInstance[methodName];
-								const apiMethodCaller = Array.isArray(testData.methodInput) ? () => apiMethod.apply(apiInstance, testData.methodInput) : apiMethod.bind(apiInstance, testData.methodInput);
 
-								apiMethodCaller().should.eventually.be.rejectedWith(expectedError).and.notify(done);
+								callApiMethod(this, testData).should.eventually.be.rejectedWith(expectedError).and.notify(done);
 							});
 						});
 					} else if (isStandardMethod === true) {
@@ -598,7 +597,25 @@ describe('lib/api/*', function() {
 							}
 						]
 					},
-					extraTestInfo: 'Valid transaction hash'
+					extraTestInfo: `Valid transaction hash with 'fetchVinAddresses' true`
+				},
+				{
+					methodInput: [random.generateRandomHashString(32, '45ythdgh'), false],
+					mockResponseData: [
+						{
+							response: {
+								data: {
+									txid: random.generateRandomHashString(32, '45ythdgh'),
+									vin: [{ prev_txid: random.generateRandomHashString(32, '54rhgf'), vout_index: 0 }]
+								},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: { txid: random.generateRandomHashString(32, '45ythdgh'), vin: [{ prev_txid: random.generateRandomHashString(32, '54rhgf'), vout_index: 0 }] },
+					extraTestInfo: `Valid transaction hash with 'fetchVinAddresses' false`
 				}
 			],
 			updateTransactionInputAddressesTests: [
