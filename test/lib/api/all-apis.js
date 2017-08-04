@@ -90,6 +90,12 @@ describe('lib/api/*', function() {
 		testData.mockResponseData.forEach((mockResponse) => {
 			const apiBaseAddress = apiData.hasOwnProperty('apiBaseAddress') ? apiData.apiBaseAddress : test.apiBaseAddress;
 			let urlSuffix = test.urlFormatters[mockResponse.urlFormatter];
+			
+			if (Array.isArray(apiData.urlFormatterReplacements)) {
+				apiData.urlFormatterReplacements.forEach((urlReplacement) => {
+					urlSuffix = urlSuffix.replace(urlReplacement.old, urlReplacement.new);
+				});
+			}
 
 			_.each(mockResponse.values, (replacementValue, index) => {
 				const actualValue = (() => {
@@ -121,19 +127,21 @@ describe('lib/api/*', function() {
 		
 		describe(test.api, function() {
 			const apiArray = typeof(test.networks) === 'object' ? _.map(test.networks, (data, network) => {
-				const apiData = { api: (self) => new self[test.api](network), network: network };
+				const apiData = { api: (self) => new self[test.api](network), isMultiNetworkApi: true, network: network };
 				if (data.hasOwnProperty('apiBaseAddress')) {
 					apiData.apiBaseAddress = data.apiBaseAddress;
 				}
 				if (data.hasOwnProperty('networkAlias')) {
 					apiData.networkAlias = data.networkAlias;
 				}
+				if (data.hasOwnProperty('urlFormatterReplacements')) {
+					apiData.urlFormatterReplacements = data.urlFormatterReplacements;
+				}
 
 				return apiData;
 			}) : [{api: (self) => self[test.api]}];
 
 			apiArray.forEach((apiData) => {
-				const isMultiNetworkApi = apiData.hasOwnProperty('network');
 				const networkForApiUrl = apiData.hasOwnProperty('networkAlias') ? apiData.networkAlias : apiData.network;
 
 				function runTests() {
@@ -173,7 +181,7 @@ describe('lib/api/*', function() {
 					}
 				}
 				
-				if (isMultiNetworkApi === true) {
+				if (apiData.isMultiNetworkApi === true) {
 					describe(apiData.network, runTests);
 				} else {
 					runTests();
@@ -213,8 +221,8 @@ describe('lib/api/*', function() {
 			networks: {
 				aeon: {},
 				bcn: {},
-				xdn: { networkAlias: 'duck' },
-				xmr: { networkAlias: 'mro' }
+				xdn: {networkAlias: 'duck'},
+				xmr: {networkAlias: 'mro'}
 			},
 			urlFormatters: {
 				block: '/api/v1/[0]/blocks/[1]/full',
@@ -649,18 +657,11 @@ describe('lib/api/*', function() {
 		{
 			api: 'insight',
 			networks: {
-				dcr: {
-					apiBaseAddress: 'https://mainnet.decred.org'
-				},
-				dgb: {
-					apiBaseAddress: 'https://digiexplorer.info'
-				},
-				kmd: {
-					apiBaseAddress: 'http://kmd.explorer.supernet.org'
-				},
-				rdd: {
-					apiBaseAddress: 'http://live.reddcoin.com'
-				}
+				bch: { apiBaseAddress: 'http://blockdozer.com', urlFormatterReplacements: [{ new: '/insight-api/', old: '/api/' }] },
+				dcr: {apiBaseAddress: 'https://mainnet.decred.org'},
+				dgb: {apiBaseAddress: 'https://digiexplorer.info'},
+				kmd: {apiBaseAddress: 'http://kmd.explorer.supernet.org'},
+				rdd: {apiBaseAddress: 'http://live.reddcoin.com'}
 			},
 			urlFormatters: {
 				account: '/api/addr/[0]',

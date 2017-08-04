@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v0.22.0 - 2017-08-04
+### Added
+- Support for BCH
+
 ## v0.21.0 - 2017-07-29
 ### Added
 - Support for BCN
