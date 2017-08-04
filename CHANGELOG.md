@@ -23,7 +23,8 @@ All notable changes to this project will be documented in this file.
 
 ## v0.18.0 - 2017-07-25
 ### Added
-- Support for DGB & RDD
+- Support for DGB
+- Support for RDD
 
 ## v0.17.0 - 2017-07-25
 ### Fixed
