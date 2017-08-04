@@ -1,6 +1,6 @@
 {
   "name": "blocke",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "author": "BikBikBikBikBik <BikBikBikBikBik@protonmail.com>",
   "description": "Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable).",
   "keywords": [
