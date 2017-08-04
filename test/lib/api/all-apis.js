@@ -600,6 +600,33 @@ describe('lib/api/*', function() {
 					},
 					extraTestInfo: 'Valid transaction hash'
 				}
+			],
+			updateTransactionInputAddressesTests: [
+				{
+					methodInput: {vin: [{ prev_txid: random.generateRandomHashString(32, '54yrdhfg'), vout_index: 0 }]},
+					mockResponseData: [
+						{
+							response: {
+								data: {
+									txid: random.generateRandomHashString(32, '54yrdhfg'),
+									vout: [{ addresses: [random.generateRandomHashString(32, '5tsehg')], value: random.generateRandomIntInclusive(1, 1000, '45yrhdf') }]
+								},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, '54yrdhfg') ]
+						}
+					],
+					expectedResult: {
+						vin: [{
+							address: random.generateRandomHashString(32, '5tsehg'),
+							prev_txid: random.generateRandomHashString(32, '54yrdhfg'),
+							value: random.generateRandomIntInclusive(1, 1000, '45yrhdf'),
+							vout_index: 0
+						}]
+					},
+					extraTestInfo: 'Valid transaction inputs'
+				}
 			]
 		},
 		{
@@ -1325,6 +1352,20 @@ describe('lib/api/*', function() {
 					expectedError: apiResources.transactionTypeNotSupportedMessage(random.generateRandomIntInclusive(0, 3, '3refdg')),
 					extraTestInfo: 'Non-asset transfer type'
 				}
+			],
+			updateTransactionFromAssetInfoTests: [
+				{
+					methodInput: {assetId: random.generateRandomHashString(32, '254t5hrdg')},
+					mockResponseData: [
+						{
+							response: { data: { decimals: random.generateRandomIntInclusive(2, 8, '67utydh'), name: random.generateRandomHashString(5, '7tyufhg') }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, '254t5hrdg') ]
+						}
+					],
+					expectedResult: { assetId: random.generateRandomHashString(32, '254t5hrdg'), valueDivisor: Math.pow(10, random.generateRandomIntInclusive(2, 8, '67utydh')), valueSymbol: random.generateRandomHashString(5, '7tyufhg') },
+					extraTestInfo: 'Valid asset info'
+				}
 			]
 		},
 		{
@@ -1405,23 +1446,17 @@ describe('lib/api/*', function() {
 	
 	/*
 	 *
+	 *  Standard method tests
+	 *
+	 */
+	/*
+	 *
 	 *  getAccount
 	 *
 	 */
 	describe('getAccount', function() {
 		tests.forEach((test) => {
 			runTestForApiClientMethod(test, 'getAccount', 'account');
-		});
-	});
-	
-	/*
-	 *
-	 *  getBlockByNumber
-	 *
-	 */
-	describe('getBlockByNumber', function() {
-		tests.forEach((test) => {
-			runTestForApiClientMethod(test, 'getBlockByNumber', 'block', false);
 		});
 	});
 	
@@ -1449,12 +1484,39 @@ describe('lib/api/*', function() {
 	
 	/*
 	 *
+	 *  Non-standard method tests
+	 *
+	 */
+	/*
+	 *
+	 *  getBlockByNumber
+	 *
+	 */
+	describe('getBlockByNumber', function() {
+		tests.forEach((test) => {
+			runTestForApiClientMethod(test, 'getBlockByNumber', 'block', false);
+		});
+	});
+	
+	/*
+	 *
+	 *  updateTransactionFromAssetInfo
+	 *
+	 */
+	describe('updateTransactionFromAssetInfo', function() {
+		tests.forEach((test) => {
+			runTestForApiClientMethod(test, 'updateTransactionFromAssetInfo', 'transaction', false);
+		});
+	});
+	
+	/*
+	 *
 	 *  updateTransactionInputAddresses
 	 *
 	 */
 	describe('updateTransactionInputAddresses', function() {
 		tests.forEach((test) => {
-			runTestForApiClientMethod(test, 'updateTransactionInputAddresses', 'block', false);
+			runTestForApiClientMethod(test, 'updateTransactionInputAddresses', 'transaction', false);
 		});
 	});
 });
