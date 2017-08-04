@@ -103,7 +103,7 @@ describe('lib/api/api-client-base', function() {
 			
 			nock(apiBaseAddress).get(`${uriSuffix}`).reply(429, {success: false});
 			
-			apiClient.executeRequest(uriSuffix, random.generateRandomHashString(4, )).should.eventually.be.rejectedWith(apiResources.tooManyRequestsMessage).and.notify(done);
+			apiClient.executeRequest(uriSuffix, random.generateRandomHashString(4)).should.eventually.be.rejectedWith(apiResources.tooManyRequestsMessage).and.notify(done);
 		});
 		
 		it('should return rejected promise (HTTP 500 response)', function(done) {
