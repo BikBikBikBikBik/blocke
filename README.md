@@ -1,4 +1,5 @@
 # blocke
+[![License](https://img.shields.io/npm/l/blocke.svg)](https://www.npmjs.com/package/blocke)
 [![NPM Version](https://img.shields.io/npm/v/blocke.svg)](https://www.npmjs.com/package/blocke)
 [![Build Status](https://travis-ci.org/BikBikBikBikBik/blocke.svg?branch=master)](https://travis-ci.org/BikBikBikBikBik/blocke/)
 [![Test Coverage](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/coverage.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/coverage)
