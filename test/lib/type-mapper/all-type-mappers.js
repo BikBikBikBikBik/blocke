@@ -247,20 +247,30 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 3849756348,
 				transactions: [ {}, {}, {}, {}, {}, {} ]
 			},
-			transaction: {
-				amountSent: 24,
-				blockHash: '0000000000000028ecc091235afb82bd9aca66ebf175137336191ec1d28be993',
-				hash: '3cb16b2faeb14244829bdcc77e9b46363e6fd0981945b4195e40332bb3347055',
-				recipients: [
-					{ address: '6a92902a983f072def4cee6d3940a58b9d8fc543ab934495d173f20e2907f38c146bfd2c6e2a', amount: 24 },
-					{ address: '6a92902a983f072def4cee6d3940a58b9d8fc543ab934495d173f20e2907f38c146bfd2c6e2a', amount: 'dust' }
-				],
-				senders: [
-					{ address: '1545d1cafd40a529ba501941a7c7576558aeaa67337a0fb253137d5b3f826ff9001ad77cd0e5', amount: 24 },
-					{ address: 'ef9e7c7bef7ad4a1e83ed1e39a092105b90e0a78bb26ce3c2b7a3d7e91d716c6bc89dbfc537e', amount: 'dust' }
-				],
-				timestamp: 345634563456
-			}
+			transaction: [
+				{
+					amountSent: 24,
+					blockHash: '0000000000000028ecc091235afb82bd9aca66ebf175137336191ec1d28be993',
+					hash: '3cb16b2faeb14244829bdcc77e9b46363e6fd0981945b4195e40332bb3347055',
+					recipients: [
+						{ address: '6a92902a983f072def4cee6d3940a58b9d8fc543ab934495d173f20e2907f38c146bfd2c6e2a', amount: 24 },
+						{ address: '6a92902a983f072def4cee6d3940a58b9d8fc543ab934495d173f20e2907f38c146bfd2c6e2a', amount: 'dust' }
+					],
+					senders: [
+						{ address: '1545d1cafd40a529ba501941a7c7576558aeaa67337a0fb253137d5b3f826ff9001ad77cd0e5', amount: 24 },
+						{ address: 'ef9e7c7bef7ad4a1e83ed1e39a092105b90e0a78bb26ce3c2b7a3d7e91d716c6bc89dbfc537e', amount: 'dust' }
+					],
+					timestamp: 345634563456
+				},
+				{
+					amountSent: 'dust',
+					blockHash: '0000000000000028ecc091235a3456ytuykhgigfs53467uyijkhggs4t567yuj4',
+					hash: '3cb16b2faeb14244829bdcc77e9b4636543r6tyugjhkmngf4wr5467eyu7yjsrs',
+					recipients: [{ address: '6a92902a983f072def4cee6d3940a58b9d8798it6uytdytrxgfsds0e2907f38c146bfd2c6e2a', amount: 'dust' }],
+					senders: [{ address: 'ef9e7c7bef7ad4a1e83ed1e39a092105b90e0453wertdhhgfmgnbdsdhgjfyyttser9dbfc537e', amount: 'dust' }],
+					timestamp: 2435678654
+				}
+			]
 		},
 		sochain: {
 			account: {
@@ -630,25 +640,48 @@ describe('lib/type-mapper/*', function() {
 					maturitytimestamp: data.siatech.block.timestamp,
 					transactions: data.siatech.block.transactions
 				},
-				transaction: {
-					transaction: {
-						id: data.siatech.transaction.hash,
-						parent: data.siatech.transaction.blockHash,
-						rawtransaction: {
-							siacoinoutputs: _.map(data.siatech.transaction.recipients, (recipient) => {
-								const returnRecipient = { unlockhash: recipient.address, value: `${(recipient.amount === 'dust' ? 0 : recipient.amount) * 1000000000000000000000000}` };
+				transaction: [
+					{
+						transaction: {
+							id: data.siatech.transaction[0].hash,
+							parent: data.siatech.transaction[0].blockHash,
+							rawtransaction: {
+								siacoinoutputs: _.map(data.siatech.transaction[0].recipients, (recipient) => {
+									const returnRecipient = { unlockhash: recipient.address, value: `${(recipient.amount === 'dust' ? 0 : recipient.amount) * 1000000000000000000000000}` };
 
-								return returnRecipient;
+									return returnRecipient;
+								})
+							},
+							siacoininputoutputs: _.map(data.siatech.transaction[0].senders, (sender) => {
+								const returnSender = { unlockhash: sender.address, value: `${(sender.amount === 'dust' ? 0 : sender.amount) * 1000000000000000000000000}` };
+
+								return returnSender;
 							})
 						},
-						siacoininputoutputs: _.map(data.siatech.transaction.senders, (sender) => {
-							const returnSender = { unlockhash: sender.address, value: `${(sender.amount === 'dust' ? 0 : sender.amount) * 1000000000000000000000000}` };
-							
-							return returnSender;
-						})
+						excludeTimestamp: true,
+						extraTestInfo: 'Non-dust amount sent'
 					},
-					excludeTimestamp: true
-				}
+					{
+						transaction: {
+							id: data.siatech.transaction[1].hash,
+							parent: data.siatech.transaction[1].blockHash,
+							rawtransaction: {
+								siacoinoutputs: _.map(data.siatech.transaction[1].recipients, (recipient) => {
+									const returnRecipient = { unlockhash: recipient.address, value: `${(recipient.amount === 'dust' ? 0 : recipient.amount) * 1000000000000000000000000}` };
+
+									return returnRecipient;
+								})
+							},
+							siacoininputoutputs: _.map(data.siatech.transaction[1].senders, (sender) => {
+								const returnSender = { unlockhash: sender.address, value: `${(sender.amount === 'dust' ? 0 : sender.amount) * 1000000000000000000000000}` };
+
+								return returnSender;
+							})
+						},
+						excludeTimestamp: true,
+						extraTestInfo: 'Dust sent'
+					}
+				]
 			},
 			expected: {
 			}
