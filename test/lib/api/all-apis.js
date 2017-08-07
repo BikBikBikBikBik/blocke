@@ -201,10 +201,10 @@ describe('lib/api/*', function() {
 		this.ethplorer = require('../../../lib/api/ethplorer');
 		this.gamecredits = require('../../../lib/api/gamecredits');
 		this.insight = require('../../../lib/api/insight');
+		this.iquidus = require('../../../lib/api/iquidus');
 		this.lisk = require('../../../lib/api/lisk');
 		this.siatech = require('../../../lib/api/siatech');
 		this.sochain = require('../../../lib/api/sochain');
-		this.vtconline = require('../../../lib/api/vtconline');
 		this.wavesexplorer = require('../../../lib/api/wavesexplorer');
 		this.zchain = require('../../../lib/api/zchain');
 	});
@@ -747,6 +747,227 @@ describe('lib/api/*', function() {
 			]
 		},
 		{
+			api: 'iquidus',
+			networks: {
+				sigt: {apiBaseAddress: 'http://explorer.signatum.download'},
+				vtc: {apiBaseAddress: 'https://explorer.vtconline.org'}
+			},
+			urlFormatters: {
+				account: '/ext/getaddress/[0]',
+				blockHash: '/api/getblock?hash=[0]',
+				blockHeight: '/api/getblockhash?index=[0]',
+				transaction: '/api/getrawtransaction?txid=[0]&decrypt=1'
+			},
+			getAccountTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '45terfg'),
+					mockResponseData: [
+						{
+							response: { data: {address: random.generateRandomHashString(32, '45terfg')}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {address: random.generateRandomHashString(32, '45terfg')},
+					extraTestInfo: 'Valid account address'
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '65yrtgd'),
+					mockResponseData: [
+						{
+							response: { data: {error: 'Invalid account'}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.accountNotFoundMessage,
+					extraTestInfo: 'Generic error response'
+				}
+			],
+			getBlockByNumberTests: [
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000, '243thds'),
+					mockResponseData: [
+						{
+							response: { data: random.generateRandomHashString(32, '234trehgf'), statusCode: 200 },
+							urlFormatter: 'blockHeight',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {hash: random.generateRandomHashString(32, '234trehgf')}, statusCode: 200 },
+							urlFormatter: 'blockHash',
+							values: [ random.generateRandomHashString(32, '234trehgf') ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, '234trehgf')},
+					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000),
+					mockResponseData: [
+						{
+							response: { data: 'There was an error.', statusCode: 200 },
+							urlFormatter: 'blockHeight',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Generic error response'
+				}
+			],
+			getBlockByNumberOrHashTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '54trhgf'),
+					mockResponseData: [
+						{
+							response: { data: {hash: random.generateRandomHashString(32, '54trhgf')}, statusCode: 200 },
+							urlFormatter: 'blockHash',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, '54trhgf')},
+					extraTestInfo: 'Valid block hash'
+				},
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000, '35y4rhy'),
+					mockResponseData: [
+						{
+							response: { data: 'Invalid block hash', statusCode: 200 },
+							urlFormatter: 'blockHash',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: random.generateRandomHashString(32, '3654yujt'), statusCode: 200 },
+							urlFormatter: 'blockHeight',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: {hash: random.generateRandomHashString(32, '3654yujt')}, statusCode: 200 },
+							urlFormatter: 'blockHash',
+							values: [ random.generateRandomHashString(32, '3654yujt') ]
+						}
+					],
+					expectedResult: {hash: random.generateRandomHashString(32, '3654yujt')},
+					extraTestInfo: 'Valid block height'
+				},
+				{
+					methodInput: random.generateRandomIntInclusive(1, 5000000),
+					mockResponseData: [
+						{
+							response: { data: 'There was an error.', statusCode: 200 },
+							urlFormatter: 'blockHash',
+							values: [ '[input]' ]
+						},
+						{
+							response: { data: 'There was an error.', statusCode: 200 },
+							urlFormatter: 'blockHeight',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.blockNotFoundMessage,
+					extraTestInfo: 'Invalid block id'
+				}
+			],
+			getTransactionTests: [
+				{
+					methodInput: random.generateRandomHashString(32, '234tergsx'),
+					mockResponseData: [
+						{
+							response: {
+								data: {
+									txid: random.generateRandomHashString(32, '234tergsx'),
+									vin: [{ txid: random.generateRandomHashString(32, '7rssfbsd'), vout: random.generateRandomIntInclusive(1, 10, '2ioerfhdgj')}]
+								},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						},
+						{
+							response: {
+								data: {
+									txid: random.generateRandomHashString(32, '7rssfbsd'),
+									vout: [{
+										n: random.generateRandomIntInclusive(1, 10, '2ioerfhdgj'),
+										scriptPubKey: {addresses: [random.generateRandomHashString(32, '4rdsfghfdh')]},
+										value: random.generateRandomIntInclusive(1, 1000, '2355trsgf')
+									}]
+								},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, '7rssfbsd') ]
+						}
+					],
+					expectedResult: {
+						txid: random.generateRandomHashString(32, '234tergsx'),
+						vin: [{
+							address: random.generateRandomHashString(32, '4rdsfghfdh'),
+							txid: random.generateRandomHashString(32, '7rssfbsd'),
+							value: random.generateRandomIntInclusive(1, 1000, '2355trsgf'),
+							vout: random.generateRandomIntInclusive(1, 10, '2ioerfhdgj')
+						}]
+					},
+					extraTestInfo: `Valid transaction hash with 'fetchVinAddresses' true`
+				},
+				{
+					methodInput: [random.generateRandomHashString(32, '6545etd'), false],
+					mockResponseData: [
+						{
+							response: { data: { txid: random.generateRandomHashString(32, '6545etd'), vin: [{txid: random.generateRandomHashString(32, '234erfgsd')}] }, statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedResult: { txid: random.generateRandomHashString(32, '6545etd'), vin: [{txid: random.generateRandomHashString(32, '234erfgsd')}] },
+					extraTestInfo: `Valid transaction hash with 'fetchVinAddresses' false`
+				},
+				{
+					methodInput: random.generateRandomHashString(32, '78oiuljk'),
+					mockResponseData: [
+						{
+							response: { data: 'Invalid transaction hash', statusCode: 200 },
+							urlFormatter: 'transaction',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.transactionNotFoundMessage,
+					extraTestInfo: 'Generic error response'
+				}
+			],
+			updateTransactionInputAddressesTests: [
+				{
+					methodInput: {vin: [{ txid: random.generateRandomHashString(32, '398eruigfj'), vout: random.generateRandomIntInclusive(1, 10, '324wtrregd') }]},
+					mockResponseData: [
+						{
+							response: {
+								data: {
+									txid: random.generateRandomHashString(32, '398eruigfj'),
+									vout: [{
+										n: random.generateRandomIntInclusive(1, 10, '324wtrregd'),
+										scriptPubKey: {addresses: [random.generateRandomHashString(32, '2534t4s')]},
+										value: random.generateRandomIntInclusive(1, 1000, '2wsfgbx')
+									}]
+								},
+								statusCode: 200
+							},
+							urlFormatter: 'transaction',
+							values: [ random.generateRandomHashString(32, '398eruigfj') ]
+						}
+					],
+					expectedResult: {
+						vin: [{
+							address: random.generateRandomHashString(32, '2534t4s'),
+							txid: random.generateRandomHashString(32, '398eruigfj'),
+							value: random.generateRandomIntInclusive(1, 1000, '2wsfgbx'),
+							vout: random.generateRandomIntInclusive(1, 10, '324wtrregd')
+						}]
+					},
+					extraTestInfo: 'Valid transaction inputs'
+				}
+			]
+		},
+		{
 			api: 'lisk',
 			apiBaseAddress: 'https://explorer.lisk.io',
 			urlFormatters: {
@@ -998,224 +1219,6 @@ describe('lib/api/*', function() {
 					],
 					expectedResult: {txid: random.generateRandomHashString(32, '76uyjhg')},
 					extraTestInfo: 'Valid transaction hash'
-				}
-			]
-		},
-		{
-			api: 'vtconline',
-			apiBaseAddress: 'https://explorer.vtconline.org',
-			urlFormatters: {
-				account: '/ext/getaddress/[0]',
-				blockHash: '/api/getblock?hash=[0]',
-				blockHeight: '/api/getblockhash?index=[0]',
-				transaction: '/api/getrawtransaction?txid=[0]&decrypt=1'
-			},
-			getAccountTests: [
-				{
-					methodInput: random.generateRandomHashString(32, '45terfg'),
-					mockResponseData: [
-						{
-							response: { data: {address: random.generateRandomHashString(32, '45terfg')}, statusCode: 200 },
-							urlFormatter: 'account',
-							values: [ '[input]' ]
-						}
-					],
-					expectedResult: {address: random.generateRandomHashString(32, '45terfg')},
-					extraTestInfo: 'Valid account address'
-				},
-				{
-					methodInput: random.generateRandomHashString(32, '65yrtgd'),
-					mockResponseData: [
-						{
-							response: { data: {error: 'Invalid account'}, statusCode: 200 },
-							urlFormatter: 'account',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.accountNotFoundMessage,
-					extraTestInfo: 'Generic error response'
-				}
-			],
-			getBlockByNumberTests: [
-				{
-					methodInput: random.generateRandomIntInclusive(1, 5000000, '243thds'),
-					mockResponseData: [
-						{
-							response: { data: random.generateRandomHashString(32, '234trehgf'), statusCode: 200 },
-							urlFormatter: 'blockHeight',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: {hash: random.generateRandomHashString(32, '234trehgf')}, statusCode: 200 },
-							urlFormatter: 'blockHash',
-							values: [ random.generateRandomHashString(32, '234trehgf') ]
-						}
-					],
-					expectedResult: {hash: random.generateRandomHashString(32, '234trehgf')},
-					extraTestInfo: 'Valid block height'
-				},
-				{
-					methodInput: random.generateRandomIntInclusive(1, 5000000),
-					mockResponseData: [
-						{
-							response: { data: 'There was an error.', statusCode: 200 },
-							urlFormatter: 'blockHeight',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.blockNotFoundMessage,
-					extraTestInfo: 'Generic error response'
-				}
-			],
-			getBlockByNumberOrHashTests: [
-				{
-					methodInput: random.generateRandomHashString(32, '54trhgf'),
-					mockResponseData: [
-						{
-							response: { data: {hash: random.generateRandomHashString(32, '54trhgf')}, statusCode: 200 },
-							urlFormatter: 'blockHash',
-							values: [ '[input]' ]
-						}
-					],
-					expectedResult: {hash: random.generateRandomHashString(32, '54trhgf')},
-					extraTestInfo: 'Valid block hash'
-				},
-				{
-					methodInput: random.generateRandomIntInclusive(1, 5000000, '35y4rhy'),
-					mockResponseData: [
-						{
-							response: { data: 'Invalid block hash', statusCode: 200 },
-							urlFormatter: 'blockHash',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: random.generateRandomHashString(32, '3654yujt'), statusCode: 200 },
-							urlFormatter: 'blockHeight',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: {hash: random.generateRandomHashString(32, '3654yujt')}, statusCode: 200 },
-							urlFormatter: 'blockHash',
-							values: [ random.generateRandomHashString(32, '3654yujt') ]
-						}
-					],
-					expectedResult: {hash: random.generateRandomHashString(32, '3654yujt')},
-					extraTestInfo: 'Valid block height'
-				},
-				{
-					methodInput: random.generateRandomIntInclusive(1, 5000000),
-					mockResponseData: [
-						{
-							response: { data: 'There was an error.', statusCode: 200 },
-							urlFormatter: 'blockHash',
-							values: [ '[input]' ]
-						},
-						{
-							response: { data: 'There was an error.', statusCode: 200 },
-							urlFormatter: 'blockHeight',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.blockNotFoundMessage,
-					extraTestInfo: 'Invalid block id'
-				}
-			],
-			getTransactionTests: [
-				{
-					methodInput: random.generateRandomHashString(32, '234tergsx'),
-					mockResponseData: [
-						{
-							response: {
-								data: {
-									txid: random.generateRandomHashString(32, '234tergsx'),
-									vin: [{ txid: random.generateRandomHashString(32, '7rssfbsd'), vout: random.generateRandomIntInclusive(1, 10, '2ioerfhdgj')}]
-								},
-								statusCode: 200
-							},
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						},
-						{
-							response: {
-								data: {
-									txid: random.generateRandomHashString(32, '7rssfbsd'),
-									vout: [{
-										n: random.generateRandomIntInclusive(1, 10, '2ioerfhdgj'),
-										scriptPubKey: {addresses: [random.generateRandomHashString(32, '4rdsfghfdh')]},
-										value: random.generateRandomIntInclusive(1, 1000, '2355trsgf')
-									}]
-								},
-								statusCode: 200
-							},
-							urlFormatter: 'transaction',
-							values: [ random.generateRandomHashString(32, '7rssfbsd') ]
-						}
-					],
-					expectedResult: {
-						txid: random.generateRandomHashString(32, '234tergsx'),
-						vin: [{
-							address: random.generateRandomHashString(32, '4rdsfghfdh'),
-							txid: random.generateRandomHashString(32, '7rssfbsd'),
-							value: random.generateRandomIntInclusive(1, 1000, '2355trsgf'),
-							vout: random.generateRandomIntInclusive(1, 10, '2ioerfhdgj')
-						}]
-					},
-					extraTestInfo: `Valid transaction hash with 'fetchVinAddresses' true`
-				},
-				{
-					methodInput: [random.generateRandomHashString(32, '6545etd'), false],
-					mockResponseData: [
-						{
-							response: { data: { txid: random.generateRandomHashString(32, '6545etd'), vin: [{txid: random.generateRandomHashString(32, '234erfgsd')}] }, statusCode: 200 },
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						}
-					],
-					expectedResult: { txid: random.generateRandomHashString(32, '6545etd'), vin: [{txid: random.generateRandomHashString(32, '234erfgsd')}] },
-					extraTestInfo: `Valid transaction hash with 'fetchVinAddresses' false`
-				},
-				{
-					methodInput: random.generateRandomHashString(32, '78oiuljk'),
-					mockResponseData: [
-						{
-							response: { data: 'Invalid transaction hash', statusCode: 200 },
-							urlFormatter: 'transaction',
-							values: [ '[input]' ]
-						}
-					],
-					expectedError: apiResources.transactionNotFoundMessage,
-					extraTestInfo: 'Generic error response'
-				}
-			],
-			updateTransactionInputAddressesTests: [
-				{
-					methodInput: {vin: [{ txid: random.generateRandomHashString(32, '398eruigfj'), vout: random.generateRandomIntInclusive(1, 10, '324wtrregd') }]},
-					mockResponseData: [
-						{
-							response: {
-								data: {
-									txid: random.generateRandomHashString(32, '398eruigfj'),
-									vout: [{
-										n: random.generateRandomIntInclusive(1, 10, '324wtrregd'),
-										scriptPubKey: {addresses: [random.generateRandomHashString(32, '2534t4s')]},
-										value: random.generateRandomIntInclusive(1, 1000, '2wsfgbx')
-									}]
-								},
-								statusCode: 200
-							},
-							urlFormatter: 'transaction',
-							values: [ random.generateRandomHashString(32, '398eruigfj') ]
-						}
-					],
-					expectedResult: {
-						vin: [{
-							address: random.generateRandomHashString(32, '2534t4s'),
-							txid: random.generateRandomHashString(32, '398eruigfj'),
-							value: random.generateRandomIntInclusive(1, 1000, '2wsfgbx'),
-							vout: random.generateRandomIntInclusive(1, 10, '324wtrregd')
-						}]
-					},
-					extraTestInfo: 'Valid transaction inputs'
 				}
 			]
 		},

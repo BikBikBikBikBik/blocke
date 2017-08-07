@@ -33,10 +33,10 @@ describe('lib/type-mapper/*', function() {
 		this.etheradapter = require('../../../lib/type-mapper/etheradapter');
 		this.gamecredits = require('../../../lib/type-mapper/gamecredits');
 		this.insight = require('../../../lib/type-mapper/insight');
+		this.iquidus = require('../../../lib/type-mapper/iquidus');
 		this.lisk = require('../../../lib/type-mapper/lisk');
 		this.siatech = require('../../../lib/type-mapper/siatech');
 		this.sochain = require('../../../lib/type-mapper/sochain');
-		this.vtconline = require('../../../lib/type-mapper/vtconline');
 		this.wavesexplorer = require('../../../lib/type-mapper/wavesexplorer');
 		this.zchain = require('../../../lib/type-mapper/zchain');
 	});
@@ -180,6 +180,43 @@ describe('lib/type-mapper/*', function() {
 				}
 			]
 		},
+		iquidus: {
+			account: {
+				address: 'VkdFmDNm7geGEWLHiPvEEaaPs2fAD7bmdc',
+				balance: 333
+			},
+			block: {
+				difficulty: 345879634985,
+				hash: '1b52cf30a05eba4be3bab57303aecc55092ecb44e65b94a7c46fd3a82ef3ec4c',
+				height: 750100,
+				timestamp: 98347693584,
+				transactions: [ {}, {}, {}, {}, {}, {}, {}, {} ]
+			},
+			transaction: [
+				{
+					amountSent: 35,
+					blockHash: '1b52cf30a05eba4be3bab57303ae234234234223e65b94a7c46fd3a82ef3ec4c',
+					hash: '8f5de2a5417169e89345345345345345345345b467c963e18b543bfc6a52786c',
+					recipients: [
+						{ address: 'VkdFmDNm7fghdfghhgvEEaaPs2fAD7bmdc', amount: 20 },
+						{ address: 'VkdFmDNm7geGEWasdfssEaaPs2fAD7bmdc', amount: 15 }
+					],
+					senders: [
+						{ address: 'VkdFmasdfasdfasdfasdfasdf2fAD7bmdc', amount: 15 },
+						{ address: 'VkdFmDNm7geasdfasdfasdfasdsAD7bmdc', amount: 20 }
+					],
+					timestamp: 4567456
+				},
+				{
+					amountSent: 155,
+					blockHash: '1b52cf30a05eba4be3bab57303ae234234234223e65b94a7c46fd3a82ef3ec4c',
+					hash: '8f5de2a5417169e89345345345345345345345b467c963e18b543bfc6a52786c',
+					recipients: [{ address: 'VkdFmDNm7fghdfghhgvEEaaPs2fAD7bmdc', amount: 155 }],
+					senders: [{ address: typeMapperResources.coinbaseAddressValue, amount: 155 }],
+					timestamp: 4567456
+				}
+			]
+		},
 		lisk: {
 			account: {
 				address: '18278674964748191682L',
@@ -310,33 +347,6 @@ describe('lib/type-mapper/*', function() {
 					timestamp: 45634563456
 				}
 			]
-		},
-		vtconline: {
-			account: {
-				address: 'VkdFmDNm7geGEWLHiPvEEaaPs2fAD7bmdc',
-				balance: 333
-			},
-			block: {
-				difficulty: 345879634985,
-				hash: '1b52cf30a05eba4be3bab57303aecc55092ecb44e65b94a7c46fd3a82ef3ec4c',
-				height: 750100,
-				timestamp: 98347693584,
-				transactions: [ {}, {}, {}, {}, {}, {}, {}, {} ]
-			},
-			transaction: {
-				amountSent: 35,
-				blockHash: '1b52cf30a05eba4be3bab57303ae234234234223e65b94a7c46fd3a82ef3ec4c',
-				hash: '8f5de2a5417169e89345345345345345345345b467c963e18b543bfc6a52786c',
-				recipients: [
-					{ address: 'VkdFmDNm7fghdfghhgvEEaaPs2fAD7bmdc', amount: 20 },
-					{ address: 'VkdFmDNm7geGEWasdfssEaaPs2fAD7bmdc', amount: 15 }
-				],
-				senders: [
-					{ address: 'VkdFmasdfasdfasdfasdfasdf2fAD7bmdc', amount: 15 },
-					{ address: 'VkdFmDNm7geasdfasdfasdfasdsAD7bmdc', amount: 20 }
-				],
-				timestamp: 4567456
-			}
 		},
 		wavesexplorer: {
 			account: {
@@ -551,6 +561,39 @@ describe('lib/type-mapper/*', function() {
 			}
 		},
 		{
+			mapper: 'iquidus',
+			inputs: {
+				account: { address: data.iquidus.account.address, balance: data.iquidus.account.balance },
+				block: {
+					difficulty: data.iquidus.block.difficulty,
+					hash: data.iquidus.block.hash,
+					height: data.iquidus.block.height,
+					time: data.iquidus.block.timestamp,
+					tx: data.iquidus.block.transactions
+				},
+				transaction: [
+					{
+						blockhash: data.iquidus.transaction[0].blockHash,
+						time: data.iquidus.transaction[0].timestamp,
+						txid: data.iquidus.transaction[0].hash,
+						vin: _.map(data.iquidus.transaction[0].senders, (sender) => ({ address: sender.address, value: sender.amount })),
+						vout: _.map(data.iquidus.transaction[0].recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: recipient.amount })),
+						extraTestInfo: 'Standard transaction'
+					},
+					{
+						blockhash: data.iquidus.transaction[1].blockHash,
+						time: data.iquidus.transaction[1].timestamp,
+						txid: data.iquidus.transaction[1].hash,
+						vin: [{coinbase: ''}],
+						vout: _.map(data.iquidus.transaction[1].recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: recipient.amount })),
+						extraTestInfo: 'Coinbase transaction'
+					}
+				]
+			},
+			expected: {
+			}
+		},
+		{
 			mapper: 'lisk',
 			inputs: {
 				account: { address: data.lisk.account.address, balance: `${data.lisk.account.balance + data.lisk.account.unconfirmedBalance}`, unconfirmedBalance: `${data.lisk.account.unconfirmedBalance}` },
@@ -715,28 +758,6 @@ describe('lib/type-mapper/*', function() {
 						extraTestInfo: 'Coinbase transaction'
 					}
 				]
-			},
-			expected: {
-			}
-		},
-		{
-			mapper: 'vtconline',
-			inputs: {
-				account: { address: data.vtconline.account.address, balance: data.vtconline.account.balance },
-				block: {
-					difficulty: data.vtconline.block.difficulty,
-					hash: data.vtconline.block.hash,
-					height: data.vtconline.block.height,
-					time: data.vtconline.block.timestamp,
-					tx: data.vtconline.block.transactions
-				},
-				transaction: {
-					blockhash: data.vtconline.transaction.blockHash,
-					time: data.vtconline.transaction.timestamp,
-					txid: data.vtconline.transaction.hash,
-					vin: _.map(data.vtconline.transaction.senders, (sender) => ({ address: sender.address, value: sender.amount })),
-					vout: _.map(data.vtconline.transaction.recipients, (recipient) => ({ scriptPubKey: {addresses: [recipient.address]}, value: recipient.amount }))
-				}
 			},
 			expected: {
 			}

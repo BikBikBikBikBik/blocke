@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+- Support for SIGT
+
+### Fixed
+- Coinbase transaction handling for VTC
 
 ## v0.22.0 - 2017-08-04
 ### Added
