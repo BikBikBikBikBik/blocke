@@ -28,26 +28,26 @@ let addAllGenericErrorTestsWasCalled = false;
 
 describe('lib/api/*', function() {
 	function addAllGenericErrorTests() {
-		function addGenericErrorTests(test, testFieldName, notFoundMessage, objectName) {
+		function addGenericErrorTests(test, testFieldName, objectName) {
 			if (test.hasOwnProperty(testFieldName)) {
 				const mockErrorTestResponseTemplate = _.find(test[testFieldName], (data) => data.useAsErrorTestResponseTemplate === true);
 				const testData = mockErrorTestResponseTemplate !== undefined ? mockErrorTestResponseTemplate : _.sortBy(test[testFieldName], (data) => -data.mockResponseData.length)[0];
 				const urlFormatters = _.pluck(testData.mockResponseData, 'urlFormatter');
 				const uniqueUrlFormatters = _.uniq(urlFormatters);
 				
-				test[testFieldName] = test[testFieldName].concat(generateGenericErrorTests(uniqueUrlFormatters, testData.mockResponseData[0].values, notFoundMessage, apiResources.generateGenericObjectErrorMessage(objectName)));
+				test[testFieldName] = test[testFieldName].concat(generateGenericErrorTests(uniqueUrlFormatters, testData.mockResponseData[0].values, apiResources.generateObjectNotFoundMessage(objectName), apiResources.generateGenericObjectErrorMessage(objectName), apiResources.connectionTimeoutMessage, apiResources.readTimeoutMessage));
 			}
 		}
 		
 		tests.forEach((test) => {
-			addGenericErrorTests(test, 'getAccountTests', apiResources.accountNotFoundMessage, 'Account');
-			addGenericErrorTests(test, 'getBlockByNumberOrHashTests', apiResources.blockNotFoundMessage, 'Block');
-			addGenericErrorTests(test, 'getBlockByNumberTests', apiResources.blockNotFoundMessage, 'Block');
-			addGenericErrorTests(test, 'getTransactionTests', apiResources.transactionNotFoundMessage, 'Transaction');
+			addGenericErrorTests(test, 'getAccountTests', 'Account');
+			addGenericErrorTests(test, 'getBlockByNumberOrHashTests', 'Block');
+			addGenericErrorTests(test, 'getBlockByNumberTests', 'Block');
+			addGenericErrorTests(test, 'getTransactionTests', 'Transaction');
 		});
 	}
 	
-	function generateGenericErrorTests(urlFormatters, urlFormatterValues, notFoundMessage, genericErrorMessage) {
+	function generateGenericErrorTests(urlFormatters, urlFormatterValues, notFoundMessage, genericErrorMessage, connectionTimeoutMessage, readTimeoutMessage) {
 		function generateMockResponseData(statusCode) {
 			return _.map(urlFormatters, (urlFormatter) => ({
 				response: { data: {success: false}, statusCode: statusCode },
@@ -56,9 +56,23 @@ describe('lib/api/*', function() {
 			}));
 		}
 		
+		function generateMockResponseError(code, connect) {
+			return _.map(urlFormatters, (urlFormatter) => ({
+				response: { code: code, connect: connect },
+				urlFormatter: urlFormatter,
+				values: urlFormatterValues
+			}));
+		}
+		
 		const urlFormattersArray = Array.isArray(urlFormatters) ? urlFormatters : [urlFormatters];
 		
 		return [
+			{
+				methodInput: random.generateRandomHashString(32),
+				mockResponseData: generateMockResponseError('ETIMEDOUT', true),
+				expectedError: connectionTimeoutMessage,
+				extraTestInfo: 'Connection timeout'
+			},
 			{
 				methodInput: random.generateRandomHashString(32),
 				mockResponseData: generateMockResponseData(400),
@@ -82,6 +96,12 @@ describe('lib/api/*', function() {
 				mockResponseData: generateMockResponseData(500),
 				expectedError: genericErrorMessage,
 				extraTestInfo: 'HTTP 500 response'
+			},
+			{
+				methodInput: random.generateRandomHashString(32),
+				mockResponseData: generateMockResponseError('ESOCKETTIMEDOUT', false),
+				expectedError: readTimeoutMessage,
+				extraTestInfo: 'Read timeout'
 			}
 		];
 	}
@@ -114,7 +134,11 @@ describe('lib/api/*', function() {
 				urlSuffix = urlSuffix.replace(`[${index}]`, actualValue);
 			});
 
-			nock(apiBaseAddress).get(urlSuffix).reply(mockResponse.response.statusCode, mockResponse.response.data);
+			if (mockResponse.response.hasOwnProperty('statusCode')) {
+				nock(apiBaseAddress).get(urlSuffix).reply(mockResponse.response.statusCode, mockResponse.response.data);
+			} else {
+				nock(apiBaseAddress).get(urlSuffix).replyWithError(mockResponse.response);
+			}
 		});
 	}
 	

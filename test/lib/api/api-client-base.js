@@ -74,6 +74,16 @@ describe('lib/api/api-client-base', function() {
 			apiClient.executeRequest(uriSuffix, random.generateRandomHashString(4)).should.eventually.deep.equal(mockResponseData).and.notify(done);
 		});
 		
+		it('should return rejected promise (Connection timeout)', function(done) {
+			const apiBaseAddress = `https://${random.generateRandomHashString(16, '43rtds')}.com`;
+			const apiClient = new ApiClientBase(apiBaseAddress);
+			const uriSuffix = `/api/get/${random.generateRandomHashString(16, '3425ytdf')}`;
+			
+			nock(apiBaseAddress).get(`${uriSuffix}`).replyWithError({ code: 'ETIMEDOUT', connect: true });
+			
+			apiClient.executeRequest(uriSuffix, random.generateRandomHashString(4)).should.eventually.be.rejectedWith(apiResources.connectionTimeoutMessage).and.notify(done);
+		});
+		
 		it('should return rejected promise (HTTP 400 response)', function(done) {
 			const apiBaseAddress = `https://${random.generateRandomHashString(16, '8756rtsd')}.com`;
 			const apiClient = new ApiClientBase(apiBaseAddress);
@@ -115,6 +125,16 @@ describe('lib/api/api-client-base', function() {
 			nock(apiBaseAddress).get(`${uriSuffix}`).reply(500, {success: false});
 			
 			apiClient.executeRequest(uriSuffix, objectName).should.eventually.be.rejectedWith(apiResources.generateGenericObjectErrorMessage(objectName)).and.notify(done);
+		});
+		
+		it('should return rejected promise (Read timeout)', function(done) {
+			const apiBaseAddress = `https://${random.generateRandomHashString(16, '34tsrdf')}.com`;
+			const apiClient = new ApiClientBase(apiBaseAddress);
+			const uriSuffix = `/api/get/${random.generateRandomHashString(16, '234tserdf')}`;
+			
+			nock(apiBaseAddress).get(`${uriSuffix}`).replyWithError({ code: 'ESOCKETTIMEDOUT', connect: false });
+			
+			apiClient.executeRequest(uriSuffix, random.generateRandomHashString(4)).should.eventually.be.rejectedWith(apiResources.readTimeoutMessage).and.notify(done);
 		});
 	});
 });
