@@ -32,18 +32,22 @@ function executeHandler(handler, usage) {
 		const resIsArray = Array.isArray(res);
 		
 		if (resIsArray && res.length > 1) {
+			const networkInfo = _.find(res, (result) => result.option === 'Network Info');
+			const otherResults = _.without(res, networkInfo);
 			//[0] = Account results
 			//[1] = The rest of the results
-			const accountsAndOthers = _.partition(res, (result) => result.option === 'Account');
+			const accountsAndOthers = _.partition(otherResults, (result) => result.option === 'Account');
 			//[0] = Block results
 			//[1] = Transaction results
 			const blocksAndTransactions = _.partition(accountsAndOthers[1], (result) => result.option === 'Block');
 			
 			const accountOutput = formatOutputResults(accountsAndOthers[0], 'Accounts');
 			const blockOutput = formatOutputResults(blocksAndTransactions[0], 'Blocks');
+			const networkInfoOutput = networkInfo !== undefined ? formatOutputResults([networkInfo], 'Network Info') : '';
 			const transactionOutput = formatOutputResults(blocksAndTransactions[1], 'Transactions');
 			
-			console.log(`${accountOutput}${(accountOutput.length > 0 && blockOutput.length > 0 ? '\n\n' : '')}${blockOutput}` +
+			console.log(`${networkInfoOutput}${networkInfoOutput.length > 0 ? '\n\n' : ''}` +
+						`${accountOutput}${(accountOutput.length > 0 && blockOutput.length > 0 ? '\n\n' : '')}${blockOutput}` +
 						`${((blockOutput.length > 0 || accountOutput.length > 0) && transactionOutput.length > 0 ? '\n\n' : '')}${transactionOutput}`);
 		} else {
 			console.log((resIsArray ? res[0] : res).data.toString());

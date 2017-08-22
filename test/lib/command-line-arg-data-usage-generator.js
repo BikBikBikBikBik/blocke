@@ -123,6 +123,13 @@ describe('lib/command-line-arg-data-usage-generator', function() {
 			type: String
 		};
 		
+		this.expectedNetworkDefinition = {
+			name: 'network',
+			alias: 'n',
+			type: Boolean,
+			description: 'Get network information.'
+		};
+		
 		this.expectedTransactionDefinition = {
 			alias: 't',
 			description: 'Transaction hash',
@@ -142,6 +149,7 @@ describe('lib/command-line-arg-data-usage-generator', function() {
 			const currency = this.dataUsageGenerator.generateCurrency(this.aeonOptions);
 			
 			validateDefinition(currency.definitions, this.expectedBlockDefinition);
+			validateDefinition(currency.definitions, this.expectedNetworkDefinition);
 			validateDefinition(currency.definitions, this.expectedTransactionDefinition);
 			validateUsage(currency.usage, this.aeonOptions);
 		});
@@ -151,6 +159,7 @@ describe('lib/command-line-arg-data-usage-generator', function() {
 			
 			validateDefinition(currency.definitions, this.expectedAccountDefinition);
 			validateDefinition(currency.definitions, this.expectedBlockDefinition);
+			validateDefinition(currency.definitions, this.expectedNetworkDefinition);
 			validateDefinition(currency.definitions, this.expectedTransactionDefinition);
 			validateUsage(currency.usage, this.btcOptions);
 		});
@@ -166,9 +175,10 @@ describe('lib/command-line-arg-data-usage-generator', function() {
 			const definitions = this.dataUsageGenerator.generateDefinitions(false);
 			
 			assert.isArray(definitions);
-			assert.lengthOf(definitions, 2);
+			assert.lengthOf(definitions, 3);
 			
 			validateDefinition(definitions, this.expectedBlockDefinition);
+			validateDefinition(definitions, this.expectedNetworkDefinition);
 			validateDefinition(definitions, this.expectedTransactionDefinition);
 		});
 		
@@ -176,10 +186,11 @@ describe('lib/command-line-arg-data-usage-generator', function() {
 			const definitions = this.dataUsageGenerator.generateDefinitions(true);
 			
 			assert.isArray(definitions);
-			assert.lengthOf(definitions, 3);
+			assert.lengthOf(definitions, 4);
 			
 			validateDefinition(definitions, this.expectedAccountDefinition);
 			validateDefinition(definitions, this.expectedBlockDefinition);
+			validateDefinition(definitions, this.expectedNetworkDefinition);
 			validateDefinition(definitions, this.expectedTransactionDefinition);
 		});
 	});
