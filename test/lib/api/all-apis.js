@@ -43,6 +43,7 @@ describe('lib/api/*', function() {
 			addGenericErrorTests(test, 'getAccountTests', 'Account');
 			addGenericErrorTests(test, 'getBlockByNumberOrHashTests', 'Block');
 			addGenericErrorTests(test, 'getBlockByNumberTests', 'Block');
+			addGenericErrorTests(test, 'getNetworkInfoTests', 'Network Info');
 			addGenericErrorTests(test, 'getTransactionTests', 'Transaction');
 		});
 	}
@@ -1201,6 +1202,7 @@ describe('lib/api/*', function() {
 			urlFormatters: {
 				account: '/api/v2/get_address_balance/[0]/[1]',
 				block: '/api/v2/get_block/[0]/[1]',
+				networkInfo: '/api/v2/get_info/[0]',
 				transaction: '/api/v2/get_tx/[0]/[1]'
 			},
 			getAccountTests: [
@@ -1229,6 +1231,19 @@ describe('lib/api/*', function() {
 					],
 					expectedResult: {hash: random.generateRandomHashString(32, 'kiujhg')},
 					extraTestInfo: 'Valid block id'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {data: {success: true}}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: [ '[network]' ]
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
 				}
 			],
 			getTransactionTests: [
@@ -1513,6 +1528,17 @@ describe('lib/api/*', function() {
 	describe('getBlockByNumberOrHash', function() {
 		tests.forEach((test) => {
 			runTestForApiClientMethod(test, 'getBlockByNumberOrHash', 'block');
+		});
+	});
+	
+	/*
+	 *
+	 *  getNetworkInfo
+	 *
+	 */
+	describe.skip('getNetworkInfo', function() {
+		tests.forEach((test) => {
+			runTestForApiClientMethod(test, 'getNetworkInfo', 'network info');
 		});
 	});
 	
