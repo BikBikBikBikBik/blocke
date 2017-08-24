@@ -590,6 +590,7 @@ describe('lib/api/*', function() {
 				account: '/api/addresses/[0]/balance',
 				block: '/api/blocks/[0]',
 				blockHeight: '/api/blocks?height=[0]',
+				networkInfo: '/api/network/info',
 				transaction: '/api/transactions/[0]'
 			},
 			getAccountTests: [
@@ -635,6 +636,19 @@ describe('lib/api/*', function() {
 					],
 					expectedResult: {height: random.generateRandomIntInclusive(1, 5000000, '423wraedf')},
 					extraTestInfo: 'Valid block height'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
 				}
 			],
 			getTransactionTests: [

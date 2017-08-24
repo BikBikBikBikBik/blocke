@@ -87,7 +87,7 @@ describe('lib/type-mapper/models', function() {
 	}
 	
 	function networkToString(difficulty, hashRate, height, lastBlockTime) {
-		return `Difficulty:      ${difficulty}\n` +
+		return (difficulty > 0 ? `Difficulty:      ${difficulty}\n` : '') +
 			   `Hash Rate:       ${hashRate}\n` +
 			   `Height:          ${height}` +
 			   (lastBlockTime !== undefined ? `\nLast Block Time: ${lastBlockTime.toString()}` : '');
@@ -203,6 +203,15 @@ describe('lib/type-mapper/models', function() {
 				new Date(random.generateRandomIntInclusive(100000, 10000000) * 1000)
 			],
 			extraTestInfo: 'All fields populated'
+		},
+		{
+			type: 'Network Info',
+			values: [
+				0,
+				random.generateRandomIntInclusive(100000, 10000000),
+				random.generateRandomIntInclusive(100000, 10000000)
+			],
+			extraTestInfo: 'Difficulty is zero'
 		},
 		{
 			type: 'Network Info',
