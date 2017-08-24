@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const { Account, Block, Transaction } = require('../../../lib/type-mapper/models');
+const { Account, Block, Network, Transaction } = require('../../../lib/type-mapper/models');
 const assert = require('../../chai-setup');
 const equal = require('deep-equal');
 const typeMapperResources = require('../../../lib/type-mapper/resources');
@@ -55,6 +55,12 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 3453456546,
 				transactions: [ {}, {}, {} ]
 			},
+			network: {
+				difficulty: 943728,
+				hashRate: 984376098,
+				height: 8376456,
+				lastBlockTime: 3948709453
+			},
 			transaction: {
 				amountSent: 20000000000000,
 				blockHash: '247575ca01657e2f61845dc2b6a64424c7e45952355757b950220b8def3fe5a0',
@@ -83,6 +89,12 @@ describe('lib/type-mapper/*', function() {
 				height: 4000000,
 				timestamp: 1923874932,
 				transactions: [ {}, {} ]
+			},
+			network: {
+				difficulty: 249387,
+				hashRate: 934875,
+				height: 21936874,
+				lastBlockTime: '2017-08-24T08:15:00.000Z'
 			},
 			transaction: [
 				{
@@ -246,8 +258,7 @@ describe('lib/type-mapper/*', function() {
 					recipients: [{ address: 'Second signature creation', amount: 2222 }],
 					senders: [{ address: '44478674964748191682L', amount: 2222 }],
 					timestamp: 345345345345
-				}
-				,
+				},
 				{
 					amountSent: 3333,
 					blockHash: '9104734534534525105',
@@ -255,8 +266,7 @@ describe('lib/type-mapper/*', function() {
 					recipients: [{ address: 'Delegate registration', amount: 3333 }],
 					senders: [{ address: '33378674964748191682L', amount: 3333 }],
 					timestamp: 345345354345
-				}
-				,
+				},
 				{
 					amountSent: 4444,
 					blockHash: '9104345345345348251',
@@ -264,8 +274,7 @@ describe('lib/type-mapper/*', function() {
 					recipients: [{ address: 'Delegate vote', amount: 4444 }],
 					senders: [{ address: '22278674964748191682L', amount: 4444 }],
 					timestamp: 345345345348
-				}
-				,
+				},
 				{
 					amountSent: 5555,
 					blockHash: '9345345345345333510',
@@ -321,6 +330,11 @@ describe('lib/type-mapper/*', function() {
 				height: 1200000,
 				timestamp: 2398467293,
 				transactions: [ {}, {}, {}, {}, {} ]
+			},
+			network: {
+				difficulty: 94750594287098,
+				hashRate: 345347843,
+				height: 298053458597
 			},
 			transaction: [
 				{
@@ -431,6 +445,12 @@ describe('lib/type-mapper/*', function() {
 					},
 					transactions: data.chainradar.block.transactions
 				},
+				network: {
+					difficulty: data.chainradar.network.difficulty,
+					height: data.chainradar.network.height,
+					instantHashrate: data.chainradar.network.hashRate,
+					timestamp: data.chainradar.network.lastBlockTime
+				},
 				transaction: {
 					header: {
 						blockHash: data.chainradar.transaction.blockHash,
@@ -457,6 +477,16 @@ describe('lib/type-mapper/*', function() {
 					number: data.etheradapter.block.height,
 					time: data.etheradapter.block.timestamp,
 					tx_count: data.etheradapter.block.transactions.length
+				},
+				network: {
+					blockCount: {
+						number: data.etheradapter.network.height,
+						time: data.etheradapter.network.lastBlockTime
+					},
+					stats: {
+						difficulty: data.etheradapter.network.difficulty,
+						hashRate: data.etheradapter.network.hashRate
+					}
 				},
 				transaction: [
 					{
@@ -485,6 +515,7 @@ describe('lib/type-mapper/*', function() {
 			},
 			expected: {
 				block: new Block(data.etheradapter.block.difficulty, data.etheradapter.block.hash, data.etheradapter.block.height, new Date(data.etheradapter.block.timestamp), data.etheradapter.block.transactions.length),
+				network: new Network(data.etheradapter.network.difficulty, data.etheradapter.network.hashRate, data.etheradapter.network.height, new Date(Date.parse(data.etheradapter.network.lastBlockTime))),
 				transaction: [
 					new Transaction(`${data.etheradapter.transaction[0].amountSent}`, data.etheradapter.transaction[0].blockHash, data.etheradapter.transaction[0].hash, { address: data.etheradapter.transaction[0].recipients[0].address, amount: `${data.etheradapter.transaction[0].recipients[0].amount}` }, { address: data.etheradapter.transaction[0].senders[0].address, amount: `${data.etheradapter.transaction[0].senders[0].amount}` }, new Date(data.etheradapter.transaction[0].timestamp * 1000)),
 					new Transaction(`${data.etheradapter.transaction[1].amountSent / 1000000000000000} GNT`, data.etheradapter.transaction[1].blockHash, data.etheradapter.transaction[1].hash, { address: data.etheradapter.transaction[1].recipients[0].address, amount: `${data.etheradapter.transaction[1].recipients[0].amount / 1000000000000000} GNT` }, { address: data.etheradapter.transaction[1].senders[0].address, amount: `${data.etheradapter.transaction[1].senders[0].amount / 1000000000000000} GNT` }, new Date(data.etheradapter.transaction[1].timestamp * 1000))
@@ -740,6 +771,11 @@ describe('lib/type-mapper/*', function() {
 					time: data.sochain.block.timestamp,
 					txs: data.sochain.block.transactions
 				},
+				network: {
+					blocks: data.sochain.network.height,
+					hashrate: `${data.sochain.network.hashRate}`,
+					mining_difficulty: `${data.sochain.network.difficulty}`
+				},
 				transaction: [
 					{
 						blockhash: data.sochain.transaction[0].blockHash,
@@ -891,6 +927,25 @@ describe('lib/type-mapper/*', function() {
 	
 	/*
 	 *
+	 *  mapNetworkInfo
+	 *
+	 */
+	describe.skip('mapNetworkInfo', function() {
+		tests.forEach(function(test) {
+			describe(test.mapper, function() {
+				it('should map network info', function() {
+					const lastBlockTime = data[test.mapper].network.lastBlockTime;
+					const expectedNetworkInfo = test.expected.hasOwnProperty('network') ? test.expected.network : new Network(data[test.mapper].network.difficulty, data[test.mapper].network.hashRate, data[test.mapper].network.height, lastBlockTime !== undefined ? new Date(lastBlockTime * 1000) : undefined);
+					const mappedNetworkInfo = this[test.mapper].mapNetworkInfo(test.inputs.network);
+
+					assert.isTrue(equal(mappedNetworkInfo, expectedNetworkInfo, {strict: true}), `Actual:\n${mappedNetworkInfo}\n\nExpected:\n${expectedNetworkInfo}`);
+				});
+			});
+		});
+	});
+	
+	/*
+	 *
 	 *  mapTransaction
 	 *
 	 */
@@ -898,7 +953,7 @@ describe('lib/type-mapper/*', function() {
 		tests.forEach(function(test) {
 			describe(test.mapper, function() {
 				const inputTransactionsArray = Array.isArray(test.inputs.transaction) ? test.inputs.transaction : [test.inputs.transaction];
-				const expectedArray = Array.isArray(test.expected.transaction) ? test.expected.transaction: [test.expected.transaction];
+				const expectedArray = Array.isArray(test.expected.transaction) ? test.expected.transaction : [test.expected.transaction];
 				const dataArray = Array.isArray(data[test.mapper].transaction) ? data[test.mapper].transaction : [data[test.mapper].transaction];
 
 				_.each(inputTransactionsArray, (inputTransaction, index) => {

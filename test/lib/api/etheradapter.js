@@ -76,6 +76,27 @@ describe('lib/api/etheradapter', function() {
 	
 	/*
 	 *
+	 *  getBlockByNumberOrHash
+	 *
+	 */
+	describe('getNetworkInfo', function() {
+		it('should return network info', function(done) {
+			const expectedResponse = {success: true};
+			this.mockEtherchainClient.getNetworkInfo = () => Promise.resolve(expectedResponse);
+			
+			this.etherAdapter.getNetworkInfo().should.eventually.deep.equal(expectedResponse).and.notify(done);
+		});
+		
+		it('should not return network info (Rejected promise response)', function(done) {
+			const expectedError = 'Error!';
+			this.mockEtherchainClient.getNetworkInfo = () => Promise.reject(expectedError);
+			
+			this.etherAdapter.getNetworkInfo().should.eventually.be.rejectedWith(expectedError).and.notify(done);
+		});
+	});
+	
+	/*
+	 *
 	 *  getTransaction
 	 *
 	 */

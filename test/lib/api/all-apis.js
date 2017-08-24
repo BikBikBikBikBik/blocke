@@ -375,7 +375,8 @@ describe('lib/api/*', function() {
 			api: 'etherchain',
 			apiBaseAddress: 'https://etherchain.org',
 			urlFormatters: {
-				block: '/api/block/[0]'
+				block: '/api/block/[0]',
+				networkInfo: '/api/basic_stats'
 			},
 			getBlockByNumberOrHashTests: [
 				{
@@ -426,7 +427,20 @@ describe('lib/api/*', function() {
 					expectedError: apiResources.blockNotFoundMessage,
 					extraTestInfo: 'Generic error response'
 				}
-			]
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {data: {success: true}}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
+				}
+			],
 		},
 		{
 			api: 'ethplorer',
