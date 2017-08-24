@@ -251,6 +251,7 @@ describe('lib/api/*', function() {
 			},
 			urlFormatters: {
 				block: '/api/v1/[0]/blocks/[1]/full',
+				networkInfo: '/api/v1/[0]/status',
 				transaction: '/api/v1/[0]/transactions/[1]/full'
 			},
 			getBlockByNumberOrHashTests: [
@@ -285,6 +286,41 @@ describe('lib/api/*', function() {
 							response: { data: {code: 'RequestLimitExceeded'}, statusCode: 200 },
 							urlFormatter: 'block',
 							values: [ '[network]', '[input]' ]
+						}
+					],
+					expectedError: apiResources.tooManyRequestsMessage,
+					extraTestInfo: 'RequestLimitExceeded response'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: [ '[network]' ]
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
+				},
+				{
+					mockResponseData: [
+						{
+							response: { data: {code: 'ApiNotAvailable'}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: [ '[network]' ]
+						}
+					],
+					expectedError: apiResources.apiNotAvailableMessage,
+					extraTestInfo: 'ApiNotAvailable response'
+				},
+				{
+					mockResponseData: [
+						{
+							response: { data: {code: 'RequestLimitExceeded'}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: [ '[network]' ]
 						}
 					],
 					expectedError: apiResources.tooManyRequestsMessage,
