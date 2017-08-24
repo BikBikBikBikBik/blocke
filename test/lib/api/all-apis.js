@@ -852,7 +852,7 @@ describe('lib/api/*', function() {
 		{
 			api: 'iquidus',
 			networks: {
-				sigt: {apiBaseAddress: 'http://explorer.signatum.download'},
+				sigt: {apiBaseAddress: 'http://explorer.signatum.io'},
 				vtc: {apiBaseAddress: 'https://explorer.vtconline.org'}
 			},
 			urlFormatters: {
