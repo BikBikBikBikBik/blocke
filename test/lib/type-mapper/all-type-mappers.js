@@ -171,6 +171,11 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 398457345,
 				transactions: [ {} ]
 			},
+			network: {
+				difficulty: 2893756498,
+				hashRate: 0,
+				height: 24356764
+			},
 			transaction: [
 				{
 					amountSent: 100,
@@ -538,10 +543,7 @@ describe('lib/type-mapper/*', function() {
 					time: data.gamecredits.block.timestamp,
 					tx: data.gamecredits.block.transactions
 				},
-				network: {
-					hashrate: data.gamecredits.network.hashRate,
-					numBlocks: data.gamecredits.network.height
-				},
+				network: { hashrate: data.gamecredits.network.hashRate, numBlocks: data.gamecredits.network.height },
 				transaction: [
 					{
 						blockhash: data.gamecredits.transaction[0].blockHash,
@@ -576,6 +578,7 @@ describe('lib/type-mapper/*', function() {
 					time: data.insight.block.timestamp,
 					tx: data.insight.block.transactions
 				},
+				network: {info: { blocks: data.insight.network.height, difficulty: data.insight.network.difficulty }},
 				transaction: [
 					{
 						blockhash: data.insight.transaction[0].blockHash,

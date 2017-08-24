@@ -756,6 +756,7 @@ describe('lib/api/*', function() {
 				account: '/api/addr/[0]',
 				block: '/api/block/[0]',
 				blockIndex: '/api/block-index/[0]',
+				networkInfo: '/api/status?q=getInfo',
 				transaction: '/api/tx/[0]'
 			},
 			getAccountTests: [
@@ -818,6 +819,19 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.blockNotFoundMessage,
 					extraTestInfo: 'Incorrect block response'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
 				}
 			],
 			getTransactionTests: [
