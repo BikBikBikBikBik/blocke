@@ -16,7 +16,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with blocke.  If not, see <http://www.gnu.org/licenses/>.
 */
-const { Account, Block, Transaction } = require('../../../lib/type-mapper/models');
+const { Account, Block, Network, Transaction } = require('../../../lib/type-mapper/models');
 const assert = require('../../chai-setup');
 const equal = require('deep-equal');
 const random = require('../../random-generator');
@@ -26,6 +26,7 @@ describe('lib/type-mapper/models', function() {
 	function createType(type, values) {
 		const accountCreator = (address, confirmedBalance, unconfirmedBalance) => new Account(address, confirmedBalance, unconfirmedBalance);
 		const blockCreator = (difficulty, hash, number, time, transactionCount) => new Block(difficulty, hash, number, time, transactionCount);
+		const networkCreator = (difficulty, hashRate, height, lastBlockTime) => new Network(difficulty, hashRate, height, lastBlockTime);
 		const transactionCreator = (amountSent, blockHash, hash, recipients, senders, time) => new Transaction(amountSent, blockHash, hash, recipients, senders, time);
 		
 		const typeCreator = (() => {
@@ -35,6 +36,9 @@ describe('lib/type-mapper/models', function() {
 
 				case 'Block':
 					return blockCreator;
+				
+				case 'Network Info':
+					return networkCreator;
 
 				case 'Transaction':
 					return transactionCreator;
@@ -74,9 +78,19 @@ describe('lib/type-mapper/models', function() {
 			case 'Block':
 				return blockToString;
 			
+			case 'Network Info':
+				return networkToString;
+			
 			case 'Transaction':
 				return transactionToString;
 		}
+	}
+	
+	function networkToString(difficulty, hashRate, height, lastBlockTime) {
+		return `Difficulty:      ${difficulty}\n` +
+			   `Hash Rate:       ${hashRate}\n` +
+			   `Height:          ${height}` +
+			   (lastBlockTime !== undefined ? `\nLast Block Time: ${lastBlockTime.toString()}` : '');
 	}
 	
 	function transactionToString(amountSent, blockHash, hash, recipients, senders, time) {
@@ -104,6 +118,9 @@ describe('lib/type-mapper/models', function() {
 			case 'Block':
 				return validateBlock;
 			
+			case 'Network Info':
+				return validateNetwork;
+			
 			case 'Transaction':
 				return validateTransaction;
 		}
@@ -121,6 +138,13 @@ describe('lib/type-mapper/models', function() {
 		assert.equal(instance._number, number);
 		assert.equal(instance._time, time);
 		assert.equal(instance._transactionCount, transactionCount);
+	}
+	
+	function validateNetwork(instance, difficulty, hashRate, height, lastBlockTime) {
+		assert.equal(instance._difficulty, difficulty);
+		assert.equal(instance._hashRate, hashRate);
+		assert.equal(instance._height, height);
+		assert.equal(instance._lastBlockTime, lastBlockTime);
 	}
 	
 	function validateTransaction(instance, amountSent, blockHash, hash, recipients, senders, time) {
@@ -169,6 +193,25 @@ describe('lib/type-mapper/models', function() {
 				random.generateRandomIntInclusive(1, 100)
 			],
 			extraTestInfo: 'Difficulty is zero'
+		},
+		{
+			type: 'Network Info',
+			values: [
+				random.generateRandomIntInclusive(100000, 10000000),
+				random.generateRandomIntInclusive(100000, 10000000),
+				random.generateRandomIntInclusive(100000, 10000000),
+				new Date(random.generateRandomIntInclusive(100000, 10000000) * 1000)
+			],
+			extraTestInfo: 'All fields populated'
+		},
+		{
+			type: 'Network Info',
+			values: [
+				random.generateRandomIntInclusive(100000, 10000000),
+				random.generateRandomIntInclusive(100000, 10000000),
+				random.generateRandomIntInclusive(100000, 10000000)
+			],
+			extraTestInfo: 'Time is undefined'
 		},
 		{
 			type: 'Transaction',
