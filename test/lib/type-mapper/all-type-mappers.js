@@ -258,6 +258,12 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 1467092942,
 				transactions: [ {}, {} ]
 			},
+			network: {
+				difficulty: 0,
+				hashRate: 0,
+				height: 238472,
+				lastBlockTime: 146709294223
+			},
 			transaction: [
 				{
 					amountSent: 1111,
@@ -660,6 +666,12 @@ describe('lib/type-mapper/*', function() {
 						timestamp: data.lisk.block.timestamp - 1464109200,
 						numberOfTransactions: data.lisk.block.transactions.length
 					}
+				},
+				network: {
+					blocks: [
+						{ height: data.lisk.network.height, timestamp: data.lisk.network.lastBlockTime - 1464109200 },
+						{ height: data.lisk.network.height - 1, timestamp: data.lisk.network.lastBlockTime - 1464109200 - 1 }
+					]
 				},
 				transaction: [
 					{

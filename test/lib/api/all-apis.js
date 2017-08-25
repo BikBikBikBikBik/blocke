@@ -1107,6 +1107,7 @@ describe('lib/api/*', function() {
 			urlFormatters: {
 				account: '/api/getAccount?address=[0]',
 				block: '/api/getBlock?blockId=[0]',
+				networkInfo: '/api/getLastBlocks',
 				search: '/api/search?id=[0]',
 				transaction: '/api/getTransaction?transactionId=[0]'
 			},
@@ -1188,6 +1189,30 @@ describe('lib/api/*', function() {
 					expectedError: apiResources.blockNotFoundMessage,
 					extraTestInfo: 'Invalid block id',
 					useAsErrorTestResponseTemplate: true
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
+				},
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: false}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedError: apiResources.networkInfoNotFoundMessage,
+					extraTestInfo: 'Generic error response'
 				}
 			],
 			getTransactionTests: [
