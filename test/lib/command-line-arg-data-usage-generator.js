@@ -57,6 +57,7 @@ describe('lib/command-line-arg-data-usage-generator', function() {
 			{ name: 'Get block by number', summary: `blocke ${inputOptions.command} -b ${inputOptions.optionSamples.blockNumber}` },
 			{ name: 'Get multiple blocks ', summary: `blocke ${inputOptions.command} -b ${inputOptions.optionSamples.blockNumber} ${inputOptions.optionSamples.blockNumber - 12345} ${inputOptions.optionSamples.blockHash}` },
 			{ name: 'Get block and transaction', summary: `blocke ${inputOptions.command} -b ${inputOptions.optionSamples.blockNumber} -t ${inputOptions.optionSamples.transactionHash}` },
+			{ name: 'Get network info and block', summary: `blocke ${inputOptions.command} -n -b ${inputOptions.optionSamples.blockNumber}` },
 			{ name: 'Get transaction by hash', summary: `blocke ${inputOptions.command} -t ${inputOptions.optionSamples.transactionHash}` },
 			{ name: 'Search for value', summary: `blocke ${inputOptions.command} ${inputOptions.optionSamples.blockHash}` },
 			{ name: 'Get account by address', summary: `blocke ${inputOptions.command} -a ${inputOptions.optionSamples.account}` },
