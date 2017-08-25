@@ -859,6 +859,7 @@ describe('lib/api/*', function() {
 				account: '/ext/getaddress/[0]',
 				blockHash: '/api/getblock?hash=[0]',
 				blockHeight: '/api/getblockhash?index=[0]',
+				networkInfo: '/ext/summary',
 				transaction: '/api/getrawtransaction?txid=[0]&decrypt=1'
 			},
 			getAccountTests: [
@@ -969,6 +970,36 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.blockNotFoundMessage,
 					extraTestInfo: 'Invalid block id'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {data: [{hashrate: `${random.generateRandomIntInclusive(1000, 5000000, '56y6tdhg')}`}]}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {
+						sigt: { hashrate: `${random.generateRandomIntInclusive(1000, 5000000, '56y6tdhg')}`, hashRateMultiplier: 1 },
+						vtc: { hashrate: `${random.generateRandomIntInclusive(1000, 5000000, '56y6tdhg')}`, hashRateMultiplier: 1000000000 }
+					},
+					extraTestInfo: 'Valid network info request'
+				},
+				{
+					mockResponseData: [
+						{
+							response: { data: {data: [{hashrate: '-'}]}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {
+						sigt: { hashrate: '0', hashRateMultiplier: 1 },
+						vtc: { hashrate: '0', hashRateMultiplier: 1000000000 }
+					},
+					extraTestInfo: 'Non-numeric hash rate returned'
 				}
 			],
 			getTransactionTests: [

@@ -214,6 +214,12 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 98347693584,
 				transactions: [ {}, {}, {}, {}, {}, {}, {}, {} ]
 			},
+			network: {
+				difficulty: 92384747538,
+				hashRate: 4598736924,
+				hashRateMultiplier: 1000,
+				height: 3742893
+			},
 			transaction: [
 				{
 					amountSent: 35,
@@ -614,6 +620,12 @@ describe('lib/type-mapper/*', function() {
 					time: data.iquidus.block.timestamp,
 					tx: data.iquidus.block.transactions
 				},
+				network: {
+					blockcount: data.iquidus.network.height,
+					difficulty: data.iquidus.network.difficulty,
+					hashrate: `${data.iquidus.network.hashRate}`,
+					hashRateMultiplier: data.iquidus.network.hashRateMultiplier
+				},
 				transaction: [
 					{
 						blockhash: data.iquidus.transaction[0].blockHash,
@@ -634,6 +646,7 @@ describe('lib/type-mapper/*', function() {
 				]
 			},
 			expected: {
+				network: new Network(data.iquidus.network.difficulty, data.iquidus.network.hashRate * data.iquidus.network.hashRateMultiplier, data.iquidus.network.height)
 			}
 		},
 		{
