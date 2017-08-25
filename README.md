@@ -6,7 +6,7 @@
 [![Code Climate](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/gpa.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/)
 
 ## Introduction
-Command-line tool to query the blockchain for a variety of cryptocurrencies. View blocks, transactions, and accounts (where applicable). Currently supports:
+blocke is a command-line tool to query the blockchain for a variety of cryptocurrencies. View blocks, transactions, and accounts (where applicable). Currently supports:
 * AEON
 * BCH
 * BCN
