@@ -437,6 +437,11 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 798547359843,
 				transactions: [ {}, {}, {}, {}, {}, {}, {}, {}, {} ]
 			},
+			network: {
+				difficulty: 293482745,
+				hashRate: 2934872893.234,
+				height: 2934823
+			},
 			transaction: [
 				{
 					amountSent: 60,
@@ -908,6 +913,11 @@ describe('lib/type-mapper/*', function() {
 					timestamp: data.zchain.block.timestamp,
 					transactions: data.zchain.block.transactions.length
 				},
+				network: {
+					blockNumber: data.zchain.network.height,
+					difficulty: data.zchain.network.difficulty,
+					hashrate: data.zchain.network.hashRate
+				},
 				transaction: [
 					{
 						blockHash: data.zchain.transaction[0].blockHash,
@@ -985,7 +995,7 @@ describe('lib/type-mapper/*', function() {
 	 *  mapNetworkInfo
 	 *
 	 */
-	describe.skip('mapNetworkInfo', function() {
+	describe('mapNetworkInfo', function() {
 		tests.forEach(function(test) {
 			describe(test.mapper, function() {
 				it('should map network info', function() {

@@ -1596,6 +1596,7 @@ describe('lib/api/*', function() {
 			urlFormatters: {
 				account: '/v2/mainnet/accounts/[0]',
 				block: '/v2/mainnet/blocks/[0]',
+				networkInfo: '/v2/mainnet/network',
 				transaction: '/v2/mainnet/transactions/[0]'
 			},
 			getAccountTests: [
@@ -1624,6 +1625,19 @@ describe('lib/api/*', function() {
 					],
 					expectedResult: {hash: random.generateRandomHashString(32, '657yutghj')},
 					extraTestInfo: 'Valid block id'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
 				}
 			],
 			getTransactionTests: [
@@ -1698,7 +1712,7 @@ describe('lib/api/*', function() {
 	 *  getNetworkInfo
 	 *
 	 */
-	describe.skip('getNetworkInfo', function() {
+	describe('getNetworkInfo', function() {
 		tests.forEach((test) => {
 			runTestForApiClientMethod(test, 'getNetworkInfo', 'network info');
 		});
