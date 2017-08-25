@@ -315,6 +315,12 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 3849756348,
 				transactions: [ {}, {}, {}, {}, {}, {} ]
 			},
+			network: {
+				difficulty: 2983472304,
+				hashRate: 238940237504,
+				height: 29348723,
+				lastBlockTime: 2934827
+			},
 			transaction: [
 				{
 					amountSent: 24,
@@ -750,6 +756,12 @@ describe('lib/type-mapper/*', function() {
 					height: data.siatech.block.height,
 					maturitytimestamp: data.siatech.block.timestamp,
 					transactions: data.siatech.block.transactions
+				},
+				network: {
+					difficulty: `${data.siatech.network.difficulty}`,
+					estimatedhashrate: `${data.siatech.network.hashRate}`,
+					height: data.siatech.network.height,
+					maturitytimestamp: data.siatech.network.lastBlockTime
 				},
 				transaction: [
 					{

@@ -1247,6 +1247,7 @@ describe('lib/api/*', function() {
 			apiBaseAddress: 'https://explore.sia.tech',
 			urlFormatters: {
 				block: '/explorer/blocks/[0]',
+				networkInfo: '/explorer',
 				hash: '/explorer/hashes/[0]',
 			},
 			getBlockByNumberOrHashTests: [
@@ -1295,6 +1296,19 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.blockNotFoundMessage,
 					extraTestInfo: 'Invalid block id'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
 				}
 			],
 			getTransactionTests: [
