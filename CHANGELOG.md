@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+## v0.24.0 - 2017-08-25
+### Added
+- Network information retrieval via `--network` option
+
 ## v0.23.0 - 2017-08-07
 ### Added
 - Support for SIGT
