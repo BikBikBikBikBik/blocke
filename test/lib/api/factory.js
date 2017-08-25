@@ -38,7 +38,7 @@ describe('lib/api/factory', function() {
 	 */
 	describe('getApi', function() {
 		const networks = _.map(commandLineDataSource.currencies, (currency, key) => key);
-		const expectedMethods = [ 'getAccount', 'getBlockByNumberOrHash', 'getTransaction' ];
+		const expectedMethods = [ 'getAccount', 'getBlockByNumberOrHash', 'getNetworkInfo', 'getTransaction' ];
 		
 		networks.forEach(function(network) {
 			it(`should return a valid api for '${network}'`, function() {

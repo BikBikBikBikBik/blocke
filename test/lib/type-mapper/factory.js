@@ -38,7 +38,7 @@ describe('lib/type-mapper/factory', function() {
 	 */
 	describe('getTypeMapper', function() {
 		const networks = _.map(commandLineDataSource.currencies, (currency, key) => key);
-		const expectedMethods = [ 'mapAccount', 'mapBlock', 'mapTransaction' ];
+		const expectedMethods = [ 'mapAccount', 'mapBlock',  'mapNetworkInfo', 'mapTransaction' ];
 		
 		networks.forEach(function(network) {
 			it(`should return a valid type mapper for '${network}'`, function() {
