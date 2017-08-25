@@ -402,6 +402,10 @@ describe('lib/type-mapper/*', function() {
 				timestamp: 398457634985,
 				transactions: [ {}, {}, {}, {}, {}, {}, {} ]
 			},
+			network: {
+				height: 9438272,
+				lastBlockTime: 29348273482
+			},
 			transaction: [
 				{
 					amountSent: 800000000000000000,
@@ -857,6 +861,7 @@ describe('lib/type-mapper/*', function() {
 					timestamp: data.wavesexplorer.block.timestamp,
 					transactions: data.wavesexplorer.block.transactions
 				},
+				network: { height: data.wavesexplorer.network.height, timestamp: data.wavesexplorer.network.lastBlockTime },
 				transaction: [
 					{
 						amount: data.wavesexplorer.transaction[0].amountSent,
@@ -885,6 +890,7 @@ describe('lib/type-mapper/*', function() {
 			expected: {
 				account: new Account(`1W${data.wavesexplorer.account.address}`, data.wavesexplorer.account.balance / 100000000),
 				block: new Block(0, data.wavesexplorer.block.hash, data.wavesexplorer.block.height, new Date(data.wavesexplorer.block.timestamp), data.wavesexplorer.block.transactions.length),
+				network: new Network(0, 0, data.wavesexplorer.network.height, new Date(data.wavesexplorer.network.lastBlockTime)),
 				transaction: [
 					new Transaction(`${data.wavesexplorer.transaction[0].amountSent / 100000000}`, data.wavesexplorer.transaction[0].blockHash, data.wavesexplorer.transaction[0].hash, { address: `1W${data.wavesexplorer.transaction[0].recipients[0].address}`, amount: `${data.wavesexplorer.transaction[0].recipients[0].amount / 100000000}` }, { address: `1W${data.wavesexplorer.transaction[0].senders[0].address}`, amount: `${data.wavesexplorer.transaction[0].senders[0].amount / 100000000}` }, new Date(data.wavesexplorer.transaction[0].timestamp)),
 					new Transaction(`${data.wavesexplorer.transaction[1].amountSent / 100000000000} WavesGO`, data.wavesexplorer.transaction[1].blockHash, data.wavesexplorer.transaction[1].hash, { address: data.wavesexplorer.transaction[1].recipients[0].address, amount: `${data.wavesexplorer.transaction[1].recipients[0].amount / 100000000000} WavesGO` }, { address: data.wavesexplorer.transaction[1].senders[0].address, amount: `${data.wavesexplorer.transaction[1].senders[0].amount / 100000000000} WavesGO` }, new Date(data.wavesexplorer.transaction[1].timestamp))

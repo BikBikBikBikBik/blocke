@@ -1416,6 +1416,7 @@ describe('lib/api/*', function() {
 				account: '/addresses/balance/[0]',
 				blockAt: '/blocks/at/[0]',
 				blockSignature: '/blocks/signature/[0]',
+				networkInfo: '/blocks/last',
 				transaction: '/transactions/info/[0]'
 			},
 			getAccountTests: [
@@ -1491,6 +1492,19 @@ describe('lib/api/*', function() {
 					],
 					expectedError: apiResources.blockNotFoundMessage,
 					extraTestInfo: 'Invalid block id'
+				}
+			],
+			getNetworkInfoTests: [
+				{
+					mockResponseData: [
+						{
+							response: { data: {success: true}, statusCode: 200 },
+							urlFormatter: 'networkInfo',
+							values: []
+						}
+					],
+					expectedResult: {success: true},
+					extraTestInfo: 'Valid network info request'
 				}
 			],
 			getTransactionTests: [
