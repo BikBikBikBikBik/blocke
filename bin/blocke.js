@@ -29,28 +29,23 @@ const validCommands = Object.keys(commandLineArgData).concat([null]);
 
 function executeHandler(handler, usage) {
 	handler.handleRequest().then((res) => {
-		const resIsArray = Array.isArray(res);
+		const results = Array.isArray(res) ? res : [res];
 		
-		if (resIsArray && res.length > 1) {
-			const networkInfo = _.find(res, (result) => result.option === 'Network Info');
-			const otherResults = _.without(res, networkInfo);
-			//[0] = Account results
-			//[1] = The rest of the results
-			const accountsAndOthers = _.partition(otherResults, (result) => result.option === 'Account');
-			//[0] = Block results
-			//[1] = Transaction results
-			const blocksAndTransactions = _.partition(accountsAndOthers[1], (result) => result.option === 'Block');
+		if (results.length > 1) {
+			const orderedOptions = [ 'Network Info', 'Account', 'Block', 'Transaction' ];
+			const optionGroups = _.groupBy(results, 'option');
+			const optionOutputs = _.without(_.map(orderedOptions, (option) => {
+				if (optionGroups.hasOwnProperty(option)) {
+					//Everthing but 'Network Info' should be pluralized, so simply check for a space character
+					return formatOutputResults(optionGroups[option], option, option.indexOf(' ') === -1);
+				}
+				
+				return '';
+			}), '');
 			
-			const accountOutput = formatOutputResults(accountsAndOthers[0], 'Accounts');
-			const blockOutput = formatOutputResults(blocksAndTransactions[0], 'Blocks');
-			const networkInfoOutput = networkInfo !== undefined ? formatOutputResults([networkInfo], 'Network Info') : '';
-			const transactionOutput = formatOutputResults(blocksAndTransactions[1], 'Transactions');
-			
-			console.log(`${networkInfoOutput}${networkInfoOutput.length > 0 ? '\n\n' : ''}` +
-						`${accountOutput}${(accountOutput.length > 0 && blockOutput.length > 0 ? '\n\n' : '')}${blockOutput}` +
-						`${((blockOutput.length > 0 || accountOutput.length > 0) && transactionOutput.length > 0 ? '\n\n' : '')}${transactionOutput}`);
+			console.log(optionOutputs.join('\n\n'));
 		} else {
-			console.log((resIsArray ? res[0] : res).data.toString());
+			console.log(results[0].data.toString());
 		}
 	}).catch((err) => {
 		if (typeof(err) === 'string') {
@@ -61,10 +56,11 @@ function executeHandler(handler, usage) {
 	});
 }
 
-function formatOutputResults(results, outputTitle) {
+function formatOutputResults(results, outputTitle, pluralizeTitle) {
 	const resultStrings = _.map(results, (result) => result.data.toString());
+	const title = pluralizeTitle === true ? `${outputTitle}s` : outputTitle;
 
-	return resultStrings.length > 0 ? `${outputTitle}\n======================\n${resultStrings.join('\n\n')}` : '';
+	return resultStrings.length > 0 ? `${title}\n======================\n${resultStrings.join('\n\n')}` : '';
 }
 
 try {
