@@ -43,26 +43,6 @@ describe('lib/api/api-client-base', function() {
 	 *
 	 */
 	describe('executeRequest', function() {
-		it('should delegate error handling to custom error handler', function(done) {
-			const apiBaseAddress = `https://${random.generateRandomHashString(16, 'asdfbbg3')}.com`;
-			const apiClient = new ApiClientBase(apiBaseAddress);
-			const errorHandlerResponse = random.generateRandomHashString(48, '234tregfda');
-			const mockResponseStatusCode = random.generateRandomIntInclusive(400, 500, '342regfd');
-			const mockResponseData = random.generateRandomHashString(48, '34t5yghrs');
-			const objectName = random.generateRandomHashString(4, '34etrsgt');
-			const uriSuffix = `/api/get/${random.generateRandomHashString(16, 'ujtydhrg')}`;
-			
-			nock(apiBaseAddress).get(`${uriSuffix}`).reply(mockResponseStatusCode, mockResponseData);
-			
-			apiClient.executeRequest(uriSuffix, objectName, (err, objName) => {
-				if (err.error === mockResponseData && err.statusCode === mockResponseStatusCode && objName === objectName) {
-					return Promise.reject(errorHandlerResponse);
-				}
-				
-				return Promise.reject('Unknown error or objectName');
-			}).should.eventually.be.rejectedWith(errorHandlerResponse).and.notify(done);
-		});
-		
 		it('should return resolved promise', function(done) {
 			const apiBaseAddress = `https://${random.generateRandomHashString(16, '435trthdf')}.com`;
 			const apiClient = new ApiClientBase(apiBaseAddress);
