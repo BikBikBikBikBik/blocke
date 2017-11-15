@@ -477,6 +477,18 @@ describe('lib/api/*', function() {
 					useAsErrorTestResponseTemplate: true
 				},
 				{
+					methodInput: `0x${random.generateRandomHashString(32, '6wegffs')}`,
+					mockResponseData: [
+						{
+							response: { data: {contractInfo: {}}, statusCode: 200 },
+							urlFormatter: 'account',
+							values: [ '[input]' ]
+						}
+					],
+					expectedError: apiResources.eth.addressIsContractMessage,
+					extraTestInfo: `Address is a contract`
+				},
+				{
 					methodInput: `0x${random.generateRandomHashString(32, '45trgfh')}`,
 					mockResponseData: [
 						{
