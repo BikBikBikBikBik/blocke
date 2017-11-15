@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Changed
+- ETH account retrieval option now displays error if given a contract address
 
 ## v0.24.0 - 2017-08-25
 ### Added
