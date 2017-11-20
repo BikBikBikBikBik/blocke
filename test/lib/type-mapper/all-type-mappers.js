@@ -79,10 +79,20 @@ describe('lib/type-mapper/*', function() {
 			}
 		},
 		etheradapter: {
-			account: {
-				address: '0x3e65303043928403f8a1a2ca4954386e6f39008c',
-				balance: 250
-			},
+			account: [
+				{
+					address: '0x3e65303043928403f8a1a2ca4954386e6f39008c',
+					balance: 250
+				},
+				{
+					address: '0x4f65303043928403f8a34534556223445239008a',
+					balance: 480,
+					tokenBalances: [
+						{ balance: 99999, symbol: 'FOO' },
+						{ balance: 99987, symbol: 'BAR' }
+					]
+				}
+			],
 			block: {
 				difficulty: 567567567,
 				hash: '0xb8a3f7f5cfc1748f91a684f20fe89031202cbadcd15078c49b85ec2a57f43853',
@@ -507,7 +517,18 @@ describe('lib/type-mapper/*', function() {
 		{
 			mapper: 'etheradapter',
 			inputs: {
-				account: { address: data.etheradapter.account.address, ETH: {balance: data.etheradapter.account.balance} },
+				account: [
+					{ address: data.etheradapter.account[0].address, ETH: {balance: data.etheradapter.account[0].balance} },
+					{
+						address: data.etheradapter.account[1].address,
+						ETH: {balance: data.etheradapter.account[1].balance},
+						tokens: [
+							{ balance: data.etheradapter.account[1].tokenBalances[0].balance * Math.pow(10, 2), tokenInfo: { decimals: 2, symbol: data.etheradapter.account[1].tokenBalances[0].symbol } },
+							{ balance: data.etheradapter.account[1].tokenBalances[1].balance * Math.pow(10, 3), tokenInfo: { decimals: 3, symbol: data.etheradapter.account[1].tokenBalances[1].symbol } }
+						],
+						extraTestInfo: 'Non-zero token balance'
+					},
+				],
 				block: {
 					difficulty: data.etheradapter.block.difficulty,
 					hash: data.etheradapter.block.hash,
@@ -954,11 +975,20 @@ describe('lib/type-mapper/*', function() {
 		
 		testPartition[0].forEach((test) => {
 			describe(test.mapper, function() {
-				it(`should map an account`, function() {
-					const expectedAccount = test.expected.hasOwnProperty('account') ? test.expected.account : new Account(data[test.mapper].account.address, data[test.mapper].account.balance, data[test.mapper].account.unconfirmedBalance);
-					const mappedAccount = this[test.mapper].mapAccount(test.inputs.account);
+				const inputAccountArray = Array.isArray(test.inputs.account) ? test.inputs.account : [test.inputs.account];
+				const expectedArray = Array.isArray(test.expected.account) ? test.expected.account : [test.expected.account];
+				const dataArray = Array.isArray(data[test.mapper].account) ? data[test.mapper].account : [data[test.mapper].account];
 
-					assert.isTrue(equal(mappedAccount, expectedAccount, {strict: true}), `Actual: ${mappedAccount}\n\nExpected: ${expectedAccount}`);
+				_.each(inputAccountArray, (inputAccount, index) => {
+					const infoString = inputAccount.hasOwnProperty('extraTestInfo') ? ` (${inputAccount.extraTestInfo})` : '';
+
+					it(`should map an account${infoString}`, function() {
+						const expectedAccount = (index < expectedArray.length && typeof(expectedArray[index]) === 'object') ? expectedArray[index]
+							: new Account(dataArray[index].address, dataArray[index].balance, dataArray[index].unconfirmedBalance, dataArray[index].tokenBalances);
+						const mappedAccount = this[test.mapper].mapAccount(inputAccount);
+
+						assert.isTrue(equal(mappedAccount, expectedAccount, {strict: true}), `Actual: ${mappedAccount}\n\nExpected: ${expectedAccount}`);
+					});
 				});
 			});
 		});

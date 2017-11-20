@@ -24,7 +24,7 @@ const _ = require('underscore');
 
 describe('lib/type-mapper/models', function() {
 	function createType(type, values) {
-		const accountCreator = (address, confirmedBalance, unconfirmedBalance) => new Account(address, confirmedBalance, unconfirmedBalance);
+		const accountCreator = (address, confirmedBalance, unconfirmedBalance, tokenBalances) => new Account(address, confirmedBalance, unconfirmedBalance, tokenBalances);
 		const blockCreator = (difficulty, hash, number, time, transactionCount) => new Block(difficulty, hash, number, time, transactionCount);
 		const networkCreator = (difficulty, hashRate, height, lastBlockTime) => new Network(difficulty, hashRate, height, lastBlockTime);
 		const transactionCreator = (amountSent, blockHash, hash, recipients, senders, time) => new Transaction(amountSent, blockHash, hash, recipients, senders, time);
@@ -53,13 +53,16 @@ describe('lib/type-mapper/models', function() {
 	 *  ToString generators
 	 *
 	 */
-	function accountToString(address, confirmedBalance, unconfirmedBalance) {
+	function accountToString(address, confirmedBalance, unconfirmedBalance, tokenBalances) {
+		const tokenBalanceStrings = _.map(tokenBalances, (token) => `${token.balance} ${token.symbol}`);
+
 		return `Address:             ${address}\n` +
 			   (unconfirmedBalance > 0 ? (
 			   `Confirmed Balance:   ${confirmedBalance}\n` +
 			   `Unconfirmed Balance: ${unconfirmedBalance}\n` +
 			   `Total Balance:       ${confirmedBalance + unconfirmedBalance}`)
-			   : (`Balance:             ${confirmedBalance}`));
+			   : (`Balance:             ${confirmedBalance}`)) +
+			   (tokenBalanceStrings.length > 0 ? `\nToken Balances:      ${tokenBalanceStrings.join('\n                     ')}` : '');
 	}
 	
 	function blockToString(difficulty, hash, number, time, transactionCount) {
@@ -126,9 +129,10 @@ describe('lib/type-mapper/models', function() {
 		}
 	}
 	
-	function validateAccount(instance, address, confirmedBalance, unconfirmedBalance) {
+	function validateAccount(instance, address, confirmedBalance, unconfirmedBalance, tokenBalances) {
 		assert.equal(instance._address, address);
 		assert.equal(instance._confirmedBalance, confirmedBalance);
+		assert.deepEqual(instance._tokenBalances, Array.isArray(tokenBalances) ? tokenBalances : []);
 		assert.equal(instance._unconfirmedBalance, typeof(unconfirmedBalance) === 'number' ? unconfirmedBalance : 0);
 	}
 	
@@ -162,6 +166,21 @@ describe('lib/type-mapper/models', function() {
 	 *
 	 */
 	const tests = [
+		{
+			type: 'Account',
+			values: [ random.generateRandomHashString(32), random.generateRandomIntInclusive(1, 1000), 0, [] ],
+			extraTestInfo: 'Token balance is empty'
+		},
+		{
+			type: 'Account',
+			values: [
+				random.generateRandomHashString(32),
+				random.generateRandomIntInclusive(1, 1000),
+				0,
+				[ { balance: random.generateRandomIntInclusive(1, 1000), symbol: random.generateRandomHashString(3) }, { balance: random.generateRandomIntInclusive(1, 1000), symbol: random.generateRandomHashString(3) } ]
+			],
+			extraTestInfo: 'Token balance is non-empty'
+		},
 		{
 			type: 'Account',
 			values: [ random.generateRandomHashString(32), random.generateRandomIntInclusive(1, 1000), random.generateRandomIntInclusive(1, 1000) ],

@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## Unreleased
+### Added
+- ETH account retrieval now displays ERC20 token balances
+
 ### Changed
 - ETH account retrieval option now displays error if given a contract address
 
