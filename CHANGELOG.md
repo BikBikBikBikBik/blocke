@@ -1,12 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## v0.25.0 - 2017-11-24
 ### Added
-- ETH account retrieval now displays ERC20 token balances
+- ETH account retrieval displays ERC20 token balances
 
 ### Changed
-- ETH account retrieval option now displays error if given a contract address
+- ETH account retrieval now displays error if given a contract address
 
 ## v0.24.0 - 2017-08-25
 ### Added
