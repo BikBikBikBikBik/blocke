@@ -54,7 +54,8 @@ describe('lib/type-mapper/models', function() {
 	 *
 	 */
 	function accountToString(address, confirmedBalance, unconfirmedBalance, tokenBalances) {
-		const tokenBalanceStrings = _.map(tokenBalances, (token) => `${token.balance} ${token.symbol}`);
+		const sortedTokens = _.sortBy(tokenBalances, 'symbol');
+		const tokenBalanceStrings = _.map(sortedTokens, (token) => `${token.balance} ${token.symbol}`);
 
 		return `Address:             ${address}\n` +
 			   (unconfirmedBalance > 0 ? (
