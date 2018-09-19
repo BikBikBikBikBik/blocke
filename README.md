@@ -122,4 +122,6 @@ options = {
 
 blockeApi.executeHandler('btc', options, console.log)
 ```
+<blockquote>
 <p>OBS: An item is required in options</p>
+</blockquote>
