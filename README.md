@@ -104,7 +104,7 @@ npm install blocke
 ```
 const blockeApi = require('blocke-api');
 
-blockeApi.executeHandler('btc', options, callback);
+blockeApi.executeHandler(coin, options, callback);
 ```
 <blockquote>
 OBS: This api use connection async.
