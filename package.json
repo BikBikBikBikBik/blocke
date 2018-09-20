@@ -1,6 +1,6 @@
 {
   "name": "blocke-cli-api",
-  "version": "0.25.7",
+  "version": "0.25.9",
   "author": "edinaldofox <edinaldofox@gmail.com>",
   "description": "Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable).",
   "keywords": [

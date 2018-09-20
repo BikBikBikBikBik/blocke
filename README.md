@@ -103,7 +103,7 @@ npm install blocke-cli-api
 ```
 const blockeApi = require('blocke-cli-api');
 
-blockeApi.executeHandler(coin, options, callback);
+blockeApi.executeHandlerApi(coin, options, callback);
 ```
 <blockquote>
 OBS: This api use connection async.
