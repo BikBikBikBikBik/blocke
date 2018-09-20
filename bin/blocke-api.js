@@ -57,15 +57,15 @@ function convertObject(res) {
     return blockApi;
 }
 
-function account(blockAccount, data) {
+function account(AccountBlock, data) {
     var account = new Object();
     account.address = data._address;
     account.balance = data._confirmedBalance;
     account.tokenBalances = data._tokenBalances;
     account.unconfirmedBalance = data._unconfirmedBalance;
-    blockAccount.account = account;
+    AccountBlock.account = account;
 
-    return blockAccount;
+    return AccountBlock;
 }
 
 function block(blockApi, data) {
