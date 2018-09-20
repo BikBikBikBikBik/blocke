@@ -43,21 +43,21 @@ function convertObject(res) {
 
         switch (res[i].option) {
             case 'Account':
-                blockApi = objectAccount(blockApi, res[i].data);
+                blockApi = account(blockApi, res[i].data);
                 break;
             case 'Block':
-                blockApi = objectBlock(blockApi, res[i].data);
+                blockApi = block(blockApi, res[i].data);
                 break;
             case 'Transaction':
-                blockApi = objectTransaction(blockApi, res[i].data);
+                blockApi = transaction(blockApi, res[i].data);
             case 'Network Info':
-                blockApi = objectNetwork(blockApi, res[i].data);
+                blockApi = network(blockApi, res[i].data);
         }
     }
     return blockApi;
 }
 
-function objectAccount(blockApi, data) {
+function account(blockApi, data) {
     var account = new Object();
     account.address = data._address;
     account.balance = data._confirmedBalance;
@@ -68,7 +68,7 @@ function objectAccount(blockApi, data) {
     return blockApi;
 }
 
-function objectBlock(blockApi, data) {
+function block(blockApi, data) {
     var block = new Object();
 
     block.difficulty = data._difficulty;
@@ -81,7 +81,7 @@ function objectBlock(blockApi, data) {
     return blockApi;
 }
 
-function objectTransaction(blockApi, data) {
+function transaction(blockApi, data) {
     var transaction = new Object();
 
     transaction.amountSent = data._amountSent;
@@ -95,7 +95,7 @@ function objectTransaction(blockApi, data) {
     return blockApi;
 }
 
-function objectNetwork(blockApi, data) {
+function network(blockApi, data) {
     var network = new Object();
     network.difficulty = data._difficulty;
     network.hashRate = data._hashRate;
