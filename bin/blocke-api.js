@@ -6,18 +6,7 @@ const OptionRequestHandler = require('../lib/option-request-handler');
 const version = require('../package.json').version;
 const _ = require('underscore');
 
-module.exports = {
-    executeHandler: function (coin, options, callback) {
 
-        var command = coin;
-        shortHandCommand = command;
-
-        const handler = new OptionRequestHandler(shortHandCommand, options);
-        const usage = commandLineUsage(commandLineArgData[command].usage);
-
-        return executeHandler(handler, usage, callback);
-    }
-};
 
 function executeHandler(handler, usage, callback) {
 

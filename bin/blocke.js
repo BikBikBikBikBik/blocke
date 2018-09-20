@@ -24,6 +24,20 @@ const commandLineUsage = require('command-line-usage');
 const OptionRequestHandler = require('../lib/option-request-handler');
 const version = require('../package.json').version;
 const _ = require('underscore');
+const blockApi = require('./blocke-api');
+
+module.exports = {
+    executeHandler: function (coin, options, callback) {
+
+        var command = coin;
+        shortHandCommand = command;
+
+        const handler = new OptionRequestHandler(shortHandCommand, options);
+        const usage = commandLineUsage(commandLineArgData[command].usage);
+
+        return executeHandler(handler, usage, callback);
+    }
+};
 
 const validCommands = Object.keys(commandLineArgData).concat([null]);
 
