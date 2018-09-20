@@ -57,12 +57,12 @@ function convertObject(res) {
     return blockApi;
 }
 
-function account(AccountBlock, data) {
+function account(AccountBlock, dataAccount) {
     var account = new Object();
-    account.address = data._address;
-    account.balance = data._confirmedBalance;
-    account.tokenBalances = data._tokenBalances;
-    account.unconfirmedBalance = data._unconfirmedBalance;
+    account.address = dataAccount._address;
+    account.balance = dataAccount._confirmedBalance;
+    account.tokenBalances = dataAccount._tokenBalances;
+    account.unconfirmedBalance = dataAccount._unconfirmedBalance;
     AccountBlock.account = account;
 
     return AccountBlock;
