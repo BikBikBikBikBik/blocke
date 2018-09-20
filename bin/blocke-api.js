@@ -43,42 +43,65 @@ function convertObject(res) {
 
         switch (res[i].option) {
             case 'Account':
-                var account = new Object();
-                account.address = res[i].data._address;
-                account.balance = res[i].data._confirmedBalance;
-                account.tokenBalances = res[i].data._tokenBalances;
-                account.unconfirmedBalance = res[i].data._unconfirmedBalance;
-                blockApi.account = account;
+                blockApi = objectAccount(blockApi, res[i].data);
                 break;
             case 'Block':
-                var block = new Object();
-
-                block.difficulty = res[i].data._difficulty;
-                block.hash = res[i].data._hash;
-                block.number = res[i].data._number;
-                block.time = res[i].data._time;
-                block.transactionCount = res[i].data._transactionCount;
-                blockApi.block = block;
+                blockApi = objectBlock(blockApi, res[i].data);
                 break;
             case 'Transaction':
-                var transaction = new Object();
-
-                transaction.amountSent = res[i].data._amountSent;
-                transaction.blockHash = res[i].data._blockHash;
-                transaction.hash = res[i].data._hash;
-                transaction.recipients = res[i].data._recipients;
-                transaction.senders = res[i].data._senders;
-                transaction.time = res[i].data._time;
-                blockApi.transaction = transaction;
+                blockApi = objectTransaction(blockApi, res[i].data);
             case 'Network Info':
-                var network = new Object();
-                network.difficulty = res[i].data._difficulty;
-                network.hashRate = res[i].data._hashRate;
-                network.height = res[i].data._height;
-                network.lastBlockTime = res[i].data._lastBlockTime;
-                blockApi.network = network;
+                blockApi = objectNetwork(blockApi, res[i].data);
         }
     }
+    return blockApi;
+}
+
+function objectAccount(blockApi, data) {
+    var account = new Object();
+    account.address = data._address;
+    account.balance = data._confirmedBalance;
+    account.tokenBalances = data._tokenBalances;
+    account.unconfirmedBalance = data._unconfirmedBalance;
+    blockApi.account = account;
+
+    return blockApi;
+}
+
+function objectBlock(blockApi, data) {
+    var block = new Object();
+
+    block.difficulty = data._difficulty;
+    block.hash = data._hash;
+    block.number = data._number;
+    block.time = data._time;
+    block.transactionCount = data._transactionCount;
+    blockApi.block = block;
+
+    return blockApi;
+}
+
+function objectTransaction(blockApi, data) {
+    var transaction = new Object();
+
+    transaction.amountSent = data._amountSent;
+    transaction.blockHash = data._blockHash;
+    transaction.hash = data._hash;
+    transaction.recipients = data._recipients;
+    transaction.senders = data._senders;
+    transaction.time = data._time;
+    blockApi.transaction = transaction;
+
+    return blockApi;
+}
+
+function objectNetwork(blockApi, data) {
+    var network = new Object();
+    network.difficulty = data._difficulty;
+    network.hashRate = data._hashRate;
+    network.height = data._height;
+    network.lastBlockTime = data._lastBlockTime;
+    blockApi.network = network;
 
     return blockApi;
 }
