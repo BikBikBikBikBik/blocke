@@ -57,15 +57,15 @@ function convertObject(res) {
     return blockApi;
 }
 
-function account(blockApi, data) {
+function account(blockAccount, data) {
     var account = new Object();
     account.address = data._address;
     account.balance = data._confirmedBalance;
     account.tokenBalances = data._tokenBalances;
     account.unconfirmedBalance = data._unconfirmedBalance;
-    blockApi.account = account;
+    blockAccount.account = account;
 
-    return blockApi;
+    return blockAccount;
 }
 
 function block(blockApi, data) {
@@ -81,7 +81,7 @@ function block(blockApi, data) {
     return blockApi;
 }
 
-function transaction(blockApi, data) {
+function transaction(blockTransaction, data) {
     var transaction = new Object();
 
     transaction.amountSent = data._amountSent;
@@ -90,18 +90,18 @@ function transaction(blockApi, data) {
     transaction.recipients = data._recipients;
     transaction.senders = data._senders;
     transaction.time = data._time;
-    blockApi.transaction = transaction;
+    blockTransaction.transaction = transaction;
 
-    return blockApi;
+    return blockTransaction;
 }
 
-function network(blockApi, data) {
+function network(blockNetwork, data) {
     var network = new Object();
     network.difficulty = data._difficulty;
     network.hashRate = data._hashRate;
     network.height = data._height;
     network.lastBlockTime = data._lastBlockTime;
-    blockApi.network = network;
+    blockNetwork.network = network;
 
-    return blockApi;
+    return blockNetwork;
 }
