@@ -1,7 +1,7 @@
 {
-  "name": "blocke",
-  "version": "0.25.0",
-  "author": "BikBikBikBikBik <BikBikBikBikBik@protonmail.com>",
+  "name": "blocke-cli-api",
+  "version": "0.25.1",
+  "author": "edinaldofox <edinaldofox@gmail.com>",
   "description": "Command-line tool to query the blockchain for a variety of cryptos. View blocks, transactions, and accounts (where applicable).",
   "keywords": [
     "aeon",
@@ -51,7 +51,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/BikBikBikBikBik/blocke.git"
+    "url": "https://github.com/edinaldofox/blocke-cli-api"
   },
   "license": "GPL-3.0",
   "bin": {

@@ -1,10 +1,9 @@
-# blocke
-[![License](https://img.shields.io/npm/l/blocke.svg)](https://www.npmjs.com/package/blocke)
-[![NPM Version](https://img.shields.io/npm/v/blocke.svg)](https://www.npmjs.com/package/blocke)
+# blocke-CLI-API
 [![Build Status](https://travis-ci.org/BikBikBikBikBik/blocke.svg?branch=master)](https://travis-ci.org/BikBikBikBikBik/blocke/)
 [![Test Coverage](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/coverage.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/coverage)
 [![Code Climate](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/gpa.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/)
 
+##Copy project https://www.npmjs.com/package/blocke
 ## Introduction
 blocke is a command-line tool to query the blockchain for a variety of cryptocurrencies. View blocks, transactions, accounts (where applicable), and network information. Currently supports:
 * AEON
@@ -35,7 +34,7 @@ With more on the way.
 
 ## Installation CLI
 ```
-$ npm install -g blocke
+$ npm install -g blocke-cli-api
 ```
 
 <br />
@@ -96,7 +95,7 @@ Many of the services used limit the number of requests allowed in a certain time
 
 ## Installation API
 ```
-npm install blocke
+npm install blocke-cli-api
 ```
 
 ## Usage API
