@@ -101,7 +101,7 @@ npm install blocke-cli-api
 ## Usage API
 
 ```
-const blockeApi = require('blocke-api');
+const blockeApi = require('blocke-cli-api');
 
 blockeApi.executeHandler(coin, options, callback);
 ```
@@ -119,7 +119,7 @@ options = {
     network: true // required false
 };
 
-blockeApi.executeHandler('btc', options, console.log)
+blockeApi.executeHandlerApi('btc', options, console.log)
 ```
 <blockquote>
 <p>OBS: An item is required in options</p>
