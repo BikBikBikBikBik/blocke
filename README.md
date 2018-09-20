@@ -1,10 +1,9 @@
-# blocke
-[![License](https://img.shields.io/npm/l/blocke.svg)](https://www.npmjs.com/package/blocke)
-[![NPM Version](https://img.shields.io/npm/v/blocke.svg)](https://www.npmjs.com/package/blocke)
+# blocke-CLI-API
 [![Build Status](https://travis-ci.org/BikBikBikBikBik/blocke.svg?branch=master)](https://travis-ci.org/BikBikBikBikBik/blocke/)
 [![Test Coverage](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/coverage.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/coverage)
 [![Code Climate](https://codeclimate.com/github/BikBikBikBikBik/blocke/badges/gpa.svg)](https://codeclimate.com/github/BikBikBikBikBik/blocke/)
 
+##Copy project https://www.npmjs.com/package/blocke
 ## Introduction
 blocke is a command-line tool to query the blockchain for a variety of cryptocurrencies. View blocks, transactions, accounts (where applicable), and network information. Currently supports:
 * AEON
@@ -33,14 +32,14 @@ With more on the way.
 
 <br />
 
-## Installation
+## Installation CLI
 ```
-$ npm install -g blocke
+$ npm install -g blocke-cli-api
 ```
 
 <br />
 
-## Usage
+## Usage CLI
 See `blocke help` and `blocke help <command>` (or the shorter `blocke <command>`) to view more information and instructions, as well as examples:
 
 ```
@@ -93,3 +92,35 @@ $ blocke zec -n -b 150000 -a t3K4aLYagSSBySdrfAGGeUd5H9z5Qvz88t2
 ```
 
 Many of the services used limit the number of requests allowed in a certain time period. While blocke will never throttle requests, be careful not to request too many values too quickly so as not to get temporarily IP banned.
+
+## Installation API
+```
+npm install blocke-cli-api
+```
+
+## Usage API
+
+```
+const blockeApi = require('blocke-cli-api');
+
+blockeApi.executeHandlerApi(coin, options, callback);
+```
+<blockquote>
+OBS: This api use connection async.
+</blockquote>
+
+Run code:
+
+```
+options = {
+    account: [ '1JCe8z4jJVNXSjohjM4i9Hh813dLCNx2Sy' ], // required false
+    block: [ '371623' ], // required false
+    transaction: [ '5756ff16e2b9f881cd15b8a7e478b4899965f87f553b6210d0f8e5bf5be7df1d' ], // required false
+    network: true // required false
+};
+
+blockeApi.executeHandlerApi('btc', options, console.log)
+```
+<blockquote>
+<p>OBS: An item is required in options</p>
+</blockquote>
